@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：Assel Aliyeva, Manuel Egele 原文标题: Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies 原文链接: https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源: AsiaCCS 202">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies">
+<meta property="og:url" content="http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：Assel Aliyeva, Manuel Egele 原文标题: Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies 原文链接: https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源: AsiaCCS 202">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/749afbc8-7bb7-4449-9adf-28f0710e32bb.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/8ab9b802-d526-4eb1-b228-85fe9b95ed0f.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/f4341811-3dc8-417f-a9d1-44d6ecc95c1a.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b679fc1b-c741-44e2-8eb2-6ae183fcebcd.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4941ede8-c1f7-4f34-bede-bab062c19044.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/13366964-df26-49df-aae5-18865dffc844.png">
+<meta property="article:published_time" content="2017-12-24T15:29:53.000Z">
+<meta property="article:modified_time" content="2021-06-09T02:34:05.704Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/749afbc8-7bb7-4449-9adf-28f0710e32bb.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&text=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&is_video=false&description=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies&body=Check out this article: http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&name=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&t=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="toc-number">2.</span> <span class="toc-text">主要贡献</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="toc-number">3.</span> <span class="toc-text">整体框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86"><span class="toc-number">3.1.</span> <span class="toc-text">数据采集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E5%A4%84%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">DNS处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.</span> <span class="toc-text">基于机器学习的检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">系统实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8CDNS%E5%A4%84%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">数据采集和DNS处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A3%80%E6%B5%8B-1"><span class="toc-number">4.2.</span> <span class="toc-text">基于机器学习的检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BC%B0"><span class="toc-number">5.</span> <span class="toc-text">方法评估</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-12-24T15:29:53.000Z" itemprop="datePublished">2017-12-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ML/" rel="tag">ML</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：Assel Aliyeva, Manuel Egele</em></p>
+<p><em>原文标题: Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies</em></p>
+<p><em>原文链接: <a target="_blank" rel="noopener" href="https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf">https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf</a></em></p>
+<p><em>原文来源: AsiaCCS 2021</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>互联网发展至今，一些在线业务通常会利用第三方的分析服务来深入了解其用户的行为。但由于隐私保护的发展及浏览器同源策略的限制，这在很大程度上限制了第三方Cookie的跟踪和使用。于是，企业开始尝试将第三方分析服务伪装成其网站的子域。这种被称为是CNAME伪装的技术使得企业能够继续监测其网站上的用户活动。但随之而来的是严重的安全隐患，因为企业与这些第三方分析服务提供商共享了用户会话Cookie，这使得在线用户的账户始终处于不安全的状态。在这篇文章中，作者演示了CNAME伪装以及Lax Cookie访问控制设置对Web用户安全性的影响。为了解决这一问题，作者构建了一个可以检测伪装为子域的第三方分析服务以及第一方Cookie泄露的工具TAFinder。</p>
+<h1 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h1><ul>
+<li>确定了第一方Cookie泄露给T/A(跟踪和广告)服务提供商的情况</li>
+<li>构建了TAFinder用于自动识别网站中是否存在隐匿域并检测这些Cookie是否泄漏到这些域</li>
+<li>针对这些隐匿域提出了一种基于HTTP的Web分析域检测机制，达到了96％的准确率</li>
+<li>确定了2,139个在野的Web分析域</li>
+<li>对100,000个最受欢迎的网站进行了测试，发现2,271个网站使用CNAME伪装技术将第三方分析服务作为其子域</li>
+</ul>
+<h1 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h1><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/749afbc8-7bb7-4449-9adf-28f0710e32bb.png"><br>TAFinder主要分为三个单元：</p>
+<ol>
+<li>数据采集</li>
+<li>DNS处理</li>
+<li>基于机器学习的检测<h2 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h2>以流水线的方式设计的TAFinder接受一个网站列表作为输入，然后由任务分配器将其分配给Worker。当从任务分配器中收到一个新的W(Website)时，一个Worker会生成一个新的爬虫实例。爬虫访问W，同时记录网络数据包和纯文本的HTTP请求/响应，并最终将捕获的数据传输给DNS处理单元。值得注意的是，Worker运行在独立的容器中，因此它允许TAFinder轻松地分离来自不同网站的网络流量。</li>
+</ol>
+<h2 id="DNS处理"><a href="#DNS处理" class="headerlink" title="DNS处理"></a>DNS处理</h2><p>TAFinder从任何给定的W中提取一组隐匿域CW。DNS处理单元对涉及CNAME的W的每个子域进行DNS解析链的遍历。如果一个解析链以属于第三方的CNAME结束，DNS处理单元将相应的子域标记为隐匿域D。</p>
+<h2 id="基于机器学习的检测"><a href="#基于机器学习的检测" class="headerlink" title="基于机器学习的检测"></a>基于机器学习的检测</h2><p>TAFinder首先使用黑名单和Virus Total将CW中的域识别为T/A服务。为了将CW中剩余的未标记的隐匿域分类为T/A或非T/A，TAFinder部署了一种监督机器学习方法。为此，其设计了九种特征，以捕捉T/A服务固有的行为模式。这些特征是从访问W时与隐匿域的HTTP通信中提取的。<br>下面是九个特征:</p>
+<ol>
+<li>当加载W的所有资源时，以D为目标的HTTP请求的数量超过所有HTTP请求的数量</li>
+<li>当加载W的所有资源时，来自D的HTTP响应的总大小超过所有HTTP响应大小的总和</li>
+<li>D所设置的cookies总数</li>
+<li>在D设置的所有cookies数量中，长cookies的数量</li>
+<li>D设置的常规的非目标cookies的数量</li>
+<li>D设置的常规的目标cookie的数量<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/8ab9b802-d526-4eb1-b228-85fe9b95ed0f.png"></li>
+<li>在URL中使用的参数数量超过了以D为目标的HTTP请求的数量</li>
+<li>目标为D的URL中包括W的域名作为参数值之一的次数</li>
+<li>Content-Type特征<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/f4341811-3dc8-417f-a9d1-44d6ecc95c1a.png"></li>
+</ol>
+<p><strong>特征重要性排序</strong><br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b679fc1b-c741-44e2-8eb2-6ae183fcebcd.png"></p>
+<h1 id="系统实现"><a href="#系统实现" class="headerlink" title="系统实现"></a>系统实现</h1><h2 id="数据采集和DNS处理"><a href="#数据采集和DNS处理" class="headerlink" title="数据采集和DNS处理"></a>数据采集和DNS处理</h2><p>在数据采集单元，TAFinder采用了RabbitMQ来实现任务分配，这使得作者可以并行扩展和运行10个Worker。每个Worker由一个独立运行的Linux容器表示，这些容器均配置好了Tcpdump和MitmProxy用于记录网络数据包和纯文本的HTTP请求/响应。Worker使用一个基于selenium的爬虫来启动对每个单独的网站的爬取。在爬取完毕后销毁实例，压缩并将捕获到的数据存储下来。在DNS处理单元则使用了Python的Scapy库分别提取每个网站的隐匿域。</p>
+<h2 id="基于机器学习的检测-1"><a href="#基于机器学习的检测-1" class="headerlink" title="基于机器学习的检测"></a>基于机器学习的检测</h2><p>TAFinder是靠一份T/A列表（来源包括了已被标记的第三方分析服务提供商和VirusTotal等）来标记要提取的隐匿域。同时，根据VirusTotal提供的类别来标记数据集中的在野隐匿域。</p>
+<p>TAFinder使用MitmProxy的Python模块解析这些数据，并从中提取特征。同时。鉴于有一大批不同的cookie名称需要分类，TAFinder只选取那些最流行的cookie。为此，作者提取了所有隐匿域的HTTP响应中的cookie名称。然后，根据发送cookie的隐匿域的数量对cookie进行排名。以同样的方式，作者又创建了两个流行度排名，专门针对非T/A和T/A服务设置的cookies。</p>
+<p>作者从上面cookie排名中选中了最受欢迎的25个cookie，以及60个隶属于T/A和非T/A域的cookie名称。根据One Trust的cookie分类，作者将这些cookie归类为T/A cookie，然后通过Cookiepedia或T/A特定的方式进行访问。基于这种方法，作者发现了27个跟踪相关的cookies和28个默认的网络应用程序cookies。</p>
+<p>为了对隐匿域进行分类，TAFinder使用Scikit-Learn的随机森林模型。</p>
+<h1 id="方法评估"><a href="#方法评估" class="headerlink" title="方法评估"></a>方法评估</h1><p>在21,184个使用CNAME的网站中，有20,504个仅使用了提供非T/A服务CNAME。根据Virus Total，这些非T/A大多属于信息技术、商业和计算机及软件类别，包括CDN和虚拟主机服务。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4941ede8-c1f7-4f34-bede-bab062c19044.png"><br>在评估Cookies泄露的时候由于每个分析站点都需要人工操作，因此作者将实验限制在10,000个最流行的域上。在过滤了金融服务和购物网站之后，作者使用119个域进行分析。其中的90个网站上作者手动创建了帐户用于测试。在这90个网站中，有27个将其会话cookie（我们确认该cookie提供了对用户帐户的访问）发送至隐匿的T/A服务。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/13366964-df26-49df-aae5-18865dffc844.png"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="toc-number">2.</span> <span class="toc-text">主要贡献</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="toc-number">3.</span> <span class="toc-text">整体框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86"><span class="toc-number">3.1.</span> <span class="toc-text">数据采集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E5%A4%84%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">DNS处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A3%80%E6%B5%8B"><span class="toc-number">3.3.</span> <span class="toc-text">基于机器学习的检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">系统实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%92%8CDNS%E5%A4%84%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">数据采集和DNS处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A3%80%E6%B5%8B-1"><span class="toc-number">4.2.</span> <span class="toc-text">基于机器学习的检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%AF%84%E4%BC%B0"><span class="toc-number">5.</span> <span class="toc-text">方法评估</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&text=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&is_video=false&description=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies&body=Check out this article: http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&title=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&name=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2017/12/24/Oversharing%20Is%20Not%20Caring/&t=PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    outx
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

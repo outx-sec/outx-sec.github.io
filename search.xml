@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>PR - Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies</title>
+      <link href="/2017/12/24/Oversharing%20Is%20Not%20Caring/"/>
+      <url>/2017/12/24/Oversharing%20Is%20Not%20Caring/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：Assel Aliyeva, Manuel Egele</em></p><p><em>原文标题: Oversharing Is Not Caring: How CNAME Cloaking Can ExposeYour Session Cookies</em></p><p><em>原文链接: <a href="https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf">https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf</a></em></p><p><em>原文来源: AsiaCCS 2021</em></p><p><em>笔记作者：outx</em></p></blockquote><h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>互联网发展至今，一些在线业务通常会利用第三方的分析服务来深入了解其用户的行为。但由于隐私保护的发展及浏览器同源策略的限制，这在很大程度上限制了第三方Cookie的跟踪和使用。于是，企业开始尝试将第三方分析服务伪装成其网站的子域。这种被称为是CNAME伪装的技术使得企业能够继续监测其网站上的用户活动。但随之而来的是严重的安全隐患，因为企业与这些第三方分析服务提供商共享了用户会话Cookie，这使得在线用户的账户始终处于不安全的状态。在这篇文章中，作者演示了CNAME伪装以及Lax Cookie访问控制设置对Web用户安全性的影响。为了解决这一问题，作者构建了一个可以检测伪装为子域的第三方分析服务以及第一方Cookie泄露的工具TAFinder。</p><h1 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h1><ul><li>确定了第一方Cookie泄露给T/A(跟踪和广告)服务提供商的情况</li><li>构建了TAFinder用于自动识别网站中是否存在隐匿域并检测这些Cookie是否泄漏到这些域</li><li>针对这些隐匿域提出了一种基于HTTP的Web分析域检测机制，达到了96％的准确率</li><li>确定了2,139个在野的Web分析域</li><li>对100,000个最受欢迎的网站进行了测试，发现2,271个网站使用CNAME伪装技术将第三方分析服务作为其子域</li></ul><h1 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h1><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/749afbc8-7bb7-4449-9adf-28f0710e32bb.png"><br>TAFinder主要分为三个单元：</p><ol><li>数据采集</li><li>DNS处理</li><li>基于机器学习的检测<h2 id="数据采集"><a href="#数据采集" class="headerlink" title="数据采集"></a>数据采集</h2>以流水线的方式设计的TAFinder接受一个网站列表作为输入，然后由任务分配器将其分配给Worker。当从任务分配器中收到一个新的W(Website)时，一个Worker会生成一个新的爬虫实例。爬虫访问W，同时记录网络数据包和纯文本的HTTP请求/响应，并最终将捕获的数据传输给DNS处理单元。值得注意的是，Worker运行在独立的容器中，因此它允许TAFinder轻松地分离来自不同网站的网络流量。</li></ol><h2 id="DNS处理"><a href="#DNS处理" class="headerlink" title="DNS处理"></a>DNS处理</h2><p>TAFinder从任何给定的W中提取一组隐匿域CW。DNS处理单元对涉及CNAME的W的每个子域进行DNS解析链的遍历。如果一个解析链以属于第三方的CNAME结束，DNS处理单元将相应的子域标记为隐匿域D。</p><h2 id="基于机器学习的检测"><a href="#基于机器学习的检测" class="headerlink" title="基于机器学习的检测"></a>基于机器学习的检测</h2><p>TAFinder首先使用黑名单和Virus Total将CW中的域识别为T/A服务。为了将CW中剩余的未标记的隐匿域分类为T/A或非T/A，TAFinder部署了一种监督机器学习方法。为此，其设计了九种特征，以捕捉T/A服务固有的行为模式。这些特征是从访问W时与隐匿域的HTTP通信中提取的。<br>下面是九个特征:</p><ol><li>当加载W的所有资源时，以D为目标的HTTP请求的数量超过所有HTTP请求的数量</li><li>当加载W的所有资源时，来自D的HTTP响应的总大小超过所有HTTP响应大小的总和</li><li>D所设置的cookies总数</li><li>在D设置的所有cookies数量中，长cookies的数量</li><li>D设置的常规的非目标cookies的数量</li><li>D设置的常规的目标cookie的数量<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/8ab9b802-d526-4eb1-b228-85fe9b95ed0f.png"></li><li>在URL中使用的参数数量超过了以D为目标的HTTP请求的数量</li><li>目标为D的URL中包括W的域名作为参数值之一的次数</li><li>Content-Type特征<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/f4341811-3dc8-417f-a9d1-44d6ecc95c1a.png"></li></ol><p><strong>特征重要性排序</strong><br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b679fc1b-c741-44e2-8eb2-6ae183fcebcd.png"></p><h1 id="系统实现"><a href="#系统实现" class="headerlink" title="系统实现"></a>系统实现</h1><h2 id="数据采集和DNS处理"><a href="#数据采集和DNS处理" class="headerlink" title="数据采集和DNS处理"></a>数据采集和DNS处理</h2><p>在数据采集单元，TAFinder采用了RabbitMQ来实现任务分配，这使得作者可以并行扩展和运行10个Worker。每个Worker由一个独立运行的Linux容器表示，这些容器均配置好了Tcpdump和MitmProxy用于记录网络数据包和纯文本的HTTP请求/响应。Worker使用一个基于selenium的爬虫来启动对每个单独的网站的爬取。在爬取完毕后销毁实例，压缩并将捕获到的数据存储下来。在DNS处理单元则使用了Python的Scapy库分别提取每个网站的隐匿域。</p><h2 id="基于机器学习的检测-1"><a href="#基于机器学习的检测-1" class="headerlink" title="基于机器学习的检测"></a>基于机器学习的检测</h2><p>TAFinder是靠一份T/A列表（来源包括了已被标记的第三方分析服务提供商和VirusTotal等）来标记要提取的隐匿域。同时，根据VirusTotal提供的类别来标记数据集中的在野隐匿域。</p><p>TAFinder使用MitmProxy的Python模块解析这些数据，并从中提取特征。同时。鉴于有一大批不同的cookie名称需要分类，TAFinder只选取那些最流行的cookie。为此，作者提取了所有隐匿域的HTTP响应中的cookie名称。然后，根据发送cookie的隐匿域的数量对cookie进行排名。以同样的方式，作者又创建了两个流行度排名，专门针对非T/A和T/A服务设置的cookies。</p><p>作者从上面cookie排名中选中了最受欢迎的25个cookie，以及60个隶属于T/A和非T/A域的cookie名称。根据One Trust的cookie分类，作者将这些cookie归类为T/A cookie，然后通过Cookiepedia或T/A特定的方式进行访问。基于这种方法，作者发现了27个跟踪相关的cookies和28个默认的网络应用程序cookies。</p><p>为了对隐匿域进行分类，TAFinder使用Scikit-Learn的随机森林模型。</p><h1 id="方法评估"><a href="#方法评估" class="headerlink" title="方法评估"></a>方法评估</h1><p>在21,184个使用CNAME的网站中，有20,504个仅使用了提供非T/A服务CNAME。根据Virus Total，这些非T/A大多属于信息技术、商业和计算机及软件类别，包括CDN和虚拟主机服务。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4941ede8-c1f7-4f34-bede-bab062c19044.png"><br>在评估Cookies泄露的时候由于每个分析站点都需要人工操作，因此作者将实验限制在10,000个最流行的域上。在过滤了金融服务和购物网站之后，作者使用119个域进行分析。其中的90个网站上作者手动创建了帐户用于测试。在这90个网站中，有27个将其会话cookie（我们确认该cookie提供了对用户帐户的访问）发送至隐匿的T/A服务。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/13366964-df26-49df-aae5-18865dffc844.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ML </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
