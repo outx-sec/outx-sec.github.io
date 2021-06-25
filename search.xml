@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - LastPyMile: Identifying the Discrepancy between Sources and Packages</title>
+      <link href="/2020/06/25/LastPyMile/"/>
+      <url>/2020/06/25/LastPyMile/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：Duc-Ly Vu, Fabio Massacci, Ivan Pashchenko, Henrik Plate</em></p><p><em>原文标题: LastPyMile: Identifying the Discrepancy between Sources and Packages</em></p><p><em>原文链接: <a href="https://securitylab.disi.unitn.it/lib/exe/fetch.php?media=research_activities:experiments:esecfse2021.pdf">https://securitylab.disi.unitn.it/lib/exe/fetch.php?media=research_activities:experiments:esecfse2021.pdf</a></em></p><p><em>原文来源: ESEC/FSE 2021</em></p><p><em>笔记作者：outx</em></p></blockquote><h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><p>通常情况下开源的软件包会在其对应的存储库上提供源代码，但开发者往往更倾向于使用集成式的包管理器来使用这些开源软件包（PyPI对应的pip）。这种方便的做法是假设源代码和软件包之间没有差异的，这会带来一定的安全风险。作者提出并实现了一种方法，名为LastPyMile，主要用于识别软件包的构造和其源代码库之间的差异，以防止恶意软件的注入。</p><p>以PyPI为例，作者做了详细的调查。下图为PyPI包的生命周期</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210625145547515.png" alt="image-20210625145547515"></p><p>作者致力于审查代码注入的问题， 而代码注入攻击中，往往只会有少量代码被修改。于是从这一点出发作者提出了三个问题：</p><h2 id="RQ1-能否有效地识别差异？"><a href="#RQ1-能否有效地识别差异？" class="headerlink" title="RQ1: 能否有效地识别差异？"></a>RQ1: 能否有效地识别差异？</h2><p>有一种现成的解决方案，即git log，但是由于git日志需要循环查看所有修订版，而且每次调用都会产生一个进程，这无疑是增加了分析机器的负担。作者的解决办法则是通过巧妙地结合软件包和运行软件的所有必需项目的散列值，以一种可扩展的方式提取这些差异。</p><p><strong>Answer</strong></p><ol><li>LastPyMile迭代所有的提交，以计算所有的文件哈希值并收集源代码库中的行内容。</li><li>LastPyMile处理一个软件包运行所需要的组件来计算文件哈希值并收集文件行数。</li><li>LastPyMile将所有计算好的文件哈希值和行数与源代码库中的文件哈希值和行数进行比较，报告那些差异性文件和行数。</li></ol><h2 id="RQ2-源代码和包存储库之间的“正常”差异有多大？"><a href="#RQ2-源代码和包存储库之间的“正常”差异有多大？" class="headerlink" title="RQ2: 源代码和包存储库之间的“正常”差异有多大？"></a>RQ2: 源代码和包存储库之间的“正常”差异有多大？</h2><p>作者研究了PyPI生态中超过2000个流行的软件包，这种差异是普遍存在的。但在Python源文件中一般只会发生很少的修改，所以作者采用审查作为替代方案。</p><p><strong>Answer</strong></p><ol><li>比较PyPI中的代码和相应的源代码库，平均有5.8%的运行时需要文件和2.6%的普通文件有差异。</li></ol><p>作者提到了可疑APIs的调用，说不能简单地将调用定义为可疑，会产生大量告警。这里存疑，因为告警和漏报的平衡点实在是很难界定。</p><h2 id="RQ3-LastPyMile能否与软件包扫描器相结合，同时保持可控的警报数量？"><a href="#RQ3-LastPyMile能否与软件包扫描器相结合，同时保持可控的警报数量？" class="headerlink" title="RQ3: LastPyMile能否与软件包扫描器相结合，同时保持可控的警报数量？"></a>RQ3: LastPyMile能否与软件包扫描器相结合，同时保持可控的警报数量？</h2><p>为了在该领域发挥效力，我们应该允许开发者和开发组织使用相同的工具来扫描软件包的源代码库，作为其审查过程的一部分。结合LastPyMile可以显著降低现有检测软件的告警数量</p><h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><p>恶意代码可以隐藏在许多其他形式中，如网页（嵌入或外部JavaScript的HTML）或配置文件（带有恶意依赖的requirements.txt）。我们注意到大量的依赖性声明文件requirements.txt，其中包含使用pip install自动安装的依赖性列表。</p><p>确实，往往技艺不精的开发者拿着一个可重用安装包的时候是不太会关心requirements.txt里到底有哪些包，这些包又是哪些版本（是不是能够被攻击者攻击利用的版本），一旦执行了pip install -r requirements.txt，就会顺序安装所有条目，这老实说是有潜在风险的，可以研究。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Supply Chain Attack </tag>
+            
+            <tag> ESEC/FSE 2021 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - Fuzzing: a survey</title>
       <link href="/2020/06/18/Fuzzing%20a%20survey/"/>
       <url>/2020/06/18/Fuzzing%20a%20survey/</url>
