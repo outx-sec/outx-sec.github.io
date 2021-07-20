@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：F Xiao, J Huang, Y Xiong, G Yang, H Hu, G Gu 原文标题: Abusing Hidden Properties to Attack the Node.js Ecosystem 原文链接: https:&#x2F;&#x2F;www.usenix.org&#x2F;system&#x2F;files&#x2F;sec21fall-xiao.pdf 原文来源: USENIX Security 20">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Abusing Hidden Properties to Attack the Node.js Ecosystem">
+<meta property="og:url" content="http://w1mps.github.io/2021/07/20/HPA/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：F Xiao, J Huang, Y Xiong, G Yang, H Hu, G Gu 原文标题: Abusing Hidden Properties to Attack the Node.js Ecosystem 原文链接: https:&#x2F;&#x2F;www.usenix.org&#x2F;system&#x2F;files&#x2F;sec21fall-xiao.pdf 原文来源: USENIX Security 20">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9ae954f3-b660-45a7-941b-7b8655b52315.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/5011f3d8-d332-4c81-899f-7ca302dfd9c1.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/ad4e1c43-6796-4bde-bfe8-3acdd7d21c70.png">
+<meta property="article:published_time" content="2021-07-20T02:44:40.000Z">
+<meta property="article:modified_time" content="2021-07-20T03:15:19.363Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="OSS Security">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Code Analysis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9ae954f3-b660-45a7-941b-7b8655b52315.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Abusing Hidden Properties to Attack the Node.js Ecosystem</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/07/12/Text%20summary/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/07/20/HPA/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/07/20/HPA/&text=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/07/20/HPA/&is_video=false&description=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem&body=Check out this article: http://w1mps.github.io/2021/07/20/HPA/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/07/20/HPA/&name=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/07/20/HPA/&t=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Introduction"><span class="toc-number">1.</span> <span class="toc-text">0x01 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Contribution"><span class="toc-number">2.</span> <span class="toc-text">0x02 Contribution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Hidden-Property-Abusing"><span class="toc-number">3.</span> <span class="toc-text">0x03 Hidden Property Abusing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Lynx%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">0x04 Lynx设计与实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">4.1.</span> <span class="toc-text">隐藏属性的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%91%E6%88%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">4.2.</span> <span class="toc-text">挑战与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0Node-js%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7"><span class="toc-number">4.2.1.</span> <span class="toc-text">如何发现Node.js程序的隐藏属性?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%A4%A7%E9%87%8F%E7%9A%84%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7%E4%B8%AD%EF%BC%8C%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9A%E5%93%AA%E4%BA%9B%E5%B1%9E%E6%80%A7%E5%AF%B9%E6%94%BB%E5%87%BB%E8%80%85%E8%80%8C%E8%A8%80%E6%98%AF%E6%9C%89%E4%BB%B7%E5%80%BC%E5%92%8C%E5%8F%AF%E5%88%A9%E7%94%A8%E7%9A%84%EF%BC%9F"><span class="toc-number">4.2.2.</span> <span class="toc-text">在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%BB%E8%A7%88"><span class="toc-number">4.3.</span> <span class="toc-text">设计总览</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">0x05 局限性</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Abusing Hidden Properties to Attack the Node.js Ecosystem
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-20T02:44:40.000Z" itemprop="datePublished">2021-07-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a> › <a class="category-link" href="/categories/Paper-Reading/USENIX-Security-2021/">USENIX Security 2021</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Code-Analysis/" rel="tag">Code Analysis</a>, <a class="tag-link-link" href="/tags/Node-js/" rel="tag">Node.js</a>, <a class="tag-link-link" href="/tags/OSS-Security/" rel="tag">OSS Security</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：F Xiao, J Huang, Y Xiong, G Yang, H Hu, G Gu</em></p>
+<p><em>原文标题: Abusing Hidden Properties to Attack the Node.js Ecosystem</em></p>
+<p><em>原文链接: <a target="_blank" rel="noopener" href="https://www.usenix.org/system/files/sec21fall-xiao.pdf">https://www.usenix.org/system/files/sec21fall-xiao.pdf</a></em></p>
+<p><em>原文来源: USENIX Security 2021</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="0x01-Introduction"><a href="#0x01-Introduction" class="headerlink" title="0x01 Introduction"></a>0x01 Introduction</h2><p>由于目前还没有特别完善的针对JavaScript和Node.js程序中的安全风险的研究和理解。于是在本文中，作者定义了一种新型攻击手法用于说明在JavaScript和Node.js程序中也存在着一定的安全风险。这种攻击手法被命名为HPA(hidden property abusing)，攻击者可以利用其特性窃取机密数据、绕过安全检查并发起拒绝服务攻击，其实例如下图。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9ae954f3-b660-45a7-941b-7b8655b52315.png"></p>
+<p>具体过程可以简单描述为：攻击者首先向服务端发送精心制作好的json数据，这个json数据会携带一个额外的而非服务端所期望的属性<code>I2</code>（被称之为隐藏属性）。接着服务端按照正常流程对该json数据进行处理，那么这个<code>I2</code>将会传播至一个内部对象中，如图中标红处，I2将覆盖内部对象的属性。一旦这些属性可以被攻击者所控制，那么攻击者就能够绕过一些安全检查，触发一些本不会触发的代码流程，例如下图中利用HPA绕过Node.js框架routing-controller的输入验证检测。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/5011f3d8-d332-4c81-899f-7ca302dfd9c1.png"></p>
+<h2 id="0x02-Contribution"><a href="#0x02-Contribution" class="headerlink" title="0x02 Contribution"></a>0x02 Contribution</h2><ul>
+<li>定义了针对Node.js程序的隐藏属性滥用(hidden property abusing, HPA)攻击，并说明了其带来的严重的安全后果</li>
+<li>设计并实现了LYNX，这是一个自动检测HPA漏洞并进行综合利用的工具</li>
+<li>其结果评估揭示了实际情况下Npm软件包中的HPA问题，这会导致严重的安全问题</li>
+</ul>
+<h2 id="0x03-Hidden-Property-Abusing"><a href="#0x03-Hidden-Property-Abusing" class="headerlink" title="0x03 Hidden Property Abusing"></a>0x03 Hidden Property Abusing</h2><p>在JavaScript中，每个对象都有一个指向原型对象的链接。当程序要访问一个对象的某个属性时，该属性不仅会在该对象上搜索，而且会在该对象的原型上搜索（甚至在原型的原型上搜索），直到找到一个名称匹配的属性。因此，每个对象除了自己的属性外，还有许多继承的属性。然而，如果有一个冲突的名称属性位于搜索树的更高层次，这样的继承链就会被劫持。</p>
+<p>需要注意的是这与原型链污染不同，具体来说原型污染需要对原型进行修改，而HPA并不需要这么做，其本质上只是劫持而非修改。</p>
+<h2 id="0x04-Lynx设计与实现"><a href="#0x04-Lynx设计与实现" class="headerlink" title="0x04 Lynx设计与实现"></a>0x04 Lynx设计与实现</h2><h3 id="隐藏属性的定义"><a href="#隐藏属性的定义" class="headerlink" title="隐藏属性的定义"></a>隐藏属性的定义</h3><p>给定一个模块，其包含一个输入对象和一个内部对象。满足以下条件便定义一个属性P为输入对象中的隐藏属性：</p>
+<ol>
+<li>这个属性P属于内部对象，且在这个模块中被引用</li>
+<li>当发生属性重名问题时，内部对象的属性P能够被外部对象的属性P所覆盖</li>
+<li>属性P并不是输入对象的默认参数</li>
+</ol>
+<h3 id="挑战与解决方案"><a href="#挑战与解决方案" class="headerlink" title="挑战与解决方案"></a>挑战与解决方案</h3><h4 id="如何发现Node-js程序的隐藏属性"><a href="#如何发现Node-js程序的隐藏属性" class="headerlink" title="如何发现Node.js程序的隐藏属性?"></a>如何发现Node.js程序的隐藏属性?</h4><p>作者设计了一种结合了动态和静态分析各自优势的方法用以发现隐藏属性。首先，利用了一个轻量级的标记系统来动态跟踪输入对象和相关属性载体，并将属性载体的所有属性作为隐藏属性候选。为了尽可能多地发现执行路径，尤其是一些关键路径，作者对输入对象进行了广泛地递归标记，并对目标程序进行了测试。但上述的动态测试还是会造成一些假阴性，这是因为很多时候即使相应的属性载体被标记了，最为重要的隐藏属性却被忽略了。为了缓解这个问题，作者通过贪婪算法搜索那些被忽略的属性，然后引入静态分析。最终，得到一个隐藏属性候选列表。</p>
+<h4 id="在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？"><a href="#在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？" class="headerlink" title="在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？"></a>在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？</h4><p>作者利用符号执行来探索所有相关的路径，收集路径约束，检测敏感行为，并最终生成漏洞利用方案。</p>
+<h3 id="设计总览"><a href="#设计总览" class="headerlink" title="设计总览"></a>设计总览</h3><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/ad4e1c43-6796-4bde-bfe8-3acdd7d21c70.png"><br>第一部分，LYNX会动态地运行一个标记系统，用于递归地跟踪输入对象，并尽可能多地识别属性载体。然后通过收集上述标记结果，引入静态分析来搜索那些被忽略的隐藏属性，构建隐藏属性候选列表。</p>
+<p>第二部分，LYNX首先利用第一部分得到的隐藏属性候选列表生成漏洞模板，运行符号执行来推理得出隐藏属性的值，以此验证其有害性及攻击结果。</p>
+<h2 id="0x05-局限性"><a href="#0x05-局限性" class="headerlink" title="0x05 局限性"></a>0x05 局限性</h2><ul>
+<li>依赖外部输入来触发分析过程</li>
+<li>与其他动态分析工具一样，存在许多的假阴性</li>
+<li>并没有覆盖完整的Node.js生态</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Introduction"><span class="toc-number">1.</span> <span class="toc-text">0x01 Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Contribution"><span class="toc-number">2.</span> <span class="toc-text">0x02 Contribution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Hidden-Property-Abusing"><span class="toc-number">3.</span> <span class="toc-text">0x03 Hidden Property Abusing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Lynx%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">0x04 Lynx设计与实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">4.1.</span> <span class="toc-text">隐藏属性的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%91%E6%88%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">4.2.</span> <span class="toc-text">挑战与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0Node-js%E7%A8%8B%E5%BA%8F%E7%9A%84%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7"><span class="toc-number">4.2.1.</span> <span class="toc-text">如何发现Node.js程序的隐藏属性?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%A4%A7%E9%87%8F%E7%9A%84%E9%9A%90%E8%97%8F%E5%B1%9E%E6%80%A7%E4%B8%AD%EF%BC%8C%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9A%E5%93%AA%E4%BA%9B%E5%B1%9E%E6%80%A7%E5%AF%B9%E6%94%BB%E5%87%BB%E8%80%85%E8%80%8C%E8%A8%80%E6%98%AF%E6%9C%89%E4%BB%B7%E5%80%BC%E5%92%8C%E5%8F%AF%E5%88%A9%E7%94%A8%E7%9A%84%EF%BC%9F"><span class="toc-number">4.2.2.</span> <span class="toc-text">在大量的隐藏属性中，如何确定哪些属性对攻击者而言是有价值和可利用的？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%BB%E8%A7%88"><span class="toc-number">4.3.</span> <span class="toc-text">设计总览</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">0x05 局限性</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/07/20/HPA/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/07/20/HPA/&text=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/07/20/HPA/&is_video=false&description=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem&body=Check out this article: http://w1mps.github.io/2021/07/20/HPA/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/07/20/HPA/&title=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/07/20/HPA/&name=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/07/20/HPA/&t=PR - Abusing Hidden Properties to Attack the Node.js Ecosystem"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    Powered by
+    outx
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

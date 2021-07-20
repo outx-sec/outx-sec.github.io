@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：Wei Wang 原文标题: Generated Automatic Summary Method Based on C-R Neural 原文链接: https:&#x2F;&#x2F;d.wanfangdata.com.cn&#x2F;periodical&#x2F;jsjyszgc202001022 原文来源: WanFang 笔记作者：outx  生成式自动摘要方法生成式文本摘要是更接近于人类思考方式的摘要生成方法，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RL - Automatic Text Summary Method">
+<meta property="og:url" content="http://w1mps.github.io/2021/07/12/Text%20summary/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：Wei Wang 原文标题: Generated Automatic Summary Method Based on C-R Neural 原文链接: https:&#x2F;&#x2F;d.wanfangdata.com.cn&#x2F;periodical&#x2F;jsjyszgc202001022 原文来源: WanFang 笔记作者：outx  生成式自动摘要方法生成式文本摘要是更接近于人类思考方式的摘要生成方法，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210712155233413.png">
+<meta property="article:published_time" content="2021-07-12T08:44:40.000Z">
+<meta property="article:modified_time" content="2021-07-12T09:06:25.975Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="Text Summery">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210712155233413.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>RL - Automatic Text Summary Method</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2021/07/20/HPA/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/07/02/Buuctf/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/07/12/Text%20summary/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/07/12/Text%20summary/&text=RL - Automatic Text Summary Method"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/07/12/Text%20summary/&is_video=false&description=RL - Automatic Text Summary Method"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RL - Automatic Text Summary Method&body=Check out this article: http://w1mps.github.io/2021/07/12/Text%20summary/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/07/12/Text%20summary/&name=RL - Automatic Text Summary Method&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/07/12/Text%20summary/&t=RL - Automatic Text Summary Method"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%BC%8F%E8%87%AA%E5%8A%A8%E6%91%98%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">生成式自动摘要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ERNN%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">基于RNN的生成式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ECNN%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">基于CNN的生成式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EAttention%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">基于Attention的生成式结构</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RL - Automatic Text Summary Method
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-12T08:44:40.000Z" itemprop="datePublished">2021-07-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Research-Learning/">Research Learning</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Text-Summery/" rel="tag">Text Summery</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：Wei Wang</em></p>
+<p><em>原文标题: Generated Automatic Summary Method Based on C-R Neural</em></p>
+<p><em>原文链接: <a target="_blank" rel="noopener" href="https://d.wanfangdata.com.cn/periodical/jsjyszgc202001022">https://d.wanfangdata.com.cn/periodical/jsjyszgc202001022</a></em></p>
+<p><em>原文来源: WanFang</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h1 id="生成式自动摘要方法"><a href="#生成式自动摘要方法" class="headerlink" title="生成式自动摘要方法"></a>生成式自动摘要方法</h1><p>生成式文本摘要是更接近于人类思考方式的摘要生成方法，具有更强的生成、理解、表征文本的能力。生成式神经网络模型的基本结构是由编码和解码器组成，如下图</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210712155233413.png" alt="image-20210712155233413"></p>
+<p>Seq2Seq 序列又称为编解码器（Encoder、Decoder）架构，编码器负责将输入文本编码成一个向量，作为原文本的表征，该向量包含了文本的上下文信息。而解码器从该向量提取重要信息，并进行剪辑加工，生成文本摘要，这套架构就是 Seq2Seq。 该方法被广泛应用于存在输入和输出序列的场景， Seq2Seq架构中的编码器和解码器通常由时间递归神经网络（RNN）或卷积神经网络（CNN）实现。</p>
+<h2 id="基于RNN的生成式结构"><a href="#基于RNN的生成式结构" class="headerlink" title="基于RNN的生成式结构"></a>基于RNN的生成式结构</h2><p>“序列到序列”方法在很多文本处理中有很好的效果。相较于从原文本中抽取式获得摘要，从序列到序列建模处理方法，其摘要长度并不依赖于原文本长度，而且相对于原文摘要必然有信息损失。</p>
+<p>Chopra等使用递归神经网络（RNN）作为解码器。(Abstractive Sentence Summarization with Attentive Recurrent Neural Networks)</p>
+<h2 id="基于CNN的生成式结构"><a href="#基于CNN的生成式结构" class="headerlink" title="基于CNN的生成式结构"></a>基于CNN的生成式结构</h2><p>CNN的算法优势是可以提取出层次特征，并可以高效并行地进行卷积运算，根据其特点，可将CNN应用到相关文本任务中，但原生态的文本字符串无法进行计算，需将文本表示为分布式向量 （Distributed Representation/Word Embedding）。可以用一个实数矩阵或向量表示一句话或一个词，经过分布式向量表示后，就可以在文本任务中应用CNN。但CNN提取的文本特征，并不能如图像特征那样，有明显的可解释性和可视性。CNN 抽取的文本特征可以类比自然语言处理中的分析树（Syntactic Parsing Tree）。</p>
+<p>Facebook 公司提出的 ConvS2S 模型，由 CNN 实现编码器和解码器，同时加入了注意力机制，尝试将该模型用于自动文本摘要。</p>
+<h2 id="基于Attention的生成式结构"><a href="#基于Attention的生成式结构" class="headerlink" title="基于Attention的生成式结构"></a>基于Attention的生成式结构</h2><p>编码器将原文编码为向量V，而解码器从向量 V 中提取信息、获取语义、生成文本摘要。自注意力模型更加关注句子内部结构，即Word-Pairs的信息。模型单独学习目标端句子内部结构信息，利用编解码器注意力建立源文本和目标文本的对应关系。自注意力在第一层便巧妙地建立了词和整个句子的联系，其思想可用于文本摘要自动生成任务。</p>
+<p>Google 团队使用自注意力（Self-Attention）和编解码器注意力（Encoder-Decoder Attention），来完全实现端到端任务。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%BC%8F%E8%87%AA%E5%8A%A8%E6%91%98%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">生成式自动摘要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ERNN%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">基于RNN的生成式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ECNN%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">基于CNN的生成式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EAttention%E7%9A%84%E7%94%9F%E6%88%90%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">基于Attention的生成式结构</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/07/12/Text%20summary/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/07/12/Text%20summary/&text=RL - Automatic Text Summary Method"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/07/12/Text%20summary/&is_video=false&description=RL - Automatic Text Summary Method"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RL - Automatic Text Summary Method&body=Check out this article: http://w1mps.github.io/2021/07/12/Text%20summary/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/07/12/Text%20summary/&title=RL - Automatic Text Summary Method"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/07/12/Text%20summary/&name=RL - Automatic Text Summary Method&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/07/12/Text%20summary/&t=RL - Automatic Text Summary Method"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    Powered by
+    outx
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
