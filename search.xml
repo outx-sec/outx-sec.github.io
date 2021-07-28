@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>PR - Towards Detection of Software Supply Chain Attacks by Forensic Artifacts</title>
+      <link href="/2021/07/28/Towards%20Detection%20of%20Software%20Supply%20Chain%20Attacks/"/>
+      <url>/2021/07/28/Towards%20Detection%20of%20Software%20Supply%20Chain%20Attacks/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：M Ohm, A Sykosch, M Meier</em></p><p><em>原文标题: Towards Detection of Software Supply Chain Attacks by Forensic Artifacts</em></p><p><em>原文链接: <a href="https://doi.org/10.1145/3407023.3409183">https://doi.org/10.1145/3407023.3409183</a></em></p><p><em>原文来源: ARES &#39;20</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Introduction"><a href="#0x01-Introduction" class="headerlink" title="0x01 Introduction"></a>0x01 Introduction</h2><p>现有针对软件供应链攻击的检测大多侧重于检测那些存在漏洞、易受到攻击的开源软件包，并没有很明确地考虑那些带有恶意性的软件包所造成的软件供应链攻击。作者发现恶意软件包通常会在安装的时候引入大量新的敏感操作，这与该软件包正常的版本安装时截然不同。基于这个发现，作者提出了Buildwatch，这是一种动态分析软件及其第三方依赖的框架。</p><h2 id="0x02-Methodology"><a href="#0x02-Methodology" class="headerlink" title="0x02 Methodology"></a>0x02 Methodology</h2><p>本文主要是从开源软件包中提取和分析那些敏感操作，例如在安装这个软件包的时候创建一个文件或是连接到某一个主机等行为。作者主要关注的是同一个软件包的恶意版本和良性版本之间的对比差异，并且提出了下列假设：</p><p><strong>恶意软件包由于引入了这些敏感操作会产生显著的变化</strong></p><p>这一部分的用于人工审查的候选包包括那些过去被攻击过的和被公开披露定性为恶意的，以及现有被相关漏洞影响的和在安装过程中有恶意行为的软件包。所有选中的包如下图：</p><p><img src="https://files.mdnice.com/user/15003/9131c2e5-150d-45da-90d7-519b14b54870.png"></p><p>作者使用了Cuckoo作为沙箱来测试这些软件包，并在沙箱中安装这些包，然后观察其系统调用等情况。具体系统调用和其标志位如下图：</p><p><img src="https://files.mdnice.com/user/15003/4158690d-4de4-425d-9014-a7f71bff61f4.png"></p><p>有了上述概念后，下面是一个将python的代码对应到系统调用的直观实例：</p><p><img src="https://files.mdnice.com/user/15003/93608592-164d-4c0c-b0ef-a928e6f3cae4.png"></p><h2 id="0x03-Buildwatch"><a href="#0x03-Buildwatch" class="headerlink" title="0x03 Buildwatch"></a>0x03 Buildwatch</h2><p><img src="https://files.mdnice.com/user/15003/2350ba08-42d1-41c8-aaeb-d93536d47554.png"><br>Buildwatch主要还是针对在提交代码这个过程中加上了一个前置处理，用于检测这些代码中是否存在一些可疑的操作，然后与正常的版本进行diff操作，输出一份结果给使用者参考，例如：</p><p><img src="https://files.mdnice.com/user/15003/980fae14-9810-4e8e-9681-570fa951cbe0.png"></p><h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者主要关注的是软件包迭代中的差异性，因为存在黑客入侵维护者PC修改源代码这类可能性，这也是供应链攻击中常见的一种攻击手法。于是，在维护者提交更新软件包之前可以运行作者实现的Buildwatch，用于发现那些可疑的新增敏感操作。</p><p>如此一来，人工审查静态代码的成本降低了很多，就如上图中所示，这样的结果输出是十分清晰明了的。但相应的也存在一些问题：</p><ol><li>如果恶意代码的入口部分存在着例如检测是否是沙箱环境等反调试代码，这个方法恐怕会出现一些问题</li><li>仅关注软件包迭代中引入的新操作是否会忽略掉这些软件包中本就存在的恶意代码，例如一开始就上传的是一个恶意软件包，后续的迭代包中也保持了这一段恶意代码</li><li>纯动态分析很多时候对于一些代码分支会执行不到，这一点可以考虑优先通过静态分析筛选，再进行动态分析。一是降低了动态分析的时间成本和资源成本，二是结合这两者的优点，可以做到一个速度与准确的相对平衡</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Supply Chain Attack </tag>
+            
+            <tag> ARES &#39;20 </tag>
+            
+            <tag> Dynamic Analysis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - Abusing Hidden Properties to Attack the Node.js Ecosystem</title>
       <link href="/2021/07/20/HPA/"/>
       <url>/2021/07/20/HPA/</url>
