@@ -13,19 +13,19 @@
 <meta property="og:site_name" content="Trashbox 4 outx!">
 <meta property="og:description" content="原文作者：M Ohm, A Sykosch, M Meier 原文标题: Towards Detection of Software Supply Chain Attacks by Forensic Artifacts 原文链接: https:&#x2F;&#x2F;doi.org&#x2F;10.1145&#x2F;3407023.3409183 原文来源: ARES &#39;20 笔记作者：outx  0x01 Introduc">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://files.mdnice.com/user/15003/9131c2e5-150d-45da-90d7-519b14b54870.png">
-<meta property="og:image" content="https://files.mdnice.com/user/15003/4158690d-4de4-425d-9014-a7f71bff61f4.png">
-<meta property="og:image" content="https://files.mdnice.com/user/15003/93608592-164d-4c0c-b0ef-a928e6f3cae4.png">
-<meta property="og:image" content="https://files.mdnice.com/user/15003/2350ba08-42d1-41c8-aaeb-d93536d47554.png">
-<meta property="og:image" content="https://files.mdnice.com/user/15003/980fae14-9810-4e8e-9681-570fa951cbe0.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9131c2e5-150d-45da-90d7-519b14b54870.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4158690d-4de4-425d-9014-a7f71bff61f4.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/93608592-164d-4c0c-b0ef-a928e6f3cae4.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/2350ba08-42d1-41c8-aaeb-d93536d47554.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/980fae14-9810-4e8e-9681-570fa951cbe0.png">
 <meta property="article:published_time" content="2021-07-28T02:44:40.000Z">
-<meta property="article:modified_time" content="2021-07-28T03:26:01.558Z">
+<meta property="article:modified_time" content="2021-07-28T03:29:42.453Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="Supply Chain Attack">
 <meta property="article:tag" content="ARES &#39;20">
 <meta property="article:tag" content="Dynamic Analysis">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://files.mdnice.com/user/15003/9131c2e5-150d-45da-90d7-519b14b54870.png">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9131c2e5-150d-45da-90d7-519b14b54870.png">
     
     
       
@@ -176,13 +176,13 @@
 <h2 id="0x02-Methodology"><a href="#0x02-Methodology" class="headerlink" title="0x02 Methodology"></a>0x02 Methodology</h2><p>本文主要是从开源软件包中提取和分析那些敏感操作，例如在安装这个软件包的时候创建一个文件或是连接到某一个主机等行为。作者主要关注的是同一个软件包的恶意版本和良性版本之间的对比差异，并且提出了下列假设：</p>
 <p><strong>恶意软件包由于引入了这些敏感操作会产生显著的变化</strong></p>
 <p>这一部分的用于人工审查的候选包包括那些过去被攻击过的和被公开披露定性为恶意的，以及现有被相关漏洞影响的和在安装过程中有恶意行为的软件包。所有选中的包如下图：</p>
-<p><img src="https://files.mdnice.com/user/15003/9131c2e5-150d-45da-90d7-519b14b54870.png"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/9131c2e5-150d-45da-90d7-519b14b54870.png"></p>
 <p>作者使用了Cuckoo作为沙箱来测试这些软件包，并在沙箱中安装这些包，然后观察其系统调用等情况。具体系统调用和其标志位如下图：</p>
-<p><img src="https://files.mdnice.com/user/15003/4158690d-4de4-425d-9014-a7f71bff61f4.png"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4158690d-4de4-425d-9014-a7f71bff61f4.png"></p>
 <p>有了上述概念后，下面是一个将python的代码对应到系统调用的直观实例：</p>
-<p><img src="https://files.mdnice.com/user/15003/93608592-164d-4c0c-b0ef-a928e6f3cae4.png"></p>
-<h2 id="0x03-Buildwatch"><a href="#0x03-Buildwatch" class="headerlink" title="0x03 Buildwatch"></a>0x03 Buildwatch</h2><p><img src="https://files.mdnice.com/user/15003/2350ba08-42d1-41c8-aaeb-d93536d47554.png"><br>Buildwatch主要还是针对在提交代码这个过程中加上了一个前置处理，用于检测这些代码中是否存在一些可疑的操作，然后与正常的版本进行diff操作，输出一份结果给使用者参考，例如：</p>
-<p><img src="https://files.mdnice.com/user/15003/980fae14-9810-4e8e-9681-570fa951cbe0.png"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/93608592-164d-4c0c-b0ef-a928e6f3cae4.png"></p>
+<h2 id="0x03-Buildwatch"><a href="#0x03-Buildwatch" class="headerlink" title="0x03 Buildwatch"></a>0x03 Buildwatch</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/2350ba08-42d1-41c8-aaeb-d93536d47554.png"><br>Buildwatch主要还是针对在提交代码这个过程中加上了一个前置处理，用于检测这些代码中是否存在一些可疑的操作，然后与正常的版本进行diff操作，输出一份结果给使用者参考，例如：</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/980fae14-9810-4e8e-9681-570fa951cbe0.png"></p>
 <h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者主要关注的是软件包迭代中的差异性，因为存在黑客入侵维护者PC修改源代码这类可能性，这也是供应链攻击中常见的一种攻击手法。于是，在维护者提交更新软件包之前可以运行作者实现的Buildwatch，用于发现那些可疑的新增敏感操作。</p>
 <p>如此一来，人工审查静态代码的成本降低了很多，就如上图中所示，这样的结果输出是十分清晰明了的。但相应的也存在一些问题：</p>
 <ol>
