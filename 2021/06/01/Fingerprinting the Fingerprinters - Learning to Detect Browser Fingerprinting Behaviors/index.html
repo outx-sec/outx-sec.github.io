@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：U Iqbal, S Englehardt, Z Shafiq 原文标题: Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors 原文链接: https:&#x2F;&#x2F;conferences.computer.org&#x2F;sppub&#x2F;pdfs&#x2F;sp&#x2F;2021&#x2F;893400b143.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors">
+<meta property="og:url" content="http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：U Iqbal, S Englehardt, Z Shafiq 原文标题: Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors 原文链接: https:&#x2F;&#x2F;conferences.computer.org&#x2F;sppub&#x2F;pdfs&#x2F;sp&#x2F;2021&#x2F;893400b143.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/99e0d167-1b6c-424d-8a3c-2b98633726d7.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/6d4cde95-1cc1-43cc-93d9-c6e69180e5b8.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/95bd2bd5-ad57-4c5d-9ce3-16403d893c0b.png">
+<meta property="article:published_time" content="2021-06-01T02:44:40.000Z">
+<meta property="article:modified_time" content="2021-07-28T03:32:31.209Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="ML">
+<meta property="article:tag" content="S&amp;P 2021">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/99e0d167-1b6c-424d-8a3c-2b98633726d7.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2021/06/06/Inforsec%20Learning/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/05/25/Oversharing%20Is%20Not%20Caring%20-%20How%20CNAME%20Cloaking%20Can%20ExposeYour%20Session%20Cookies/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&text=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&is_video=false&description=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors&body=Check out this article: http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&name=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&t=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="toc-number">1.1.</span> <span class="toc-text">主要贡献</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FP-INSPECTOR"><span class="toc-number">2.</span> <span class="toc-text">FP-INSPECTOR</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC"><span class="toc-number">2.1.</span> <span class="toc-text">检测指纹脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.1.</span> <span class="toc-text">静态分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.2.</span> <span class="toc-text">动态分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB"><span class="toc-number">2.1.3.</span> <span class="toc-text">对指纹脚本进行分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC%E5%AF%B9%E6%8A%97%E6%8E%AA%E6%96%BD"><span class="toc-number">2.2.</span> <span class="toc-text">指纹脚本对抗措施</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%AF%84%E4%BC%B0"><span class="toc-number">3.</span> <span class="toc-text">实验评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E7%A1%AE%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">准确性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">网站完整性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E5%9C%A8%E9%87%8E%E6%8C%87%E7%BA%B9"><span class="toc-number">4.</span> <span class="toc-text">检测在野指纹</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%8C%87%E7%BA%B9%E5%B8%B8%E7%94%A8%E7%9A%84API"><span class="toc-number">5.</span> <span class="toc-text">分析指纹常用的API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%8C%87%E7%BA%B9"><span class="toc-number">5.1.</span> <span class="toc-text">功能指纹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%8C%87%E7%BA%B9"><span class="toc-number">5.2.</span> <span class="toc-text">算法指纹</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">6.</span> <span class="toc-text">方法局限性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%84%9A%E6%9C%AC%E5%88%86%E6%95%A3%E8%BA%B2%E9%81%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">6.1.</span> <span class="toc-text">通过脚本分散躲避检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%84%9A%E6%9C%AC%E5%90%88%E5%B9%B6%E8%BA%B2%E9%81%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">6.2.</span> <span class="toc-text">通过脚本合并躲避检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-06-01T02:44:40.000Z" itemprop="datePublished">2021-06-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ML/" rel="tag">ML</a>, <a class="tag-link-link" href="/tags/S-P-2021/" rel="tag">S&P 2021</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：U Iqbal, S Englehardt, Z Shafiq</em></p>
+<p><em>原文标题: Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors</em></p>
+<p><em>原文链接: <a target="_blank" rel="noopener" href="https://conferences.computer.org/sppub/pdfs/sp/2021/893400b143.pdf">https://conferences.computer.org/sppub/pdfs/sp/2021/893400b143.pdf</a></em></p>
+<p><em>原文来源: S&amp;P 2021</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>浏览器指纹识别是一种侵入性的、不透明的无状态跟踪技术。浏览器供应商、学术界和标准机构长期以来一直在努力提供有效的保护措施，以在又不降低用户体验的前提下尽可能防止浏览器指纹识别。作者提出了FP-INSPECTOR，一种基于机器学习的句法-语义应用方法，以准确检测浏览器的指纹。根据实验结果来看，FP-INSPECTOR表现良好，它能够比最先进的技术多检测26%的指纹脚本。同时，建立在FP-INSPECTOR基础上的API级指纹反制措施有助于减少2倍影响网站完整性的因素。结果表明，现在有超过10%的前10万网站和超过四分之一的前10万网站存在浏览器指纹。作者还发现了以前没有报道过的指纹脚本对JavaScript API的使用，这表明这些指纹脚本正在以一些出人意料的方式来利用API。</p>
+<h2 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h2><ol>
+<li>一种基于ML的语法-语义方法，结合了静态和动态分析来检测浏览器指纹行为。</li>
+<li>评估由不同的缓解策略引起的网站不完整性，这些策略阻止了网络请求或限制了API。</li>
+<li>一项针对Alexa排名前10万的网站上浏览器指纹脚本的测量研究</li>
+<li>对JavaScript APIs进行聚类分析以发现新的浏览器指纹载体。</li>
+</ol>
+<h1 id="FP-INSPECTOR"><a href="#FP-INSPECTOR" class="headerlink" title="FP-INSPECTOR"></a>FP-INSPECTOR</h1><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/99e0d167-1b6c-424d-8a3c-2b98633726d7.png"></p>
+<h2 id="检测指纹脚本"><a href="#检测指纹脚本" class="headerlink" title="检测指纹脚本"></a>检测指纹脚本</h2><p>首先，FP-INSPECTOR并不依赖手工编码的启发式方法，而是会自行学习指纹脚本的新属性。具体来说，作者提取了大量的低级启发式方法来捕捉指纹脚本的句法和语义特性，以训练机器学习分类器。FP-INSPECTOR分类器是在已有研究的指纹脚本的基础上训练出来的，且能够推广为检测新的指纹脚本和以前未知的指纹方法。</p>
+<p>第二，作者同时利用了静态特征（即脚本语法）和动态特征（即脚本的执行）。静态表征使其能够捕获在页面访问期间可能不会执行的指纹脚本或程序（例如，因为它们需要用户互动，而在自动抓取过程中很难模拟）。动态表征使其能够捕捉到被混淆的指纹脚本。FP-INSPECTOR针对静态和动态表征分别训练有监督的机器学习模型，并结合它们的输出来准确地将脚本分类为指纹或非指纹脚本。</p>
+<h3 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h3><p>静态分析能够从JavaScript文件的内容和结构中捕获信息——包括那些在度量过程中没有执行的信息，或者那些没有被作者所扩展的检测覆盖的信息。</p>
+<p><strong>AST表示法.</strong><br>首先，作者将脚本表示为抽象语法树（AST）。这样做便可以忽略脚本之间的编码风格差异和不断变化的JavaScript语法。AST将脚本编码为一棵语法基元树（例如，VariableDeclaration和ForStatement），其边缘代表代码语句之间的语法关系。</p>
+<p><strong>脚本解包.</strong><br>将脚本表示为AST的过程很复杂，因为JavaScript是一种解释语言，在运行时编译。这允许脚本的部分内容以纯文本的形式存在，然后用eval或Function编译和执行。之前的工作表明，指纹脚本通常包括被eval或Function所括起来的代码。为了解开含有eval或Function的脚本，作者将它们嵌入到空的HTML网页中，并在一个工具化的浏览器中打开，这样就可以在JavaScript引擎解析脚本时提取它们。</p>
+<p><strong>静态特征提取</strong><br>作者是从ASTs生成的静态特征。为了建立特征集，作者首先分层遍历AST，并将它们分成一对父节点和子节点。父节点代表上下文（如for loops、try statements或if conditions），子节点代表该上下文中的函数（如createElement、toDataURL和measureText）。简单地解析每个脚本的整个AST的父子对会导致所有脚本的特征数量过大（即数百万）。为了避免这种情况，作者只考虑父子对中至少有一个关键词与JavaScript API中的名称、方法或属性相匹配。作者将这些父子节点的组合作为所有脚本的特征向量进行组合，每个父子节点组合都被视为一个二进制特征（其中1表示存在一个特征，0表示没有）。</p>
+<p>为了避免过度拟合，作者采用了无监督和有监督的特征选择方法来减少特征的数量。具体来说，首先去掉那些变化不大的特征（即方差&lt;0.01），并使用信息增益来缩短前一千名的特征列表。这使得FP-INSPECTOR能够保留代表最常用的指纹识别API的特征。</p>
+<h3 id="动态分析"><a href="#动态分析" class="headerlink" title="动态分析"></a>动态分析</h3><p>虽然静态分析能够捕捉到脚本的语法结构，但当脚本被混淆或减化时，静态分析的效果会受到很大的影响。这一点至关重要，因为之前的研究表明，指纹脚本经常使用混淆来隐藏其功能。除了从脚本内容中提取静态特征外，作者还通过监控脚本的执行来提取动态特征。执行跟踪可以捕捉到脚本中的语义关系而无视混淆所带来的影响，这使得作者能够提取有关脚本功能的相关信息。</p>
+<p><strong>动态特征提取</strong><br>作者使用两种方法来从执行过程中提取特征。首先，对脚本访问每个单独的API方法或属性的次数进行记录和统计，并将其作为一个特征。接下来，作者从支持参数传递或存在返回值的API中建立特征。作者没有直接使用参数或返回值，而是使用派生值来捕捉更高层次的语义，以便在分类过程中更好地进行泛化。</p>
+<p>为了避免过度拟合，作者再次应用无监督和有监督的特征选择方法来限制特征的数量。与静态分析的特征减少类似，这使其能够保留代表最常用的API的特征，以便进行指纹识别。然后，作者利用排名前一千名的特征作为输入，训练了一个有监督的机器学习模型。</p>
+<h3 id="对指纹脚本进行分类"><a href="#对指纹脚本进行分类" class="headerlink" title="对指纹脚本进行分类"></a>对指纹脚本进行分类</h3><p>FP-INSPECTOR使用了决策树分类器来训练一个机器学习模型。决策树是通过脚本的特征向量来进行分类的。在构建树的过程中，决策树会在每个节点上选择能最有效地分割数据的特征。具体来说，选择具有最高信息增益的属性，通过丰富一个类来分割数据。然后，决策树遵循同样的方法来递归划分子集，除非该子集属于一个类别或不能再被划分。</p>
+<p>需要注意的是作者训练了两个独立的模型，并将它们的分类结果联合起来，而不是将脚本的静态和动态特征结合起来训练一个模型。也就是说，如果一个脚本被使用静态特征作为输入的模型或使用动态特征作为输入的模型归类为指纹脚本，那么它就被认为是一个指纹脚本。通过使用这种方法，作者对页面访问过程中加载的所有脚本进行分类。这些脚本包括从单独的URL加载的外部脚本和任何HTML文档中包含的内联脚本。</p>
+<h2 id="指纹脚本对抗措施"><a href="#指纹脚本对抗措施" class="headerlink" title="指纹脚本对抗措施"></a>指纹脚本对抗措施</h2><p>现有的浏览器指纹对抗措施可分为内容封锁和 API 限制两大类。内容拦截会根据用户的网络位置(例如，域名或 URL)阻止用户下载指纹脚本。而API 限制并不会阻止指纹识别脚本的加载，而是限制了对某些 JavaScript API 的访问，这些 API 被用于浏览器指纹识别。<br>作者在先前研究的基础上提出了以下措施：</p>
+<ol>
+<li>黑名单API限制</li>
+<li>有针对性的API限制</li>
+<li>请求阻止</li>
+<li>混合情况阻止</li>
+</ol>
+<h1 id="实验评估"><a href="#实验评估" class="headerlink" title="实验评估"></a>实验评估</h1><h2 id="准确性"><a href="#准确性" class="headerlink" title="准确性"></a>准确性</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/6d4cde95-1cc1-43cc-93d9-c6e69180e5b8.png"><br>上表列出了静态和动态模型的综合和单独结果。从表中可以看出，FP-INSPECTOR的分类器比启发式方法多检测出26%的脚本，假阳性率（FPR）为0.05%，假阴性率（FNR）为6.1%，可以忽略不计。总的来说，我们发现通过结合这些模型，FP-INSPECTOR的检测率提高了近10%，总体准确率达到99.9%，召回率为93.8%，精确度为93.1%。</p>
+<h2 id="网站完整性"><a href="#网站完整性" class="headerlink" title="网站完整性"></a>网站完整性</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/95bd2bd5-ad57-4c5d-9ce3-16403d893c0b.png"><br>上表总结了网站的平均受损结果。总的来说，使用FP-INSPECTOR检测的有针对性的反击措施在特别容易被破坏的测试网站上减少了2倍的网站受损率。更具体地说，blanketAPI限制受到的影响最大（破坏了三分之二以上的测试网站），而有针对性的API限制造成的破坏最小（在大约75%的测试网站上没有重大破坏）。</p>
+<h1 id="检测在野指纹"><a href="#检测在野指纹" class="headerlink" title="检测在野指纹"></a>检测在野指纹</h1><p>作者从Alexa排名前10万的网站收集数据，分析之后得出了以下结论以方便检测在野的一些指纹识别脚本：</p>
+<ol>
+<li>超过四分之一的顶级网站现在会对用户进行指纹识别</li>
+<li>指纹识别在新闻网站上最为常见</li>
+<li>指纹常用于打击广告欺诈，也用于潜在的跨站点跟踪</li>
+</ol>
+<h1 id="分析指纹常用的API"><a href="#分析指纹常用的API" class="headerlink" title="分析指纹常用的API"></a>分析指纹常用的API</h1><p>作者调查研究了那些常出现在检测到的指纹脚本中的节点和那些出现在fingerprintjs2中的节点所属的集群。虽然其发现了许多指纹脚本对JavaScript API的使用，但为了简洁的讨论，作者没有单独列出所有JavaScript API关键词，而是将它们按主题分组。同时，作者讨论了他们发现的每个被指纹脚本使用的新API是如何被滥用来提取关于用户或其设备的识别信息的。</p>
+<h2 id="功能指纹"><a href="#功能指纹" class="headerlink" title="功能指纹"></a>功能指纹</h2><p>该类别包括浏览器指纹识别技术，用于探测浏览器支持的不同功能。现代网站依靠许多API来支持其丰富的功能。然而，并不是所有的浏览器都支持每一个API，或者可能有必要的用户权限。因此，网站可能需要探测API和权限以调整其功能。然而，这种功能探测有可能会泄露信息。</p>
+<h2 id="算法指纹"><a href="#算法指纹" class="headerlink" title="算法指纹"></a>算法指纹</h2><p>这一类包括浏览器指纹识别技术，它不仅仅是简单地探测不同的功能。这些浏览器指纹识别技术使用不同的 JavaScript APIs 对某些输入进行算法处理，并利用不同的实现方式对这些输入进行不同的处理这一情况来泄露信息。作者既讨论了新发现的、以前在指纹脚本中没有观察到的JavaScript APIs的用途，也讨论了已知的指纹技术。</p>
+<h1 id="方法局限性"><a href="#方法局限性" class="headerlink" title="方法局限性"></a>方法局限性</h1><p>FP-INSPECTOR的检测和缓解组件存在着一些限制。由于 FP-INSPECTOR 检测脚本粒度上的指纹，对抗性网站可以将指纹脚本分散成若干块，以避免检测或合并所有脚本(功能性脚本和指纹) ，从而避免执行缓解措施。</p>
+<h2 id="通过脚本分散躲避检测"><a href="#通过脚本分散躲避检测" class="headerlink" title="通过脚本分散躲避检测"></a>通过脚本分散躲避检测</h2><p>在检测方面，FP-INSPECTOR只考虑脚本内部的句法和语义关系，不考虑脚本之间的关系。由于其目前的设计，FP-INSPECTOR在检测指纹时可能会遇到问题——指纹脚本的主要功能被划分到几个分散的脚本中。然而，FP-INSPECTOR可以通过对浏览器进行更深入的检测，扩展到捕获脚本之间的互动。。未来版本的FP-INSPECTOR也可以实现这样的工具化；特别是，FP-INSPECTOR可以扩展到捕捉脚本包含的父子关系。为了避免通过父子关系进行琐碎的检测，脚本分散技术需要将每个块从独立的祖先节点嵌入网站，并将结果返回到看似独立的服务器。因此，脚本分散也有一个维护成本：每次更新指纹脚本都需要将脚本分散到若干块中，并进行广泛的测试以确保正确执行。</p>
+<h2 id="通过脚本合并躲避检测"><a href="#通过脚本合并躲避检测" class="headerlink" title="通过脚本合并躲避检测"></a>通过脚本合并躲避检测</h2><p>为了限制指纹，FP-INSPECTOR最有效的反制措施（即有针对性的API限制）是在脚本的粒度上应用的。FP-INSPECTOR可能会破坏所有脚本都被合并在一个脚本中的网站。然而，在这种情况下，可以采用更细化的执行方式来有效防止指纹识别。与脚本分散类似，脚本合并也有维护成本：任何脚本的每次更新都需要将所有脚本合并成一个。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>作者提出了FP-INSPECTOR，一种基于机器学习的句法-语义应用方法，以准确检测浏览器的指纹行为。FP-INSPECTOR超越了先前工作中的启发式方法，检测到的指纹脚本多了26%，并有助于将网站受损率降低2倍。FP-INSPECTOR的部署表明，现在浏览器指纹识别比以前更普遍。对Alexa排名前10万的网站的测量研究表明，10.18%的网站上部署了2349个不同的域的指纹脚本。</p>
+<p>作者计划将提供指纹脚本的域名报告给追踪保护名单，如Disconnect 和 EasyPrivacy 。FP-INSPECTOR还发现了几个新的API的利用，这些API是首次被发现用于浏览器指纹识别的。作者计划将这些API的名称和统计数据报告给面向隐私的浏览器供应商和标准机构。为了促进后续研究，作者还将发布对OpenWPM的补丁、指纹识别对策原型扩展、新发现的指纹识别供应商名单，以及提交给跟踪保护列表、浏览器供应商和标准机构的错误报告，网址是<a target="_blank" rel="noopener" href="https://uiowa-irl.github.io/FP-Inspector%E3%80%82">https://uiowa-irl.github.io/FP-Inspector。</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="toc-number">1.1.</span> <span class="toc-text">主要贡献</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#FP-INSPECTOR"><span class="toc-number">2.</span> <span class="toc-text">FP-INSPECTOR</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC"><span class="toc-number">2.1.</span> <span class="toc-text">检测指纹脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.1.</span> <span class="toc-text">静态分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-number">2.1.2.</span> <span class="toc-text">动态分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB"><span class="toc-number">2.1.3.</span> <span class="toc-text">对指纹脚本进行分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E7%BA%B9%E8%84%9A%E6%9C%AC%E5%AF%B9%E6%8A%97%E6%8E%AA%E6%96%BD"><span class="toc-number">2.2.</span> <span class="toc-text">指纹脚本对抗措施</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%AF%84%E4%BC%B0"><span class="toc-number">3.</span> <span class="toc-text">实验评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E7%A1%AE%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">准确性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">网站完整性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E5%9C%A8%E9%87%8E%E6%8C%87%E7%BA%B9"><span class="toc-number">4.</span> <span class="toc-text">检测在野指纹</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%8C%87%E7%BA%B9%E5%B8%B8%E7%94%A8%E7%9A%84API"><span class="toc-number">5.</span> <span class="toc-text">分析指纹常用的API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%8C%87%E7%BA%B9"><span class="toc-number">5.1.</span> <span class="toc-text">功能指纹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%8C%87%E7%BA%B9"><span class="toc-number">5.2.</span> <span class="toc-text">算法指纹</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">6.</span> <span class="toc-text">方法局限性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%84%9A%E6%9C%AC%E5%88%86%E6%95%A3%E8%BA%B2%E9%81%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">6.1.</span> <span class="toc-text">通过脚本分散躲避检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%84%9A%E6%9C%AC%E5%90%88%E5%B9%B6%E8%BA%B2%E9%81%BF%E6%A3%80%E6%B5%8B"><span class="toc-number">6.2.</span> <span class="toc-text">通过脚本合并躲避检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&text=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&is_video=false&description=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors&body=Check out this article: http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&title=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&name=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/06/01/Fingerprinting%20the%20Fingerprinters%20-%20Learning%20to%20Detect%20Browser%20Fingerprinting%20Behaviors/&t=PR - Fingerprinting the Fingerprinters: Learning to Detect Browser Fingerprinting Behaviors"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    Powered by
+    outx
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
