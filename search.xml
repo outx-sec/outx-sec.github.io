@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - LiSa - Multiplatform Linux Sandbox for Analyzing IoT Malware</title>
+      <link href="/2021/08/31/LiSa%20-%20Multiplatform%20Linux%20Sandbox%20for%20Analyzing%20IoT%20Malware/"/>
+      <url>/2021/08/31/LiSa%20-%20Multiplatform%20Linux%20Sandbox%20for%20Analyzing%20IoT%20Malware/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：D Uhrıcek</em></p><p><em>原文标题: LiSa - Multiplatform Linux Sandbox for Analyzing IoT Malware</em></p><p><em>原文链接: <a href="http://excel.fit.vutbr.cz/submissions/2019/058/58.pdf">http://excel.fit.vutbr.cz/submissions/2019/058/58.pdf</a></em></p><p><em>原文来源: 2020 - excel.fit.vutbr.cz</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Introduction"><a href="#0x01-Introduction" class="headerlink" title="0x01 Introduction"></a>0x01 Introduction</h2><p>目前针对Windows平台的沙箱已经较成熟，例如热门的Cuckoo。而Linux下有Limon/REMnux/Padawan等，但这些分析软件或多或少受到限制。作者提出了一个新的产品-LiSa，提供了完整的分析环境，包含静态、动态和网络分析、同时还能利用yara、json编写规则进行扩展。</p><h2 id="0x02-Program-Tracing"><a href="#0x02-Program-Tracing" class="headerlink" title="0x02 Program Tracing"></a>0x02 Program Tracing</h2><p>作者利用strace工具进行系统调用的追踪。这个工具忽略用户级的调用而专注于内核级的追踪。</p><h2 id="0x03-Implementation"><a href="#0x03-Implementation" class="headerlink" title="0x03 Implementation"></a>0x03 Implementation</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/09324eb4-652f-453d-9939-1421d2382525.png"></p><p>主要实现方法：</p><ul><li>Python（模块化系统、分析用的Pipeline、Web API）</li><li>bash（构建系统）</li><li>C++（解析网络数据）</li></ul><p>简而言之，是采用hook syscall的方式来进行追踪。而构造沙盒的方式则是利用了Docker技术，统一管理则是用了Docker compose。</p><h2 id="0x03-Conclusion"><a href="#0x03-Conclusion" class="headerlink" title="0x03 Conclusion"></a>0x03 Conclusion</h2><p>总的来说，作者的思路和我拟定的论文扩展思路类似，首先构建虚拟环境，然后在虚拟环境中进行进程追踪(利用strace)，以确定进程行为。最后，结合预定的行为组合判断包的恶意性。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Malware Detection </tag>
+            
+            <tag> Trace Syscall </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - Deep entity classification: Abusive account detection for online social networks</title>
       <link href="/2021/08/09/Deep%20entity%20classification%20-%20Abusive%20account%20detection%20for%20online%20social%20networks/"/>
       <url>/2021/08/09/Deep%20entity%20classification%20-%20Abusive%20account%20detection%20for%20online%20social%20networks/</url>
