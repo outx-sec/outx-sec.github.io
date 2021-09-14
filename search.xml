@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - Can I Take Your Subdomain? Exploring Same-Site Attacks in the Modern Web</title>
+      <link href="/2021/09/14/Can%20I%20Take%20Your%20Subdomain%20Exploring%20Same-Site%20Attacks%20in%20the%20Modern%20Web/"/>
+      <url>/2021/09/14/Can%20I%20Take%20Your%20Subdomain%20Exploring%20Same-Site%20Attacks%20in%20the%20Modern%20Web/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：M Squarcina, M Tempesta, L Veronese</em></p><p><em>原文标题: Can I Take Your Subdomain? Exploring Same-Site Attacks in the Modern Web</em></p><p><em>原文链接: <a href="https://www.usenix.org/system/files/sec21-squarcina.pdf">https://www.usenix.org/system/files/sec21-squarcina.pdf</a></em></p><p><em>原文来源: USENIX Security 2021</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>作者主要描述了一种研究者不太重视的安全风险，即部分针对同级域名控制而产生的破坏cookie安全的威胁隐患，并重新审视了这一类威胁，并分析了相关域攻击者所带来的安全性危害，主要是从：</p><ol><li>引入了相关域攻击者的细粒度定义，主要是根据攻击者发起攻击的位置及其与安全威胁的关联性进行分析，拆解攻击者的攻击能力，并评估这些攻击能力所对应的web攻击条件</li><li>实现了一个工具用于评估相关域攻击者可能对web应用程序安全造成的影响</li></ol><blockquote><p>补充知识</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/c2abe24f-24b3-4cf7-acbf-8e6c84d1f491.png"></p></blockquote><h2 id="0x02-Threat-Model"><a href="#0x02-Threat-Model" class="headerlink" title="0x02 Threat Model"></a>0x02 Threat Model</h2><h3 id="悬空DNS记录"><a href="#悬空DNS记录" class="headerlink" title="悬空DNS记录"></a>悬空DNS记录</h3><p>指域的权威DNS服务器中指向过期资源的记录</p><ul><li>过期的域名：DNS CNAME记录将一个域名(别名)映射到另一个称为规范名称的域名。如果规范名称过期，攻击者可以轻松注册该域，并在别名域下提供任意内容。</li><li>停止提供的服务：第三方服务常常用于扩展网站的功能，就好像blog.example.com代表一个wordpress博客，但是如果服务提供商没有明确验证域所有权，攻击者可以把任何具有有效DNS记录的子域映射到自己的账户。加之，站点管理员通常会使用通配符来简化配置过程，这就造成了攻击者可以绑定一些自定义的子域。</li><li>已去除的云实例：主要指的是利用那些云中可用的悬空DNS记录。</li></ul><h3 id="动态DNS服务"><a href="#动态DNS服务" class="headerlink" title="动态DNS服务"></a>动态DNS服务</h3><p>许多服务提供商允许用户在特定子域下创建网站，例如github上的&lt;username&gt;.github.io。如果PSL中包含父域，则承载用户提供的内容的子域彼此不相关，如github.io</p><h3 id="已沦陷主机"><a href="#已沦陷主机" class="headerlink" title="已沦陷主机"></a>已沦陷主机</h3><p>攻击可用一些脆弱的服务直接对主机发起攻击，然后从一个特权位置开始对一个更加敏感的网站进行攻击</p><h2 id="0x03-Analysis-Methodology"><a href="#0x03-Analysis-Methodology" class="headerlink" title="0x03 Analysis Methodology"></a>0x03 Analysis Methodology</h2><h3 id="过期域名"><a href="#过期域名" class="headerlink" title="过期域名"></a>过期域名</h3><p>给定一个以CNAME记录开头的解析链，检查其是否指向一个无法解析的资源，并提取链末端规范名称的eTLD+1。如果根域上的whois没有匹配结果的话，直接查询GoDaddy检测是否可以直接购买该域名。</p><h3 id="停止提供的服务"><a href="#停止提供的服务" class="headerlink" title="停止提供的服务"></a>停止提供的服务</h3><p>直接尝试解析&lt;none&gt;.test.example.com的CNAME或DNS记录，就可以检测test.example.com的DNS通配符，确定安全性，其中none为完全随机的字符串</p><h3 id="已去除的云实例"><a href="#已去除的云实例" class="headerlink" title="已去除的云实例"></a>已去除的云实例</h3><p>首先测试了数据集中的每个(子)域，以检查指向的IP是否包含在任何云IP范围中。主要是通过ping一个IP是来判断这个IP是否存活。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> USENIX Security 2021 </tag>
+            
+            <tag> Domain </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>WP - Buuctf Web Part</title>
       <link href="/2021/09/09/Buuctf%20Web%20Part/"/>
       <url>/2021/09/09/Buuctf%20Web%20Part/</url>
