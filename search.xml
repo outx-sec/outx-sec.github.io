@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>PR - PDiff: Semantic-based Patch Presence Testing for Downstream Kernels</title>
+      <link href="/2021/10/27/PDiff%20-%20Semantic-based%20Patch%20Presence%20Testing%20for%20Downstream%20Kernels/"/>
+      <url>/2021/10/27/PDiff%20-%20Semantic-based%20Patch%20Presence%20Testing%20for%20Downstream%20Kernels/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：Z Jiang, Y Zhang, J Xu, Q Wen, Z Wang</em></p><p><em>原文标题: PDiff: Semantic-based Patch Presence Testing for Downstream Kernels</em></p><p><em>原文链接: <a href="https://secsys.fudan.edu.cn/_upload/article/files/69/06/2b05ab0d4f8bba54fd410b031ae8/7024cbe1-82e7-4308-876a-4c8973eb809a.pdf">https://secsys.fudan.edu.cn/_upload/article/files/69/06/2b05ab0d4f8bba54fd410b031ae8/7024cbe1-82e7-4308-876a-4c8973eb809a.pdf</a></em></p><p><em>原文来源: CCS 2020</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>首先需要了解的背景是，开源内核通常会被一些下游厂商应用在数十亿的设备上，但这些下游厂商经常遗漏或推迟其主流版本中的补丁发布，更糟糕的是有些厂商甚至不公开补丁的发布进展，这就导致了其设备的安全性不能够得到及时的保障，危害其用户的安全。所以对于那些常常受到安全威胁的群体来说，打补丁的情况至关重要，这就要求我们对下游厂商所发布的设备的内核中补丁的存在性进行测试。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/50cb4bec-f9e3-468f-a019-4edda4aafc9e.png"></p><p>现有的检测方式主要是通过代码签名匹配来判断目标内核中是否有补丁，但这对于实际情况来说是远远不足的。这主要是因为下游厂商通常是客制化的代码风格，这通常会改变主流版本的补丁代码以适配其自身的代码情况，使得校验失败。作者提出了PDiff，首先生成与目标补丁相关的语义摘要，然后基于这个语义摘要，PDiff会将目标内核与采用补丁前后的主流版本进行比较（选择更接近的参考版本来确定补丁的状态）。</p><p>而补丁存在性测试的主要挑战来自于主流版本和下游内核之间的代码层差异，详细来说：</p><ul><li>第三方代码定制：开源内核往往会被第三方供应商客制化，以拓展其功能点。</li><li>非标准Building配置：现代操作系统内核往往带有其Building配置，以适应功能的需要</li></ul><p>以上这两种情况是十分普遍存在的，而且会在很大程度上影响补丁存在性的测试，仍然是很难处理好的点。</p><h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b3f7a370-6b98-4979-9ba6-d13ebb6fc3e6.png"></p><p>PDiff设计的基本原理是，目标内核和它的参考版本不论在代码层面如何改变，它们应该具有类似的语义，具体的工作流程如下图所示，简单来说分为：</p><ol><li>锚块选择：PDiff从受补丁影响的路径总结补丁语义，所以需要确定好锚块，主要是从参考版本中找到与补丁相关的函数，然后引入锚块这个定义，锚块的属性有：<ul><li>任何穿过受补丁影响的代码块的路径都会到达至少一个锚块。通过这种方式，能够保证所有受补丁影响的代码块都被覆盖。</li><li>在锚块之后的任何路径都不能到达受补丁影响的代码块。这就保证了没有受补丁影响的代码块会被截取掉。</li><li>在存在补丁之前的版本中，一个锚块应该在打了补丁后的版本中有对应的部分，反之亦然。</li></ul></li><li>补丁摘要生成：给定补丁相关函数中的锚块，PDiff将枚举函数开始到锚块结束的路径，这个路径将被认定为受到补丁影响的路径，然后根据路径摘要获取补丁摘要。</li><li>基于摘要的补丁存在测试：在获得两个参考版本和目标内核的补丁摘要后，我们衡量它们的相似性以确定补丁状态。</li></ol><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>本文主要深入研究了下游厂商设备中内核补丁的存在性测试方法，它主要克服了补丁存在性检测的两个关键挑战：第三方代码定制和非标准Building配置。读者在读完这篇paper后主要有两个问题：一是对于受影响代码块起始部分的判定，如果说该函数存在着父子函数关系时，应该如何取舍，究竟是扩大锚块呢还是精确缩小呢？二是选择的前后两个主流版本的问题，如何在没有对下游内核中补丁存在性做出判断依据前，精准定位到前后最近的两个主流版本？这其中的资源消耗，数据集体量又是如何？</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux Kernel </tag>
+            
+            <tag> Semantic Analysis </tag>
+            
+            <tag> CCS 2020 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Conference - TrustCom</title>
       <link href="/2021/10/25/Trustcom2021/"/>
       <url>/2021/10/25/Trustcom2021/</url>
