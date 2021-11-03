@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - MAAC: Novel Alert Correlation Method To Detect Multi-step Attack</title>
+      <link href="/2021/11/03/MAAC%20-%20Novel%20Alert%20Correlation%20Method%20To%20Detect%20Multi-step%20Attack/"/>
+      <url>/2021/11/03/MAAC%20-%20Novel%20Alert%20Correlation%20Method%20To%20Detect%20Multi-step%20Attack/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：X Wang, L Yu, H He, X Gong</em></p><p><em>原文标题: MAAC: Novel Alert Correlation Method To Detect Multi-step Attack</em></p><p><em>原文链接: <a href="https://arxiv.org/pdf/2011.07793.pdf">https://arxiv.org/pdf/2011.07793.pdf</a></em></p><p><em>原文来源: TrustCom 2021</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>首先需要了解的是，随着攻击手段及攻击机制的改进，现在的攻击者往往会考虑利用分布式攻击的方式来进攻。最为直观的便是高级网络攻击会包含多个攻击阶段来实现最终目标。而传统的入侵检测系统，例如IDS、防火墙等等用于监视网络情况的工具会在被攻击期间产生大量告警。虽然这些告警中包含了关联攻击者的攻击线索，但大部分的告警是与攻击无关的误报。对于网络管理人员来说，手动在大量异构的告警中排查梳理出攻击者的攻击阶段和路线犹如大海捞针。</p><p>作者提出并实现了MAAC，一个多阶段攻击告警关联分析系统，它能够有效地减少重复的告警，并根据告警的语义和攻击阶段来组合生成可疑的多阶段攻击路径。本文主要解决了一个问题，即如何了解告警的语义，并通过语义进行聚合和关联，最终得到可疑主机和攻击路径的顺序。这个问题主要有三个方面：</p><ol><li>告警语义：实现的算法应该能够理解告警的含义，并通过告警语义分析获得攻击所属阶段</li><li>攻击关联性：这部分的挑战在于通过逻辑语义自动关联告警，而非是通过特征或者手动关联</li><li>攻击路径发现：作者的目标是建立一个攻击告警图并提供可能存在的攻击路径，同时对疑似沦陷的主机进行排序</li></ol><h2 id="0x02-Method"><a href="#0x02-Method" class="headerlink" title="0x02 Method"></a>0x02 Method</h2><p>作者构建了一个威胁模型用于研究，如下图<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/3bd36641-0adb-486f-a58c-263e1041504e.png"><br>攻击者首先尝试攻击办公网中的两台主机，通过钓鱼邮件的方式或其他方法，如CVE-2017011882，但仅成功一台。随后，攻击者在这台电脑上安装后门，并开始尝试横向移动，其通过这台受控主机进行内网扫描，尝试利用MS17-010等漏洞直接控制内网其他主机，这时又仅有一台成功，这台主机与核心服务器相连，攻击者便能够从核心服务中获取敏感信息。</p><p>在整个入侵过程中，边界和内部网络入侵检测系统会分别产生大量的告警，除此之外还有大量由主机端安装的安全软件产生的关于恶意文件和后门的告警。这些告警是混乱，且大量重复的。不论是告警的分散性还是重复性都严重阻碍了网络管理人员的排查，增加了攻击检测的难度，所以作者聚焦于如何处理告警而不是如何生成告警。以下是MAAC的架构，总结起来主要是五部分：</p><ol><li>告警解析：规范化不同安全设备和软件生成的告警，解析成标准化告警</li><li>告警信息向量化：主要是为了尽可能减少重复的告警的数量，去掉无意义的干扰项</li><li>告警关联分析：在精简了留存了有效告警之后，MAAC将告警关联起来生成告警图，包括同一主机上的告警关联和不同主机之间告警的关联</li><li>图遍历：在生成告警图之后，MAAC会遍历该图查找具有三个及以上的所有路径</li><li>攻击路径排名：作者提出了用于计算路径概率的方程，以获得最可能的攻击路径</li></ol><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/ad2cab44-59b5-43de-9f16-adacc4e13fcd.png"></p><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>在本文中，作者提出并实现了MAAC，这是一种基于语义分析的告警缩减和告警关联技术，以解决网络中安全设备告警数量爆炸导致网络管理人员无法及时有效地排除攻击者威胁的情况。同时，MAAC能够给出可能的攻击路径及其可疑程度，进一步协助攻击检测，它并不需要先验知识，完全由告警之间的关联生成。</p><p>读者在读完这篇文章后主要有两个疑问：一是数据集的问题，作者在Real-World Evaluation部分中描述了其用于评估的数据集，但这存在一个问题，这些数据集偏旧了，近几年安全设备的迭代相较于10年初可谓是日新月异，现有的安全设备的告警相较于作者使用的数据集中的有效性应该会高很多，在这种情况下MAAC的关联分析会不会更加精准一些呢？二是路径发现问题，仅仅只是找三个节点及以上的路径是如何确定的呢，短路径，即一两步的攻击路径为何不考虑呢？也许攻击者直接一封邮件邮到网络管理员那里，恰好网络管理员又在域控呢？不过总的来说，这篇文章站在一个新的角度对内网攻击，尤其是这种多阶段的攻击检测提出了一个特别好的检测思路。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> TrustCom 2021 </tag>
+            
+            <tag> Attack Detection </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - PDiff: Semantic-based Patch Presence Testing for Downstream Kernels</title>
       <link href="/2021/10/27/PDiff%20-%20Semantic-based%20Patch%20Presence%20Testing%20for%20Downstream%20Kernels/"/>
       <url>/2021/10/27/PDiff%20-%20Semantic-based%20Patch%20Presence%20Testing%20for%20Downstream%20Kernels/</url>
