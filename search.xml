@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - A network attack path prediction method using attack graph</title>
+      <link href="/2021/11/09/dwadwa/"/>
+      <url>/2021/11/09/dwadwa/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：X Liu</em></p><p><em>原文标题：A network attack path prediction method using attack graph</em></p><p><em>原文链接：<a href="https://link.springer.com/article/10.1007/s12652-020-02206-5">https://link.springer.com/article/10.1007/s12652-020-02206-5</a></em></p><p><em>原文来源：JAIHC 2020</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>正如之前笔记中所说过的，现在的网络攻击行为已经由传统单一简单的攻击机制转变为多阶段多步骤复杂的攻击机制。这里举一个简单的例子，Zeus僵尸网络通过扫描检测、溢出攻击、感染目标、传播病毒及窃取数据五个攻击步骤/攻击阶段发动攻击，这会造成严重且恶劣的影响。简单来说，攻击路径预测的目的是通过告警关联分析技术分析攻击行为，揭露这些攻击行为背后隐藏的逻辑，进而构建攻击场景，最终推断出攻击者的后续攻击步骤，实现及时发现主动防御。</p><p>攻击路径预测的关键主要分为两部分：</p><ol><li>了解当前的攻击行为</li><li>预测攻击者可能会采用的攻击路径</li></ol><p>基于上述想法，作者提出了一种基于攻击图的攻击路径预测方法，并尝试用攻击图来描述入侵行为的节点之间的传递关系，映射出从某一主机或漏洞进行攻击的最大可能性，进而网络各攻击路径下的入侵情况，并根据检测结果构建网络攻击节点路径检测模型。</p><h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><pre><code>文中涉及大量公式推理，读者仅作简要概述，如感兴趣请至原文中查看</code></pre><p><strong>网络攻击节点路径检测</strong><br>在构建网络攻击节点路径检测模型的过程中，首先基于攻击图理论定义了网络攻击图，通过检测攻击者在当前时间节点的权限状态，获取网络连接矩阵，得到攻击者使用的漏洞、攻击效果和攻击条件的描述，进而构建网络攻击节点路径检测模型。</p><p><strong>攻击意图预测和优化</strong><br>在优化和预测网络中异常信息的攻击意图的过程中，根据主机之间的连接关系定义攻击路径图，计算攻击意图的可达性和实现的可能性，得到攻击意图的最短路径，进而优化和预测网络中异常信息的攻击意图</p><p><strong>基于入侵概率的网络攻击节点路径检测模型</strong><br>在构建网络攻击节点路径检测模型的过程中，根据预定义的攻击标准，对网络中存在的漏洞的各个属性进行赋值，检测攻击者能够成功利用漏洞进行入侵的概率、攻击者获得高权限的概率以及实现攻击意图的概率，最后得攻击者在网络中各个攻击路径下能够进行入侵的最大可能性的那一条攻击路径，进行后续检测（当然这部分是建立在网络攻击节点路径检测的基础上实现的）。</p><h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>作者为了验证想法，构建了一套环境用于实现，拓扑图如下</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/398f0df6-4859-4ed8-a21a-dcca85b35d51.png"></p><p>外网用户（攻击者）可以通过互联网访问该网络，实验网络总共分为四个区域：DMZ区、子网1、子网2、子网3。访问控制设置如下：DMZ区包含Web服务器和Email服务器，由防火墙1保护并与互联网互联，且只能访问主机1、子网2的文件服务器和子网3的数据库服务器；子网1的主机1可以访问子网2和子网3的所有机器，主机3只能访问主机1和数据库服务器，主机2只能访问主机3；工作站2可以访问数据库服务器和文件服务器。</p><p>然后作者与另外两种模型检测到的漏洞风险、节点攻击路径检测的精确度和可靠性进行了比较，最后还对比了其误报率，总体情况如下图</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/527e9887-52dd-44af-bfae-20fdb36e4222.png"></p><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>作者提出了一种基于攻击图的攻击意图预测方法，也可以称之为基于攻击图的攻击路径预测方法。该方法用攻击路径图来描述入侵行为节点之间的传递关系，从而映射出从主机/漏洞进行攻击的最大可能性，进一步梳理得到网络中各攻击路径下的入侵情况，并根据这个情况构建网络攻击节点路径检测模型。</p><p>读者在读完整篇文章后，主要有一个问题：在描述攻击图定义那部分，作者写道：“在网络节点攻击路径检测的过程中，路由器会以一定的概率检测自己的地址信息，并计算出路由器检测数据包信息的概率，从而根据这个计算结果确定网络入侵中的攻击路径”。对于这部分，读者比较迷惑的是为什么路由器检测自己地址信息结合数据包中的信息可以确定网络入侵的攻击路径，不应该是从一些异常数据包中排查出路由信息进而确定攻击路径么，这里的描述比较迷惑。但总的来说，这篇文章从网络节点关联攻击路径出发，重点关注可被攻击者利用到的漏洞/主机，对其进行评估，进而确定各条攻击路径的可能性，是一个不错的想法。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JAIHC 2020 </tag>
+            
+            <tag> Attack Path Prediction </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>NS - CTF Notes</title>
       <link href="/2021/11/08/CTF%20Notes/"/>
       <url>/2021/11/08/CTF%20Notes/</url>
