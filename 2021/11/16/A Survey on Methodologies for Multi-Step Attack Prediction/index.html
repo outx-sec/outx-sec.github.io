@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：S Ingale, M Paraye 原文标题：A Survey on Methodologies for Multi-Step Attack Prediction 原文链接：https:&#x2F;&#x2F;ieeexplore.ieee.org&#x2F;abstract&#x2F;document&#x2F;9171106 原文来源：ICISC 2020 笔记作者：outx  Intro首先需要知道的概念是Multi-Step">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - A Survey on Methodologies for Multi-Step Attack Prediction">
+<meta property="og:url" content="http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：S Ingale, M Paraye 原文标题：A Survey on Methodologies for Multi-Step Attack Prediction 原文链接：https:&#x2F;&#x2F;ieeexplore.ieee.org&#x2F;abstract&#x2F;document&#x2F;9171106 原文来源：ICISC 2020 笔记作者：outx  Intro首先需要知道的概念是Multi-Step">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/a49e53fc-00e3-4fef-8f80-0c0093066d34.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/0aa4213a-9807-43d9-a862-6bc42aa3e7b3.png">
+<meta property="article:published_time" content="2021-11-16T06:43:20.000Z">
+<meta property="article:modified_time" content="2021-11-16T12:30:58.756Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="Survey">
+<meta property="article:tag" content="Multi-Step Attack Prediction">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/a49e53fc-00e3-4fef-8f80-0c0093066d34.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - A Survey on Methodologies for Multi-Step Attack Prediction</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/11/09/A%20network%20attack%20path%20prediction%20method%20using%20attack%20graph/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&text=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&is_video=false&description=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - A Survey on Methodologies for Multi-Step Attack Prediction&body=Check out this article: http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&name=PR - A Survey on Methodologies for Multi-Step Attack Prediction&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&t=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intro"><span class="toc-number">1.</span> <span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Challenges"><span class="toc-number">2.</span> <span class="toc-text">Challenges</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Algorithms-Mechanisms"><span class="toc-number">3.</span> <span class="toc-text">Algorithms&#x2F;Mechanisms</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hidden-Markov-Models"><span class="toc-number">3.1.</span> <span class="toc-text">Hidden Markov Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Artificial-Neural-Networks"><span class="toc-number">3.2.</span> <span class="toc-text">Artificial Neural Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bayesian-Networks"><span class="toc-number">3.3.</span> <span class="toc-text">Bayesian Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Machine-Learning-Techniques"><span class="toc-number">3.4.</span> <span class="toc-text">Machine Learning Techniques</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - A Survey on Methodologies for Multi-Step Attack Prediction
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-16T06:43:20.000Z" itemprop="datePublished">2021-11-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Multi-Step-Attack-Prediction/" rel="tag">Multi-Step Attack Prediction</a>, <a class="tag-link-link" href="/tags/Survey/" rel="tag">Survey</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：S Ingale, M Paraye</em></p>
+<p><em>原文标题：A Survey on Methodologies for Multi-Step Attack Prediction</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/9171106">https://ieeexplore.ieee.org/abstract/document/9171106</a></em></p>
+<p><em>原文来源：ICISC 2020</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>首先需要知道的概念是Multi-Step，也叫Multi-Stage，相信对cs熟悉的朋友应该都能明白所谓step或者stage指的是这一类型的攻击通常是多步走，多个阶段进行的，不是一次性的。对于这类攻击，阶段性的成果只是达成最终目标的一个路径，在攻击者实现最终目标之前这些阶段性的攻击可能或多或少能够被安全设备捕捉到，但像传统IDS这类防御措施是不足以完整挖掘出攻击路径并及时反馈出攻击者的下一步行动的。于是作者着眼于这类攻击检测方法的性能指标，回顾最常用的用于预测多步骤攻击的方法，以指导研究人员为不同的多步骤攻击场景选择最为合适的方法。</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><p>早期用于检测传统网络攻击的方法已经不太适用于检测和预测多步骤攻击。目前针对多步骤攻击的检测和预测通常是通过结合几个特定的事件来进行的，但网络中我们不可能保证所有运行的服务都是绝对安全的。这里涉及到一个取舍，到底是要安全还是用户体验。于是考虑到这个局限性，问题就转变为制定一个限制程度可接受的多步骤攻击检测和预测方法。</p>
+<p>这个问题的关键挑战在于如何预测复杂多变的攻击手法，通常来说这类攻击是由多个不同步骤组成的用于实现攻击者最终目标的一系列攻击。但由于网络流量数据的复杂性，攻击流量与正常流量混杂难以区别，从海量数据中筛查出攻击流量就犹如海底捞针了。除此之外，还有一些特定环境和场景下才能发动的攻击，这种情况作者称之为稀有数据(rare-data)挑战。在这种情况下，训练一个模型来检测这种数量罕有的攻击是一件几乎无法完成的事。</p>
+<p>除了上述挑战以外，在预测多步骤攻击时会遇到的另一个挑战/阻碍是极度不平衡的数据集。这主要是因为要做多步骤攻击检测和预测，首先需要找到攻击阶段之间的关联性或相似性，更重要的是不仅要知道攻击类型，还要知道攻击的性质和目的。一旦缺失了一部分信息，那么构建起来的检测模型效果一定是不太好的。所以这种问题也被称为是“数据缺失”问题，在这种情况下，需要先对传入的未知攻击进行分类，然后才能够输入模型进行训练。</p>
+<h2 id="Algorithms-Mechanisms"><a href="#Algorithms-Mechanisms" class="headerlink" title="Algorithms/Mechanisms"></a>Algorithms/Mechanisms</h2><pre><code>以下涉及到的具体论文方法请至原文中查看
+</code></pre>
+<h3 id="Hidden-Markov-Models"><a href="#Hidden-Markov-Models" class="headerlink" title="Hidden Markov Models"></a>Hidden Markov Models</h3><p>隐马尔可夫模型（HMM）是目前应用于多步骤攻击预测的众多模型中使用最广泛的，HMM模型中的存在着一定数量的隐藏态，但不论如何每一个状态都会产生一个观察值。对于试验者来说，只有那些由特定状态所产生的观察值是值得注意的。由此，该模型所谓的状态很容易地能够和多步骤攻击中的每一步进行关联，这也是该模式适用于多步骤攻击预测的原因。通过该模型，能够根据先验的攻击序列来确定未知攻击所属的类型象限。</p>
+<p>虽然HMM有着上述优点，但其用来预测攻击序列的viterbi算法需要大量的计算时间和内存消耗，序列长度与所需时间成正比。通常来说，较大但不是巨大的序列和特征集比较适用。除此之外，训练HMM模型还有一个问题是需要合理调参，以使得模型能够快速收敛，减少迭代次数。</p>
+<h3 id="Artificial-Neural-Networks"><a href="#Artificial-Neural-Networks" class="headerlink" title="Artificial Neural Networks"></a>Artificial Neural Networks</h3><p>人工神经网络（ANN）能够根据一些标记数据或聚类算法来理解输入的数据，一个ANN是一个个神经元的相互连接，神经元结合输入和相关权重进行计算，将结果反馈给激活函数，以确定信号是否能够通过。举一个实例，将ANN引入至IDS中，它从网络入侵数据集中提取特征，并预测攻击类型。关于神经网络的学习过程这里不再赘述，归根到底是要让其收敛。</p>
+<p>ANN在实际生产环境已经被证明是能够成功检测和预测攻击的了，它能够通过监测和从数据集中学习来做到在正常或异常的基础分类上对攻击进行更高层次的分类。但ANN的缺点也十分明显，虽然其能够处理大量数据，但其进能够分析现有数据并作出判断，并不适用于实时数据处理，即没有很好的办法预测实时入侵。</p>
+<h3 id="Bayesian-Networks"><a href="#Bayesian-Networks" class="headerlink" title="Bayesian Networks"></a>Bayesian Networks</h3><p>贝叶斯网络是基于条件概率原理工作的一个概率模型，本质上来说贝叶斯网络是一个包含节点和边的有向无环图，节点代表随机变量，而边代表这些变量之间的条件独立性。所谓条件概率，指的是一个节点在给定时间处于特定状态的概率，而每个贝叶斯网络中一定存在一个父节点和子节点，子节点的概率取决于父节点。</p>
+<p>以一个实际例子来说明：利用贝叶斯网络建立的贝叶斯分类器能够识别正常和恶意TCP流量中出现的具有不同概率的特征，然后通过一个预定义的训练模型，将流量分类为正常或恶意。贝叶斯最大的优点就在于其易于实现，但效果仅仅只是赶得上别的方法。</p>
+<h3 id="Machine-Learning-Techniques"><a href="#Machine-Learning-Techniques" class="headerlink" title="Machine Learning Techniques"></a>Machine Learning Techniques</h3><p>这一部分就比较大了，分大类可以分为监督和无监督甚至半监督方法。作者仅讨论了两种方法：</p>
+<ol>
+<li>Support Vector Machine<br>支持向量机（SVM）是一种监督模型，主要用于数据分类，传统的SVM适用于带标签的数据。但对于无标签的数据，可以利用One-Class SVM来解决。除此之外，传统SVM可以考虑使用Robust-SVM来替换模型以追求更加稳定的实验效果。<br>SVM已被证明是用于入侵检测和预测最为成功的数据挖掘技术，它与神经网络和决策树相比，具有更低的误报率和更高的预测精准度，同时对于输入数据也没有那么多限制要求。但SVM的缺点是其不能够有效地实时处理数据，除此之外它更多地适用于数字数据，而对于非数字数据的处理效果并不佳。</li>
+<li>Decision Trees<br>决策树是一种能够绘制决策及其结果的树状模型，在决策树中，内部节点代表了对属性的测试，而分支代表了该测试的结果。简单来说，决策树能够给出不同情况下（不同路径下）的预期值。<br>决策树通常通过需要寻找显著特征来分析数据集并从中寻找相对应的模式来预测攻击，正因如此，它能够处理大型数据集。它能从父节点到子节点的路径规则来对攻击进行分类，这意味着决策树能够有助于对网络入侵进行实时监控。</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>最后，简单看看作者罗列出的不同方法的对比</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/a49e53fc-00e3-4fef-8f80-0c0093066d34.png"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/0aa4213a-9807-43d9-a862-6bc42aa3e7b3.png"></p>
+<p>写在最后，作者表明其上述讨论的所有算法都没有充分解决“稀有数据”和“缺失数据”的问题，这两个问题会在极大程度上误导预测的结果。在“稀有数据”问题的情况下，方法可能会倾向于数据集中发生次数最多的攻击类型；在“缺失数据”问题的情况下，由于多步骤攻击的连贯性，很有可能预测没办法进行下去。此外，更多的研究倾向于对于已有的入侵数据集进行研究，而非是真实、实时的网络环境中的数据。因此，未来应当重点关注上述问题，并解决。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intro"><span class="toc-number">1.</span> <span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Challenges"><span class="toc-number">2.</span> <span class="toc-text">Challenges</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Algorithms-Mechanisms"><span class="toc-number">3.</span> <span class="toc-text">Algorithms&#x2F;Mechanisms</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hidden-Markov-Models"><span class="toc-number">3.1.</span> <span class="toc-text">Hidden Markov Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Artificial-Neural-Networks"><span class="toc-number">3.2.</span> <span class="toc-text">Artificial Neural Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bayesian-Networks"><span class="toc-number">3.3.</span> <span class="toc-text">Bayesian Networks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Machine-Learning-Techniques"><span class="toc-number">3.4.</span> <span class="toc-text">Machine Learning Techniques</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&text=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&is_video=false&description=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - A Survey on Methodologies for Multi-Step Attack Prediction&body=Check out this article: http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&title=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&name=PR - A Survey on Methodologies for Multi-Step Attack Prediction&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/&t=PR - A Survey on Methodologies for Multi-Step Attack Prediction"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
