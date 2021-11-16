@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="原文作者：X Wang, L Yu, H He, X Gong 原文标题: MAAC: Novel Alert Correlation Method To Detect Multi-step Attack 原文链接: https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.07793.pdf 原文来源: TrustCom 2021 笔记作者：outx  0x01 Intro首先需要了解的是，随着攻">
+    <meta name="description" content="原文作者：X Wang, L Yu, H He, X Gong 原文标题：MAAC: Novel Alert Correlation Method To Detect Multi-step Attack 原文链接：https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.07793.pdf 原文来源：TrustCom 2021 笔记作者：outx  0x01 Intro首先需要了解的是，随着攻击手段">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PR - MAAC: Novel Alert Correlation Method To Detect Multi-step Attack">
 <meta property="og:url" content="http://w1mps.github.io/2021/11/03/MAAC%20-%20Novel%20Alert%20Correlation%20Method%20To%20Detect%20Multi-step%20Attack/index.html">
 <meta property="og:site_name" content="Trashbox 4 outx!">
-<meta property="og:description" content="原文作者：X Wang, L Yu, H He, X Gong 原文标题: MAAC: Novel Alert Correlation Method To Detect Multi-step Attack 原文链接: https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.07793.pdf 原文来源: TrustCom 2021 笔记作者：outx  0x01 Intro首先需要了解的是，随着攻">
+<meta property="og:description" content="原文作者：X Wang, L Yu, H He, X Gong 原文标题：MAAC: Novel Alert Correlation Method To Detect Multi-step Attack 原文链接：https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.07793.pdf 原文来源：TrustCom 2021 笔记作者：outx  0x01 Intro首先需要了解的是，随着攻击手段">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/3bd36641-0adb-486f-a58c-263e1041504e.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/ad2cab44-59b5-43de-9f16-adacc4e13fcd.png">
 <meta property="article:published_time" content="2021-11-03T11:44:40.000Z">
-<meta property="article:modified_time" content="2021-11-03T11:26:29.305Z">
+<meta property="article:modified_time" content="2021-11-16T12:35:34.566Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="TrustCom 2021">
 <meta property="article:tag" content="Attack Detection">
@@ -165,9 +165,9 @@
   <div class="content" itemprop="articleBody">
     <blockquote>
 <p><em>原文作者：X Wang, L Yu, H He, X Gong</em></p>
-<p><em>原文标题: MAAC: Novel Alert Correlation Method To Detect Multi-step Attack</em></p>
-<p><em>原文链接: <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2011.07793.pdf">https://arxiv.org/pdf/2011.07793.pdf</a></em></p>
-<p><em>原文来源: TrustCom 2021</em></p>
+<p><em>原文标题：MAAC: Novel Alert Correlation Method To Detect Multi-step Attack</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2011.07793.pdf">https://arxiv.org/pdf/2011.07793.pdf</a></em></p>
+<p><em>原文来源：TrustCom 2021</em></p>
 <p><em>笔记作者：outx</em></p>
 </blockquote>
 <h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>首先需要了解的是，随着攻击手段及攻击机制的改进，现在的攻击者往往会考虑利用分布式攻击的方式来进攻。最为直观的便是高级网络攻击会包含多个攻击阶段来实现最终目标。而传统的入侵检测系统，例如IDS、防火墙等等用于监视网络情况的工具会在被攻击期间产生大量告警。虽然这些告警中包含了关联攻击者的攻击线索，但大部分的告警是与攻击无关的误报。对于网络管理人员来说，手动在大量异构的告警中排查梳理出攻击者的攻击阶段和路线犹如大海捞针。</p>

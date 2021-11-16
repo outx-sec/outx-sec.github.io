@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="原文作者：J Li, B Zhao, C Zhang 原文标题: Fuzzing a survey 原文链接: https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源: Cybersecurity 笔记作者：outx  介绍​    互联网和世界数字经济运行在一个共享的、关键的开源软件（OSS）基础设施上。单个库中的安全缺">
+    <meta name="description" content="原文作者：J Li, B Zhao, C Zhang 原文标题：Fuzzing a survey 原文链接：https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源：Cybersecurity 笔记作者：outx  介绍​    互联网和世界数字经济运行在一个共享的、关键的开源软件（OSS）基础设施上。单个库中的安全缺陷可能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PR - Fuzzing: a survey">
 <meta property="og:url" content="http://w1mps.github.io/2021/06/18/Fuzzing%20-%20a%20survey/index.html">
 <meta property="og:site_name" content="Trashbox 4 outx!">
-<meta property="og:description" content="原文作者：J Li, B Zhao, C Zhang 原文标题: Fuzzing a survey 原文链接: https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源: Cybersecurity 笔记作者：outx  介绍​    互联网和世界数字经济运行在一个共享的、关键的开源软件（OSS）基础设施上。单个库中的安全缺">
+<meta property="og:description" content="原文作者：J Li, B Zhao, C Zhang 原文标题：Fuzzing a survey 原文链接：https:&#x2F;&#x2F;seclab.bu.edu&#x2F;papers&#x2F;cname_cloaking-asiaccs2021.pdf 原文来源：Cybersecurity 笔记作者：outx  介绍​    互联网和世界数字经济运行在一个共享的、关键的开源软件（OSS）基础设施上。单个库中的安全缺陷可能">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210618145110707.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210618145552977.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20210618145642592.png">
 <meta property="article:published_time" content="2021-06-18T06:43:20.000Z">
-<meta property="article:modified_time" content="2021-07-28T03:32:41.205Z">
+<meta property="article:modified_time" content="2021-11-16T12:35:34.566Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="Survey">
 <meta property="article:tag" content="Fuzzing">
@@ -166,9 +166,9 @@
   <div class="content" itemprop="articleBody">
     <blockquote>
 <p><em>原文作者：J Li, B Zhao, C Zhang</em></p>
-<p><em>原文标题: Fuzzing a survey</em></p>
-<p><em>原文链接: <a target="_blank" rel="noopener" href="https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf">https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf</a></em></p>
-<p><em>原文来源: <a target="_blank" rel="noopener" href="https://cybersecurity.springeropen.com/">Cybersecurity</a></em></p>
+<p><em>原文标题：Fuzzing a survey</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf">https://seclab.bu.edu/papers/cname_cloaking-asiaccs2021.pdf</a></em></p>
+<p><em>原文来源：<a target="_blank" rel="noopener" href="https://cybersecurity.springeropen.com/">Cybersecurity</a></em></p>
 <p><em>笔记作者：outx</em></p>
 </blockquote>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>​    互联网和世界数字经济运行在一个共享的、关键的开源软件（OSS）基础设施上。单个库中的安全缺陷可能会产生严重后果。例如，OpenSSL实现了用于安全通信的协议，并被包括大多数HTTPS网站在内的Internet服务器广泛使用。早期版本的OpenSSL中的“心脏滴血”漏洞会泄露机密数据并造成巨大的经济损失。目前，fuzzing是这方面最有前途的技术之一，现阶段有三种主要的fuzzing技术：黑盒，灰盒和白盒fuzzing。</p>
