@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/fc0563ee-953d-4b80-9f1b-cd8cba4d94d0.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/316b72aa-8e6a-4b22-9504-614525b54f0d.png">
 <meta property="article:published_time" content="2021-12-07T11:44:40.000Z">
-<meta property="article:modified_time" content="2021-12-13T11:45:21.757Z">
+<meta property="article:modified_time" content="2021-12-13T11:46:19.674Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="ASIA CCS 2020">
 <meta property="article:tag" content="Attack &amp; Defense">
@@ -171,7 +171,7 @@
 </blockquote>
 <h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>这是一篇发布在ASIA CCS 2020的POSTER，作者聚焦于现今越来越多恶意应用程序和APT攻击将MacOS作为攻击目标这一情况展开研究。造成这一情况的原因在读者看来有二，一是MacOS的普及，这主要是M1的高性能表现吸引了很多新用户转向MacOS；二是安全行业相关从业人员也有使用MacOS的习惯，最近几年这些安全行业从业人员也成为了APT组织的攻击目标，前段时候才看到了一个APT组织在推特养号，然后发布破解了的、号称“无后门”的安全方面的工具以侵入安全行业从业人员私人电脑的攻击手段。</p>
 <p>综上，作者观察到目前研究工作很少讨论在MacOS上的攻击和防御技术，包括攻击方法、防护手段以及审查工具。所以作者便尝试构建一个用于评估红队和蓝队的MacOS网络靶场，以刺激更多关于MacOS威胁分析的研究创新。</p>
-<h2 id="0x02-Cyber-Range"><a href="#0x02-Cyber-Range" class="headerlink" title="0x02 Cyber Range"></a>0x02 Cyber Range</h2><p>!<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/08329f62-83d3-4597-9efb-56a2d849c77c.png"></p>
+<h2 id="0x02-Cyber-Range"><a href="#0x02-Cyber-Range" class="headerlink" title="0x02 Cyber Range"></a>0x02 Cyber Range</h2><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/08329f62-83d3-4597-9efb-56a2d849c77c.png"></p>
 <p>上图为网络靶场的结构，主要由三个部分构成。首先，作者建立了一个攻防关联图，它系统地总结了MacOS中可能存在的攻击和防御技术，该图的目的是描述MacOS领域内的恶意软件/APT事件、攻击技术、检测工具和分析工具之间的所有关系。其次，作者开发了一个通用的RAT用于红队模拟攻击，红队可以发动攻击、记录攻击，并使用该工具将攻击映射至ATT&amp;CK矩阵中。第三，作者通过开源工具开发了一个蓝队用于检测和取证评估的工具包。蓝队可以利用这个工具包生成的记录（日志、告警等），以识别恶意行为并标记ATT&amp;CK ID，最后对攻击情况进行评估。通过结合这三部分，作者处理红队日志和蓝队报告，最后生成一个全面的攻防关联图，让用户能够轻松识别不同参与方之间的关系。</p>
 <h3 id="攻防关联图"><a href="#攻防关联图" class="headerlink" title="攻防关联图"></a>攻防关联图</h3><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/fc0563ee-953d-4b80-9f1b-cd8cba4d94d0.png"></p>
 <p>攻防关联图的核心是ATT&amp;CK矩阵，这个矩阵相信大家多少都了解过，这里不多赘述。作者在此基础上构建了一个攻防关联图，用于评估红队和蓝队。上图为攻防关联图的一个样例图，可以看到其根本目的还是为了描述攻击和防御技术之间的关系。对于攻击方（红队），必须要根据ATT&amp;CK矩阵来确定攻击过程中所涉及的攻击技术；对于防御方，则是需要找到行之有效的检测工具和取证工具，并整理出这些工具产生的记录（如事件、登录记录等）。如果这些记录中能够对应上攻击手段可能导致产生的记录，则在攻击技术和记录中添加关联，例如文件操作事件可以与T1105远程文件复制技术产生关联。对于MacOS来说有很多可以被检测工具和取证工具所留下来的记录，包括系统日志、钥匙串、通用日志等。根据这些记录，便可以追踪攻击者的活动。</p>
