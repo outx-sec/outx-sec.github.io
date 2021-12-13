@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：YH Chen, YD Lin, CK Chen, CL Lei 原文标题：POSTER: Construct macOS Cyber Range for Red&#x2F;Blue Teams 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3320269.3405449 原文来源：ASIA CCS 2020 笔记作者：outx  0x01 Intro这是一篇发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - POSTER: Construct macOS Cyber Range for Red&#x2F;Blue Teams">
+<meta property="og:url" content="http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：YH Chen, YD Lin, CK Chen, CL Lei 原文标题：POSTER: Construct macOS Cyber Range for Red&#x2F;Blue Teams 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3320269.3405449 原文来源：ASIA CCS 2020 笔记作者：outx  0x01 Intro这是一篇发">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://files.mdnice.com/user/15003/08329f62-83d3-4597-9efb-56a2d849c77c.png">
+<meta property="og:image" content="https://files.mdnice.com/user/15003/fc0563ee-953d-4b80-9f1b-cd8cba4d94d0.png">
+<meta property="og:image" content="https://files.mdnice.com/user/15003/316b72aa-8e6a-4b22-9504-614525b54f0d.png">
+<meta property="article:published_time" content="2021-12-07T11:44:40.000Z">
+<meta property="article:modified_time" content="2021-12-13T11:00:22.213Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="ASIA CCS 2020">
+<meta property="article:tag" content="Attack &amp; Defense">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://files.mdnice.com/user/15003/08329f62-83d3-4597-9efb-56a2d849c77c.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/11/16/A%20Survey%20on%20Methodologies%20for%20Multi-Step%20Attack%20Prediction/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&text=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&is_video=false&description=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams&body=Check out this article: http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&name=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&t=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Cyber-Range"><span class="toc-number">2.</span> <span class="toc-text">0x02 Cyber Range</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E9%98%B2%E5%85%B3%E8%81%94%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text">攻防关联图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A2%E9%98%9F%E8%A7%92%E5%BA%A6-%E8%93%9D%E9%98%9F%E8%A7%92%E5%BA%A6"><span class="toc-number">2.2.</span> <span class="toc-text">红队角度&#x2F;蓝队角度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Evaluation"><span class="toc-number">3.</span> <span class="toc-text">0x03 Evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-07T11:44:40.000Z" itemprop="datePublished">2021-12-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ASIA-CCS-2020/" rel="tag">ASIA CCS 2020</a>, <a class="tag-link-link" href="/tags/Attack-Defense/" rel="tag">Attack & Defense</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：YH Chen, YD Lin, CK Chen, CL Lei</em></p>
+<p><em>原文标题：POSTER: Construct macOS Cyber Range for Red/Blue Teams</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3320269.3405449">https://dl.acm.org/doi/abs/10.1145/3320269.3405449</a></em></p>
+<p><em>原文来源：ASIA CCS 2020</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>这是一篇发布在ASIA CCS 2020的POSTER，作者聚焦于现今越来越多恶意应用程序和APT攻击将MacOS作为攻击目标这一情况展开研究。造成这一情况的原因在读者看来有二，一是MacOS的普及，这主要是M1的高性能表现吸引了很多新用户转向MacOS；二是安全行业相关从业人员也有使用MacOS的习惯，最近几年这些安全行业从业人员也成为了APT组织的攻击目标，前段时候才看到了一个APT组织在推特养号，然后发布破解了的、号称“无后门”的安全方面的工具以侵入安全行业从业人员私人电脑的攻击手段。</p>
+<p>综上，作者观察到目前研究工作很少讨论在MacOS上的攻击和防御技术，包括攻击方法、防护手段以及审查工具。所以作者便尝试构建一个用于评估红队和蓝队的MacOS网络靶场，以刺激更多关于MacOS威胁分析的研究创新。</p>
+<h2 id="0x02-Cyber-Range"><a href="#0x02-Cyber-Range" class="headerlink" title="0x02 Cyber Range"></a>0x02 Cyber Range</h2><p><img src="https://files.mdnice.com/user/15003/08329f62-83d3-4597-9efb-56a2d849c77c.png"></p>
+<p>上图为网络靶场的结构，主要由三个部分构成。首先，作者建立了一个攻防关联图，它系统地总结了MacOS中可能存在的攻击和防御技术，该图的目的是描述MacOS领域内的恶意软件/APT事件、攻击技术、检测工具和分析工具之间的所有关系。其次，作者开发了一个通用的RAT用于红队模拟攻击，红队可以发动攻击、记录攻击，并使用该工具将攻击映射至ATT&amp;CK矩阵中。第三，作者通过开源工具开发了一个蓝队用于检测和取证评估的工具包。蓝队可以利用这个工具包生成的记录（日志、告警等），以识别恶意行为并标记ATT&amp;CK ID，最后对攻击情况进行评估。通过结合这三部分，作者处理红队日志和蓝队报告，最后生成一个全面的攻防关联图，让用户能够轻松识别不同参与方之间的关系。</p>
+<h3 id="攻防关联图"><a href="#攻防关联图" class="headerlink" title="攻防关联图"></a>攻防关联图</h3><p><img src="https://files.mdnice.com/user/15003/fc0563ee-953d-4b80-9f1b-cd8cba4d94d0.png"></p>
+<p>攻防关联图的核心是ATT&amp;CK矩阵，这个矩阵相信大家多少都了解过，这里不多赘述。作者在此基础上构建了一个攻防关联图，用于评估红队和蓝队。上图为攻防关联图的一个样例图，可以看到其根本目的还是为了描述攻击和防御技术之间的关系。对于攻击方（红队），必须要根据ATT&amp;CK矩阵来确定攻击过程中所涉及的攻击技术；对于防御方，则是需要找到行之有效的检测工具和取证工具，并整理出这些工具产生的记录（如事件、登录记录等）。如果这些记录中能够对应上攻击手段可能导致产生的记录，则在攻击技术和记录中添加关联，例如文件操作事件可以与T1105远程文件复制技术产生关联。对于MacOS来说有很多可以被检测工具和取证工具所留下来的记录，包括系统日志、钥匙串、通用日志等。根据这些记录，便可以追踪攻击者的活动。</p>
+<p>在读者看来，作者所提出的这种关联图其实并不局限于MacOS，但需要限定场景使用，采用该关联图有几个优点。一是从红队的角度来看，该图总结了攻击方会使用到的一些技术，安全从业者便能够通过观察从这个角度出发常见的攻击技术，以实现更好的防护；二是从蓝队的角度出发，检测工具和取证工具及其对应能够产生的记录则展示了这些工具的能力，对于安全从业者来说可以按需选择和部署这些工具。</p>
+<h3 id="红队角度-蓝队角度"><a href="#红队角度-蓝队角度" class="headerlink" title="红队角度/蓝队角度"></a>红队角度/蓝队角度</h3><p>作者在开发红队仿真工具时，采用了模块化的方式进行构建，同时在最新的MacOS上进行测试，以确保其有效性。对于整个模块化的流程来说，保证其有效性其实也就是保证对应攻击模块的时效性。</p>
+<p>在蓝队角度，作者调查了几个著名的蓝队用的取证工具，并总结了这些工具能够提供的记录，然后将其整合，以形成蓝队工具包。按照阶段划分，作者提供的蓝队工具包包括了两个阶段：1)信息收集阶段；2)恶意行为检测阶段。前一阶段主要是收集攻击过程中的动态信息（采集自动态监控工具）和静态信息（采集自静态取证工具），然后反馈至后一阶段，以识别恶意行为并标记ATT&amp;CK ID。</p>
+<h2 id="0x03-Evaluation"><a href="#0x03-Evaluation" class="headerlink" title="0x03 Evaluation"></a>0x03 Evaluation</h2><p>作者利用其红队仿真工具构建了一整个APT攻击流程，并使用其蓝队工具包来检测。</p>
+<p>攻击开始，红队首先利用CVE-2018-6574在Github上建立一个恶意包。在得到这个恶意包后，仿真工具被执行，并将自身复制为用户主目录下的一个隐藏目录。同时，它还将添加一个plist文件，以注册一个用户级的LaunchAgent。然后，它会通过一个socket连接到对应的C2服务器，红队便能够利用shell命令来收集主机上的敏感信息。同时，它还会扫描SSH配置文件，并向沦陷主机中添加自己的公钥。随后，红队通过进程发现、屏幕监控及特权提升等手段，注册一个系统级的LaunchDaemon，便能够以root身份进行更高权限的操作了。</p>
+<p>下表为评估结果，列出了上述攻击流程中会用到的技术，以及蓝队工具包的检测结果。从结果不难看出，蓝队的检测结构从很大程度上依赖于过滤规则的完整性和可用性。因此，不支持的部分主要是由于现有的检测规则倾向于发现阶段，而非实际发生恶意行为阶段所造成的。尽管作者在系统日志文件中记录了尽可能多的系统信息，但在初始低权限阶段和权限提升阶段，是很难区分恶意记录和正常记录的，作者将这个问题作为其未来研究的主要工作之一。</p>
+<p><img src="https://files.mdnice.com/user/15003/316b72aa-8e6a-4b22-9504-614525b54f0d.png"></p>
+<h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>总的来说，作者打算抛砖引玉以引起研究人员对于MacOS攻防方面的研究兴趣。诚然现在很多很多安全设备都是针对Windows或是Linux的，这是实际生产环境决定的。但是MacOS作为大量安全从业者所使用的设备，在其之上的攻防是不能够忽视的。读者认为作者可能想表达的是：也许系统是安全的，但是操作系统的管理员所使用的PC并不一定。那些重重布防难以攻破的系统，攻击者完全可以不从正面突破，转而攻击那些操作系统的人，最终也能达到相同的目的。因此，MacOS上的攻防也是值得注意和研究的！</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Cyber-Range"><span class="toc-number">2.</span> <span class="toc-text">0x02 Cyber Range</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E9%98%B2%E5%85%B3%E8%81%94%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text">攻防关联图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A2%E9%98%9F%E8%A7%92%E5%BA%A6-%E8%93%9D%E9%98%9F%E8%A7%92%E5%BA%A6"><span class="toc-number">2.2.</span> <span class="toc-text">红队角度&#x2F;蓝队角度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Evaluation"><span class="toc-number">3.</span> <span class="toc-text">0x03 Evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&text=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&is_video=false&description=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams&body=Check out this article: http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&title=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&name=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/&t=PR - POSTER: Construct macOS Cyber Range for Red/Blue Teams"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
