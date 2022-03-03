@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PR - Mnemosyne: An Effective and Efficient Postmortem Watering Hole Attack Investigation System</title>
+      <link href="/2022/03/03/Mnemosyne%20-%20An%20Effective%20and%20Efficient%20Postmortem%20Watering%20Hole%20Attack%20Investigation%20System/"/>
+      <url>/2022/03/03/Mnemosyne%20-%20An%20Effective%20and%20Efficient%20Postmortem%20Watering%20Hole%20Attack%20Investigation%20System/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：J Allen, Z Yang, M Landen, R Bhat, H Grover</em></p><p><em>原文标题：Mnemosyne: An Effective and Efficient Postmortem Watering Hole Attack Investigation System</em></p><p><em>原文链接：<a href="https://dl.acm.org/action/doi/pdf/10.1145/3372297.3423355">https://dl.acm.org/action/doi/pdf/10.1145/3372297.3423355</a></em></p><p><em>原文来源：CCS 2020</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>本文聚焦于“水坑攻击”，其通常作为杀伤链中初始阶段的主要技术之一，将一个被攻陷的网站当作垫脚石从而进入目标组织网络。现有的一些研究尝试将那些被攻陷的网站与正常网站进行比较以找出攻击者所做的恶意修改，但作者认为，仅仅检测网站是否被攻陷以及是否被恶意修改只包括了调查而不包括取证。</p><p>经过调研后，作者认为检测水坑攻击以及重构其攻击过程主要有两大挑战：一是现有用于攻击重构的系统通常收集并跟踪系统级信息流的审计日志，并且严重倾向于依赖低级语义，包括进程、套接字和系统调用等。但正是因为其对于低级语义的依赖导致了其无法准确理解与浏览器内Javascript执行有关的细节，限制了其重构复杂攻击的能力；二是水坑攻击具有高度的针对性，在取证调查的早期很难确定哪些访问者才是攻击者真正的目标。作者认为仅仅是检测一个网站是否被攻击者攻陷了是不够的，对于此网站的访问组织来说，他们更关心这个被攻陷的网站在访问时是否会对组织有何不利影响。但是想要独立完成这项调查并不简单，因为服务端的日志对于这些组织来说是透明的。</p><h2 id="0x02-Mnemosyne"><a href="#0x02-Mnemosyne" class="headerlink" title="0x02 Mnemosyne"></a>0x02 Mnemosyne</h2><p>作者提出了Mnemosyne（希腊神话中的记忆女神），一个被水坑攻击后用于取证分析的工具，依赖浏览器端审计日志进行重构、调查和评估水坑攻击，结构如下图。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/86b04540-b19d-4eba-a38d-f8413e040919.png"></p><p>第一部分是浏览器端审计守护程序，它被部署在组织的每个终端系统上，以监测网络浏览活动。审计守护程序会在每个终端的浏览会话中被动地收集审计日志，这些审计日志会被收集并存储在一个负责维护安全审计信息的后台服务器上。第二部分是用于跟踪和分析外部网站行为的版本控制系统，它将结合第一步收集到的浏览器级别的审计日志来确定网站是何时沦陷的以及攻击者做了哪些恶意修改。具体来说，版本控制系统重现了沦陷网站是如何随着时间一步步被攻击者攻陷的，这能够帮助取证人员快速确定入侵窗口期。最后一部分是用户级分析模块，它基于一个可疑版本列表，判断当用户访问网站时网站的行为是否恶意。</p><p>针对第一部分提到的两个挑战，Mnemosyne分别用以下方式进行解决：</p><ol><li><p>Mnemosyne收集审计日志，以浏览器级别的语义来捕捉信息，包括页面、脚本、域等。虽然在此之前已有许多针对浏览器的审计系统，但其中多数需要对浏览器本身进行很多修改，这样做在实验环境下表现良好却不适用于现实世界。相比之下，Mnemosyne以一种无需修改浏览器的轻量级方法，利用现有基于Chromium的浏览器已提供的调试接口构建审计系统，更容易在现实世界中部署。</p></li><li><p>Mnemosyne以一种轻量级的审计方法，在用户的浏览会话期间被动地收集审计日志。为了使得这项调查审计尽可能高效，Mnemosyne对收集到的审计日志应用了一套差异分析方法，以快速确定该组织的哪些员工才是攻击者真正的目标。</p></li></ol><p><strong>Techniques: Auditor Daemon</strong><br>作者所提出的审计守护程序与传统需要修改浏览器的程序不同，其仅仅依赖于由Chromium提供的DevTools调试接口来获取有关用户浏览会话的信息，并将其作为审计日志存储下来，具体捕获的事件如下表。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/987b456c-7e13-488b-ac66-d2c7f5548bdd.png"></p><p><strong>Techniques: Browser-level Causality Graph</strong><br>作为攻击重构的第一步，作者基于浏览器级的审计日志构建了因果关系图，用于分析和调查，如下表所示。</p><table><thead><tr><th align="center">对象定义</th><th align="center">关系定义</th></tr></thead><tbody><tr><td align="center"></td><td align="center"><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/d5e890a9-a7c4-49f0-a164-53bb29dff37b.png" width="70%"/></td></tr></tbody></table><p>这种图式结构能够反映出浏览器事件链以及其产生的因果关系。以社会工程攻击为例子，如下图所示，主要有三个阶段：第一阶段是对用户进行指纹识别，以确定是否是目标用户；第二阶段尝试模糊原始网站的内容，在DOM中注入一个恶意的覆盖层，将用户重定向到一个精心仿照过的网站下；第三阶段欺骗用户进行登陆等操作，以获取用户敏感数据。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/01463d84-3f8c-4020-901a-42db1e698c00.png"></p><p><strong>Techniques: Versioning System</strong>  </p><p>基于域的版本控制系统将所有客户端审计日志信息中的域名信息抽出，按照一定的加权评分方式统计那些网站的可疑版本，即尝试找出可疑变化时间窗口。这套加权评分系统的主要运作方式是将基于浏览器级的审计日志与ATT&amp;CK框架中现有的攻击模式相匹配，涉及的TTP集以及映射所需的pattern如下表。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/76baf8d2-b972-4c84-a62b-dd0d225bd18a.png"></p><p><strong>Techniques: User-Level Analysis</strong><br>用户级分析的目的主要是根据访问用户浏览器中的会话记录来确定同一网站是否在不同用户访问时表现不一。下表就表现了普通用户访问和目标用户访问时，网站所表现出的区别。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/cd5eb4a2-ac64-42ae-8dfa-ee5f3ff8d233.png"></p><h2 id="0x03-Conclusion"><a href="#0x03-Conclusion" class="headerlink" title="0x03 Conclusion"></a>0x03 Conclusion</h2><p>作者在现实世界中尝试部署了这套系统，并且得到了一些攻击场景在野案例，如下表。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/2db50aec-4345-4dc0-9ec2-9c53339a75fd.png"></p><p>读者在读完整篇文章后有一个想法，如果说攻击者在拿下了该网站后，替换掉其中正常下载的文件，比如替换掉网站正常提供下载的一个word文件。通过这种方式不就绕过了系统中版本控制那一部分的加权评分系统从而被识别为一个正常的版本了。当然，针对大多数通过操纵DOM完成页面替换的攻击，此方法思路清晰有效。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CCS </tag>
+            
+            <tag> Watering Hole Attack </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>NS - Leetcode Notes</title>
       <link href="/2022/02/24/Coding/"/>
       <url>/2022/02/24/Coding/</url>
