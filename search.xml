@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?</title>
+      <link href="/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/"/>
+      <url>/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：T Dey, A Mockus</em></p><p><em>原文标题：Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?</em></p><p><em>原文链接：<a href="https://dl.acm.org/doi/abs/10.1145/3273934.3273942">https://dl.acm.org/doi/abs/10.1145/3273934.3273942</a></em></p><p><em>原文来源：PROMISE&#39;18</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>一个软件是否有用、是否受到大众喜爱和追捧，取决于其使用率，而其流行程度需要根据其活跃用户数量来衡量。但除非这些软件尝试追踪并评估其用户活跃度，否则这些活跃用户数量是难以直接准确地统计的。除了考虑活跃用户数量以外还有没有能用于衡量软件流行程度的呢？下载量也许是一个不错的答案，也是最接近软件受欢迎程度内涵的一个数据。  </p><p>作者关注到NPM分发的JavaScript包存在着比较复杂的依赖关系，即一个包可能是其他包运行时或开发时的依赖。这种依赖关系网络会影响到单个软件包的下载数量，当用户安装一个软件包的时候，会同时安装其依赖项。因此分析一个体量超过600K的生态系统中软件包的流行程度面临着巨大的困难。</p><p><strong>RQ: 上下游依赖项的下载量是否有助于预测NPM中流行的JavaScript包的下载量？</strong></p><h2 id="0x02-Data"><a href="#0x02-Data" class="headerlink" title="0x02 Data"></a>0x02 Data</h2><p>所有用于研究的数据均采自npms.io的API，作者只关注了那些至少有一个上游依赖和一个下游依赖的包，最终在60多万个包中，找出了72,211个符合其标准的软件包。数据收集过程涵盖了2017年12月1日至2018年3月15日之间的日期，分别于月初和月中收集这部分NPM软件包的信息，从而产生对应的软件包快照，共计8个可用快照（能够用于预测当前和下个月下载比例的快照需要排除最后两个快照）。</p><p>从npms.io上收集的数据包括Github仓库信息，这其中又有Issue数、每周/月/季度/半年/年的提交数、贡献者名单和贡献者提交数、Branch数和Star数。除此之外，还采集到了软件包的元数据，包括运行时/开发时的依赖列表、月度/季度/半年度/年度/总计发布数量、作者姓名邮件、README等等。对于一些由npms.io计算的评价指标，作者并没有使用。而对于发布和提交的数量，作者根据PCA分析只用了每月和每年的数字。</p><p>为了保持前后一致性，作者考虑到通常NPM安装某个软件包的时候会优先使用本地缓存，也就是说，这些安装是不会计入软件包的下载量的。于是根据建议“只有当一个NPM包的下载量大于50次/天的时候，才认为是值得纳入考虑范围的软件包”作者进一步过滤出了12,999个软件包。</p><h2 id="0x03-Analysis"><a href="#0x03-Analysis" class="headerlink" title="0x03 Analysis"></a>0x03 Analysis</h2><p>作者分两步对所有数据进行了分析。首先对6个快照中的每一个快照单独进行线性回归，并比较结果。在这一步中只做模型拟合，而没有进行预测。第二部作者合并了6个快照的数据，并附增一个“日期”变量以考虑时间因素，输入至一个随机森林模型中进行预测。同时，调研了特征重要性，如下图。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b04c7726-07c2-4b87-815a-5951e3b91dbb.png"></p><p>实验结果显示，当使用随机森林模型（包含所有变量）来预测下载量是否会增加时，ROC曲线下AUC 0.73，敏感性和特异性值为0.66和0.56。而当不包含这些引入的变量时，ROC曲线下AUC值、敏感性和特异性值为0.65、0.59和0.53。</p><h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者旨在通过软件供应链的视角更好地理解这些软件生态系统的行为，并模拟软件依赖网络的影响如何影响JavaScript软件包的下载变化。其使用线性回归和随机森林模型分析了2017年12月1日至2018年3月15日期间NPM中的12,999个流行包，并研究了代表软件依赖性供应链不同方面的预测因素对包的下载数量变化的影响。初步结果表明，上游和下游运行时依赖的数量和下载量对该软件包下载量的变化有很大的影响，以更少、更受欢迎的软件包为依赖（上游或下游）的软件包的下载量大概率会缓步上升。读者在阅读了这份研究报告后发现作者在考虑纳入统计的NPM包的时候其实并未对包的类型稍作区分（纯构建软件包、大型系统的组件软件包等），这些类型也许会对依赖关系以及包的流行程度评估问题上产生较大的影响。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NPM </tag>
+            
+            <tag> Supply Chain </tag>
+            
+            <tag> PROMISE 2018 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - Mnemosyne: An Effective and Efficient Postmortem Watering Hole Attack Investigation System</title>
       <link href="/2022/03/03/Mnemosyne%20-%20An%20Effective%20and%20Efficient%20Postmortem%20Watering%20Hole%20Attack%20Investigation%20System/"/>
       <url>/2022/03/03/Mnemosyne%20-%20An%20Effective%20and%20Efficient%20Postmortem%20Watering%20Hole%20Attack%20Investigation%20System/</url>

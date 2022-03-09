@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：T Dey, A Mockus 原文标题：Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages? 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3273934.3273942 原文来源：PROMISE&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?">
+<meta property="og:url" content="http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：T Dey, A Mockus 原文标题：Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages? 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3273934.3273942 原文来源：PROMISE&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b04c7726-07c2-4b87-815a-5951e3b91dbb.png">
+<meta property="article:published_time" content="2022-03-09T02:44:40.000Z">
+<meta property="article:modified_time" content="2022-03-09T07:16:04.859Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="NPM">
+<meta property="article:tag" content="Supply Chain">
+<meta property="article:tag" content="PROMISE 2018">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b04c7726-07c2-4b87-815a-5951e3b91dbb.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2022/03/03/Mnemosyne%20-%20An%20Effective%20and%20Efficient%20Postmortem%20Watering%20Hole%20Attack%20Investigation%20System/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&text=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&is_video=false&description=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?&body=Check out this article: http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&name=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&t=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Data"><span class="toc-number">2.</span> <span class="toc-text">0x02 Data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Analysis"><span class="toc-number">3.</span> <span class="toc-text">0x03 Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-03-09T02:44:40.000Z" itemprop="datePublished">2022-03-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/NPM/" rel="tag">NPM</a>, <a class="tag-link-link" href="/tags/PROMISE-2018/" rel="tag">PROMISE 2018</a>, <a class="tag-link-link" href="/tags/Supply-Chain/" rel="tag">Supply Chain</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：T Dey, A Mockus</em></p>
+<p><em>原文标题：Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3273934.3273942">https://dl.acm.org/doi/abs/10.1145/3273934.3273942</a></em></p>
+<p><em>原文来源：PROMISE&#39;18</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>一个软件是否有用、是否受到大众喜爱和追捧，取决于其使用率，而其流行程度需要根据其活跃用户数量来衡量。但除非这些软件尝试追踪并评估其用户活跃度，否则这些活跃用户数量是难以直接准确地统计的。除了考虑活跃用户数量以外还有没有能用于衡量软件流行程度的呢？下载量也许是一个不错的答案，也是最接近软件受欢迎程度内涵的一个数据。  </p>
+<p>作者关注到NPM分发的JavaScript包存在着比较复杂的依赖关系，即一个包可能是其他包运行时或开发时的依赖。这种依赖关系网络会影响到单个软件包的下载数量，当用户安装一个软件包的时候，会同时安装其依赖项。因此分析一个体量超过600K的生态系统中软件包的流行程度面临着巨大的困难。</p>
+<p><strong>RQ: 上下游依赖项的下载量是否有助于预测NPM中流行的JavaScript包的下载量？</strong></p>
+<h2 id="0x02-Data"><a href="#0x02-Data" class="headerlink" title="0x02 Data"></a>0x02 Data</h2><p>所有用于研究的数据均采自npms.io的API，作者只关注了那些至少有一个上游依赖和一个下游依赖的包，最终在60多万个包中，找出了72,211个符合其标准的软件包。数据收集过程涵盖了2017年12月1日至2018年3月15日之间的日期，分别于月初和月中收集这部分NPM软件包的信息，从而产生对应的软件包快照，共计8个可用快照（能够用于预测当前和下个月下载比例的快照需要排除最后两个快照）。</p>
+<p>从npms.io上收集的数据包括Github仓库信息，这其中又有Issue数、每周/月/季度/半年/年的提交数、贡献者名单和贡献者提交数、Branch数和Star数。除此之外，还采集到了软件包的元数据，包括运行时/开发时的依赖列表、月度/季度/半年度/年度/总计发布数量、作者姓名邮件、README等等。对于一些由npms.io计算的评价指标，作者并没有使用。而对于发布和提交的数量，作者根据PCA分析只用了每月和每年的数字。</p>
+<p>为了保持前后一致性，作者考虑到通常NPM安装某个软件包的时候会优先使用本地缓存，也就是说，这些安装是不会计入软件包的下载量的。于是根据建议“只有当一个NPM包的下载量大于50次/天的时候，才认为是值得纳入考虑范围的软件包”作者进一步过滤出了12,999个软件包。</p>
+<h2 id="0x03-Analysis"><a href="#0x03-Analysis" class="headerlink" title="0x03 Analysis"></a>0x03 Analysis</h2><p>作者分两步对所有数据进行了分析。首先对6个快照中的每一个快照单独进行线性回归，并比较结果。在这一步中只做模型拟合，而没有进行预测。第二部作者合并了6个快照的数据，并附增一个“日期”变量以考虑时间因素，输入至一个随机森林模型中进行预测。同时，调研了特征重要性，如下图。</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/b04c7726-07c2-4b87-815a-5951e3b91dbb.png"></p>
+<p>实验结果显示，当使用随机森林模型（包含所有变量）来预测下载量是否会增加时，ROC曲线下AUC 0.73，敏感性和特异性值为0.66和0.56。而当不包含这些引入的变量时，ROC曲线下AUC值、敏感性和特异性值为0.65、0.59和0.53。</p>
+<h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者旨在通过软件供应链的视角更好地理解这些软件生态系统的行为，并模拟软件依赖网络的影响如何影响JavaScript软件包的下载变化。其使用线性回归和随机森林模型分析了2017年12月1日至2018年3月15日期间NPM中的12,999个流行包，并研究了代表软件依赖性供应链不同方面的预测因素对包的下载数量变化的影响。初步结果表明，上游和下游运行时依赖的数量和下载量对该软件包下载量的变化有很大的影响，以更少、更受欢迎的软件包为依赖（上游或下游）的软件包的下载量大概率会缓步上升。读者在阅读了这份研究报告后发现作者在考虑纳入统计的NPM包的时候其实并未对包的类型稍作区分（纯构建软件包、大型系统的组件软件包等），这些类型也许会对依赖关系以及包的流行程度评估问题上产生较大的影响。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Data"><span class="toc-number">2.</span> <span class="toc-text">0x02 Data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Analysis"><span class="toc-number">3.</span> <span class="toc-text">0x03 Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&text=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&is_video=false&description=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?&body=Check out this article: http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&title=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&name=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/03/09/Are%20Software%20Dependency%20Supply%20Chain%20Metrics%20Useful%20in%20Predicting%20Change%20of%20Popularity%20of%20NPM%20Packages/&t=PR - Are Software Dependency Supply Chain Metrics Useful in Predicting Change of Popularity of NPM Packages?"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2022
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
