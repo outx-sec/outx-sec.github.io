@@ -16,12 +16,13 @@
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/86b04540-b19d-4eba-a38d-f8413e040919.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/987b456c-7e13-488b-ac66-d2c7f5548bdd.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/d5e890a9-a7c4-49f0-a164-53bb29dff37b.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/0ff5a0f8-ec96-43f5-92bf-6d5637aa526f.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/01463d84-3f8c-4020-901a-42db1e698c00.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/76baf8d2-b972-4c84-a62b-dd0d225bd18a.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/cd5eb4a2-ac64-42ae-8dfa-ee5f3ff8d233.png">
 <meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/2db50aec-4345-4dc0-9ec2-9c53339a75fd.png">
 <meta property="article:published_time" content="2022-03-03T02:44:40.000Z">
-<meta property="article:modified_time" content="2022-03-09T07:20:47.733Z">
+<meta property="article:modified_time" content="2022-03-09T07:22:26.519Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="CCS">
 <meta property="article:tag" content="Watering Hole Attack">
@@ -190,18 +191,9 @@
 <p><strong>Techniques: Auditor Daemon</strong><br>作者所提出的审计守护程序与传统需要修改浏览器的程序不同，其仅仅依赖于由Chromium提供的DevTools调试接口来获取有关用户浏览会话的信息，并将其作为审计日志存储下来，具体捕获的事件如下表。</p>
 <p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/987b456c-7e13-488b-ac66-d2c7f5548bdd.png"></p>
 <p><strong>Techniques: Browser-level Causality Graph</strong><br>作为攻击重构的第一步，作者基于浏览器级的审计日志构建了因果关系图，用于分析和调查，如下表所示。</p>
-<table>
-<thead>
-<tr>
-<th align="center">对象定义</th>
-<th align="center">关系定义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/d5e890a9-a7c4-49f0-a164-53bb29dff37b.png" width="70%"/></td>
-</tr>
-</tbody></table>
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/d5e890a9-a7c4-49f0-a164-53bb29dff37b.png" width="70%"/>  
+<img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/0ff5a0f8-ec96-43f5-92bf-6d5637aa526f.png" width="70%"/> 
+
 <p>这种图式结构能够反映出浏览器事件链以及其产生的因果关系。以社会工程攻击为例子，如下图所示，主要有三个阶段：第一阶段是对用户进行指纹识别，以确定是否是目标用户；第二阶段尝试模糊原始网站的内容，在DOM中注入一个恶意的覆盖层，将用户重定向到一个精心仿照过的网站下；第三阶段欺骗用户进行登陆等操作，以获取用户敏感数据。</p>
 <p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/01463d84-3f8c-4020-901a-42db1e698c00.png"></p>
 <p><strong>Techniques: Versioning System</strong>  </p>
