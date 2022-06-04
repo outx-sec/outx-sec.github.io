@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>PR - Wolf at the Door: Preventing Install-Time Attacks in npm with Latch</title>
+      <link href="/2022/06/04/Wolf%20at%20the%20Door%20-%20Preventing%20Install-Time%20Attacks%20in%20npm%20with%20Latch/"/>
+      <url>/2022/06/04/Wolf%20at%20the%20Door%20-%20Preventing%20Install-Time%20Attacks%20in%20npm%20with%20Latch/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><em>原文作者：Elizabeth Wyss, Alexander Wittman, Drew Davidson</em></p><p><em>原文标题：Wolf at the Door: Preventing Install-Time Attacks in npm with Latch</em></p><p><em>原文链接：<a href="https://dl.acm.org/doi/10.1145/3488932.3523262">https://dl.acm.org/doi/10.1145/3488932.3523262</a></em></p><p><em>原文来源：ASIA CCS&#39;22</em></p><p><em>笔记作者：outx</em></p></blockquote><h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>NPM的地位在之前读者的笔记中已经聊过，此处不再赘述。在今天的这篇论文中，作者的主要研究重点在于npm包的安装过程。同时作者提及了一个很有意思的概念——不受欢迎的行为。这个概念的具体含义为，包的安装脚本可能没有明显的恶意性，但其代码规范糟糕或执行了一些不必要的行为。在开源包安全性检查中的确存在着一些行为不好界定的包，作者把这些包在安装时表现出的行为统称为不良安装时行为。在读者自己的研究中也尝试使用了行为恶意性和目的恶意性来解释，有机会会在将来的笔记中谈及。</p><p>作者在调研了NPM生态的一些基本情况后，设计了LATCH检测系统(<strong>L</strong>ightweight inst<strong>A</strong>ll-<strong>T</strong>ime <strong>CH</strong>ecker)，提出了一些具有挑战性的目标：可配置、自动化、高性能。</p><p><strong>可配置</strong><br>目前尚无一个普遍的共识关于哪些行为应当被包的安装器所禁止。这主要在于包生态系统中的不同角色对于行为的定义不同。恶意行为的边界定义不清，对可接受的包行为界定缺乏共识，直接或间接地影响到了整个生态的安全性。作者通过引入一种新的语言策略，让LATCH的用户能够表达出他们能接受的包行为以解决这一问题。（这里作者的精心构造很值得学习，让生态中的参与者清晰表达和动态调整其能接受的包在安装过程中的行为不失为一种妙计！</p><p><strong>自动化</strong><br>包管理系统最大的好处在于将包的下载、安装和配置等过程完全自动化处理了，但也正是这种自动化方便了攻击者实施供应链攻击。作者引入了行为清单这一概念：描述包在安装过程中与安全相关的行为。这份行为清单是LATCH在沙盒环境中执行和跟踪包的安装过程中自动生成的。当用户尝试安装包的时候，LATCH从两方面进行防护：一是根据预设策略检查行为清单，当触发相应的行为时终止安装；二是在安装期间，通过内核级的安全模块在防止用户策略偏离的情况下完成包的安装。</p><p><strong>高性能</strong><br>大型、高度相互依赖的包在安装时可能会同时安装数百个包。作者通过缓存机制（异步生成清单，实时检查清单）尽可能地缩小开销以解决性能挑战。</p><h2 id="0x02-LATCH"><a href="#0x02-LATCH" class="headerlink" title="0x02 LATCH"></a>0x02 LATCH</h2><p>LATCH的工作流程包括了三个阶段：行为清单生成、用户策略检查、实时安全安装</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/0e366414-5dfe-415b-a2ae-7f9a80c0e134.png"></p><p><strong>行为清单生成</strong><br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/30392e41-a80f-40e3-9863-9baa6b219064.png"></p><p>作者使用<a href="https://github.com/apptainer/singularity">Singularity</a>和<a href="https://github.com/strace/strace">strace</a>构造动态运行环境。通过这种方法，可以观察包在安装过程中的具体行为。作者将这些行为记录到日志文件中，然后根据日志文件生成包的行为清单，并存储到清单数据库中。</p><p><strong>用户策略检查</strong><br>当用户尝试安装包时，LATCH会根据用户策略来检查这些包及其依赖项的行为清单，以阻止那些用户不希望发生的行为。这里作者受SELinux等系统启发，设定了两种工作模式：warning和failure。在warning模式下，违反用户策略只会产生警告而不会终止安装程序；在failure模式下，违反任何一条策略会直接导致安装失败。</p><p><strong>实时安全安装</strong><br>单次运行获得的行为清单有时候无法完全捕获那些由于系统架构差异或是逻辑绕过等对抗性规避检测技术构造的包的安装行为。为了在真实环境下处理和应对这一情况，作者利用内核级安全模块（<a href="https://gitlab.com/apparmor/apparmor">AppArmor</a>）来保证包安装过程的安全性。</p><h2 id="0x03-Manifest-Enforcement-Policies"><a href="#0x03-Manifest-Enforcement-Policies" class="headerlink" title="0x03 Manifest Enforcement Policies"></a>0x03 Manifest Enforcement Policies</h2><p>作者设计了一种轻量级的策略语言，允许用户通过这种方式来表达在包的安装过程中允许发生的行为。该语言以清单属性为中心，使用语法表达式解析来实现。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/4232c3af-6b6f-41e4-b6fe-73330f6fa227.png"></p><p>在论文中，作者给包管理生态系统中两大主要角色提供了默认策略建议。</p><p><strong>开发者策略</strong><br>该策略旨在满足有安全意识的开发人员的需求，他们希望阻止系统上所有安全敏感的行为。这种策略可以确保在安装过程中不会出现危险行为，但会影响一些包的正常安装。具体来说，该策略允许安装脚本将输出打印到终端上，允许读取非敏感文件，但阻止网络连接行为和文件写入行为。完整的策略如下。</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/c7dcafbd-485e-41e8-a7b3-a62813d024e4.png"></p><p><strong>维护者策略</strong><br>该策略旨在满足npm仓库维护人员的需求，尽可能只筛除存在明显恶意行为的包。作者随机抽样了375个总所周知是正常的npm包和375个被维护者删除的恶意包（作者此处没有说明是如何从102到375的，读者推测是从102个恶意包的不同版本中获得的），并构建了一个CART决策树分类器来区分正常包和恶意包，然后直接由该决策树分支生成策略规则。</p><p>一句话概括上述基本策略：开发者策略是最能够阻止恶意行为的策略，但会导致一些包的安装失败；维护者策略允许安装更多的包，同时也能报告几乎所有已知的恶意包，但也许会存在遗漏。（此处是读者的理解</p><h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者采用了一种新的权限系统来限制npm包的安装时行为并生成行为清单，同时提出了一种轻量级策略语言来检查行为清单，以发现恶意包和阻止恶意行为。</p><p>读者在研读过程中注意到作者提到了一个对抗性规避检测。LATCH能够提供一些防护，但是在上述的行为清单生成过程中，作者有意进行行为意图推断，比如前一个系统调用为网络连接，下一个系统调用为进程创建，且涉及参数为<code>/bin/bash -i</code>，这里作者合理推断该行为是反弹shell，是一个恶意行为。但如果攻击者将恶意行为拆解，在中间插入一些无关紧要的非敏感文件读取等行为，打乱恶意行为的明显特征后该方法是否还能够合理推断是需要进一步研究的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Paper Reading </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NPM </tag>
+            
+            <tag> Supply Chain Attack </tag>
+            
+            <tag> ASIA CCS&#39;22 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PR - Practical Automated Detection of Malicious npm Packages</title>
       <link href="/2022/05/26/Practical%20Automated%20Detection%20of%20Malicious%20npm%20Packages/"/>
       <url>/2022/05/26/Practical%20Automated%20Detection%20of%20Malicious%20npm%20Packages/</url>
@@ -269,9 +298,9 @@
       
         <tags>
             
-            <tag> JAIHC 2020 </tag>
-            
             <tag> Attack Path Prediction </tag>
+            
+            <tag> JAIHC&#39;20 </tag>
             
         </tags>
       
