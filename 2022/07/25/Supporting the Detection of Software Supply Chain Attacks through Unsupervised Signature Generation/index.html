@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：M Ohm, L Kempf, F Boes, M Meier 原文标题：Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation 原文链接：https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.02235.pdf 原文来源：PREPRINT 笔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation">
+<meta property="og:url" content="http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：M Ohm, L Kempf, F Boes, M Meier 原文标题：Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation 原文链接：https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2011.02235.pdf 原文来源：PREPRINT 笔">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/beebe43e-fe6e-4b7b-b52c-1f11cad45b74.png">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/681be44b-77bf-4de9-a84f-de0a05c2f882.png">
+<meta property="article:published_time" content="2022-07-25T11:44:40.000Z">
+<meta property="article:modified_time" content="2022-07-25T09:24:06.662Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="Supply Chain Attack">
+<meta property="article:tag" content="Cluster">
+<meta property="article:tag" content="Package Fingerprint">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/beebe43e-fe6e-4b7b-b52c-1f11cad45b74.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2022/06/04/Wolf%20at%20the%20Door%20-%20Preventing%20Install-Time%20Attacks%20in%20npm%20with%20Latch/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&text=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&is_video=false&description=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation&body=Check out this article: http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&name=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&t=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Method"><span class="toc-number">2.</span> <span class="toc-text">0x02 Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x021-Syntactic-Clones"><span class="toc-number">2.1.</span> <span class="toc-text">0x021 Syntactic Clones</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x022-Embedding-of-Packages"><span class="toc-number">2.2.</span> <span class="toc-text">0x022 Embedding of Packages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x023-Clustering-of-Packages"><span class="toc-number">2.3.</span> <span class="toc-text">0x023 Clustering of Packages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x024-Derivation-of-Signatures"><span class="toc-number">2.4.</span> <span class="toc-text">0x024 Derivation of Signatures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Conclusion"><span class="toc-number">3.</span> <span class="toc-text">0x03 Conclusion</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-07-25T11:44:40.000Z" itemprop="datePublished">2022-07-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Cluster/" rel="tag">Cluster</a>, <a class="tag-link-link" href="/tags/Package-Fingerprint/" rel="tag">Package Fingerprint</a>, <a class="tag-link-link" href="/tags/Supply-Chain-Attack/" rel="tag">Supply Chain Attack</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：M Ohm, L Kempf, F Boes, M Meier</em></p>
+<p><em>原文标题：Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2011.02235.pdf">https://arxiv.org/pdf/2011.02235.pdf</a></em></p>
+<p><em>原文来源：PREPRINT</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="0x01-Intro"><a href="#0x01-Intro" class="headerlink" title="0x01 Intro"></a>0x01 Intro</h2><p>现代软件开发是站在大量第三方工具、库和软件包的基础上的一项工作。通常来说，由官方维护的注册表（npm、PyPI）在整个软件包生态中扮演着最为核心的角色。那么站在攻击者的角度来看，针对开源软件包仓库进行投毒（发布恶意包）是一项既有效也十分节省成本的攻击方法。作者给出了三个主要场景例子：  </p>
+<ol>
+<li>开源软件包常用于构成各种软件项目，但软件包的代码库不太可能由软件包用户进行审查；</li>
+<li>大多数软件包存储库没有使用有效的恶意软件包检测方法，大多恶意包需要200天左右的时候才能被识别和删除；</li>
+<li>由于缺乏有效的恶意软件包检测方法，恶意软件包作者可以重新发布略微修改过的恶意代码片段，以此绕过检测。  </li>
+</ol>
+<p>按照传统的上报、比对、归类的方式处理恶意软件包难以应对每次都需要手动查询已有恶意家族，同时需要维护一份相对干净的家族特征表的问题。作者于本文中提供了一个工具，<strong>使安全分析师最耗时、最繁琐的任务变成一项自动化的任务</strong>。</p>
+<h2 id="0x02-Method"><a href="#0x02-Method" class="headerlink" title="0x02 Method"></a>0x02 Method</h2><p>作者Ohm在其之前的文章中观察到，恶意软件包通常具有共同的一些特征代码片段，这也于读者在研究时发现的内容一致。一般来说，恶意软件包出现不会是单独一个发布到注册表中，而是会以一种批量的方式进行广撒网式的攻击。如Intro中描述的，现在急需一个自动化的方法来识别和搜索所述特征代码片段。为此，作者提供并评估了几种自动化方法，以（1）使用特征代码片段自动集群（潜在恶意软件包）；（2）利用结果检测当前未识别的已知恶意包克隆包。</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/beebe43e-fe6e-4b7b-b52c-1f11cad45b74.png"></p>
+<p>作者设计了一种自动化标记方法，如上图所示。首先，将每个包嵌入到<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54041981">度量空间</a>中，即将每一个软件包用一个点（多个点构成的点云）进行表示，每对点之间都有精确的距离。然后，利用点与点之间的距离计算集群。在此基础上，根据专家手动集群（在带标记的数据集上）对各种嵌入和集群软件包的方法进行评估。使用集群代表一组共享特征恶意代码片段的恶意软件包，然后从每个集群中提取一组特征代码片段，用于生产集群签名。</p>
+<h3 id="0x021-Syntactic-Clones"><a href="#0x021-Syntactic-Clones" class="headerlink" title="0x021 Syntactic Clones"></a>0x021 Syntactic Clones</h3><p>Walker等人定义了四种不同成都相关的克隆类型。Type-1克隆共享两个相同的代码片段，但不涉及空格、空白或注释。Type-2克隆指的是代码结构相同，但一些函数、类或变量被重命名。Type-3克隆在命名不同的基础上，存在着结构性的差异，即代码片段可能被修改。Type-4克隆则是指的无法观察到语法相似性，但函数相同。</p>
+<h3 id="0x022-Embedding-of-Packages"><a href="#0x022-Embedding-of-Packages" class="headerlink" title="0x022 Embedding of Packages"></a>0x022 Embedding of Packages</h3><p>为了识别代码克隆、比较代码片段，作者通过字符串相似性，程序依赖图和抽象语法树来计算相似性。作者提取了软件包所有功能代码片段，定义两个软件包相似性是两个软件包的两个代码片段之间最小的编辑距离。在实际实现过程中，作者放弃了利用PDG进行进一步实验，主要因为性能瓶颈。而字符串相似性由于其准确度不足等问题也同样被放弃了。通过将源代码转为AST可以忽略命名标识符混淆带来的影响，从而专注于结构表示上的区别。具体来说，两个AST的相似性表现为树的编辑距离。当软件包A所有函数的AST与软件包B所有函数的AST进行比较时，AB两个软件包的相似性是其中最小的AST树的编辑距离。（<em>这里会不会有排列组合爆炸问题？</em>）</p>
+<h3 id="0x023-Clustering-of-Packages"><a href="#0x023-Clustering-of-Packages" class="headerlink" title="0x023 Clustering of Packages"></a>0x023 Clustering of Packages</h3><p>作者使用Markov Cluster Algorithm(MCL)进行聚类，与K-Means等方法不同，MCL不需要对基础数据进行先验假设（不需要预先设定数据集）。具体算法实现可以参考 &quot;A cluster algorithm for graphs.&quot; 对比实验结果表如下所示。<br><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/681be44b-77bf-4de9-a84f-de0a05c2f882.png"></p>
+<h3 id="0x024-Derivation-of-Signatures"><a href="#0x024-Derivation-of-Signatures" class="headerlink" title="0x024 Derivation of Signatures"></a>0x024 Derivation of Signatures</h3><p>作者使用了Chilowicz提出的指纹识别方法，考虑从AST表示的每个函数中导出一个指纹。但与之不同的是，作者构建的关联子图专注于代码片段的结构，丢弃运算符等非结构信息例如a+b和a*b有着相同指纹，而a+(a+a)和(a+a)+a有着不同的指纹。</p>
+<h2 id="0x03-Conclusion"><a href="#0x03-Conclusion" class="headerlink" title="0x03 Conclusion"></a>0x03 Conclusion</h2><p>作者为了解决现有大部分方案到最后需要人工审查分类恶意包的情况，研究一种自动化标记归类的方法。基于AST考虑恶意代码家族克隆(相似性)，这里主要还是针对Type-1和Type-2，结合MCL进行聚类，同时结合人工手动聚类，实现了一个能够模拟人工审查分类的框架。读者在读完整篇文章后存在这样几个问题：一是相似度计算时的两个软件包之间函数AST的比较，这里存在排列组合爆炸问题；二是聚类时还是需要人工介入，对于新的类型是没有办法识别的，这里做的工作更像是简化已有流程，对于未知类型的恶意软件包还是难以检测到。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Intro"><span class="toc-number">1.</span> <span class="toc-text">0x01 Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Method"><span class="toc-number">2.</span> <span class="toc-text">0x02 Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x021-Syntactic-Clones"><span class="toc-number">2.1.</span> <span class="toc-text">0x021 Syntactic Clones</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x022-Embedding-of-Packages"><span class="toc-number">2.2.</span> <span class="toc-text">0x022 Embedding of Packages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x023-Clustering-of-Packages"><span class="toc-number">2.3.</span> <span class="toc-text">0x023 Clustering of Packages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x024-Derivation-of-Signatures"><span class="toc-number">2.4.</span> <span class="toc-text">0x024 Derivation of Signatures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Conclusion"><span class="toc-number">3.</span> <span class="toc-text">0x03 Conclusion</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&text=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&is_video=false&description=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation&body=Check out this article: http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&title=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&name=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/&t=PR - Supporting the Detection of Software Supply Chain Attacks through Unsupervised Signature Generation"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2022
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
