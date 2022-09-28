@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>VA - CS RCE</title>
+      <link href="/2022/09/28/CS%20RCE/"/>
+      <url>/2022/09/28/CS%20RCE/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>蹭蹭，学习</p></blockquote><h2 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h2><p>先上结论，在<a href="https://mp.weixin.qq.com/s?__biz=MzIxNDAyNjQwNg==&mid=2456098978&idx=1&sn=d511d5a674d84eeaf262c8e389ae0403&chksm=803c696bb74be07d8ef8e473b11ffe4dce57b58ccf82e8615ab15d9ba6bba9263360c01276a8&mpshare=1&scene=23&srcid=0927syGAjDstgXYXlb2qZClV&sharer_sharetime=1664241912146">师傅的文章哩狠狠地学习了</a>，于是在本地尝试找了一下链子，也是第一次尝试吧，最后结果是好的！</p><p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20220928170351686.png" alt="image-20220928170351686"></p><h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><p>复现Demo</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.swing.*;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwingDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">showGUI</span><span class="params">()</span></span>&#123;</span><br><span class="line">        JFrame frame = <span class="keyword">new</span> JFrame();</span><br><span class="line">        JLabel jLabel = <span class="keyword">new</span> JLabel(<span class="string">&quot;&lt;html&gt;&lt;object classid=\&quot;javax.swing.JLabel\&quot;&gt;&lt;param name=\&quot;text\&quot; value=\&quot;hhhhhhhh\&quot;&gt;&lt;/object&gt;&quot;</span>);</span><br><span class="line">        frame.getContentPane().add(jLabel);</span><br><span class="line">        frame.pack();</span><br><span class="line">        frame.setVisible(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        javax.swing.SwingUtilities.invokeLater(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                showGUI();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>整个过程下来收获颇多。按文章中提到的，可以在JLabel中写入<code>&lt;html&gt;&lt;object classid=&#39;javax.swing.JLabel&#39;&gt;&lt;parame name=&#39;Text&#39; value=&#39;hahaha&#39;&gt;</code>，这里在实际测试过程中遇到了些问题，最后构造<code>JLabel jLabel = new JLabel(&quot;&lt;html&gt;&lt;object classid=\&quot;javax.swing.JLabel\&quot;&gt;&lt;param name=\&quot;text\&quot; value=\&quot;hhhhhhhh\&quot;&gt;&lt;/object&gt;&quot;);</code>才能正常显示。这里有一些要注意的：<strong>name字段的值，对应setXXX的XXX部分只能有一个，例如setString可以但是setStringVar不行，同时XXX部分首字母大写的在name处需要全小写，而全大写的需要全大写</strong>，具体可以在<code>Object v = attr.getAttribute(props[i].getName());</code>处下个断点看props和attr。后面的debug过程就省略掉啦。</p><h3 id="找链子"><a href="#找链子" class="headerlink" title="找链子"></a>找链子</h3><p>这里一开始在rt.jar下面翻了很久很久，后来被hxd提醒把cs.jar导进来一起看。回顾一下文章中说的条件：</p><ol><li>classid传入需要实例化的类，必须是继承自Component</li><li>必须有无参构造方法</li><li>必须存在一个setXXX方法</li><li>setXXX只接受一个String类型的参数</li></ol><p><strong>今天学到的小技巧，在IDEA里CTRL+H可以看一个类的继承关系，方便筛查！！</strong>然后就是慢慢找啦，符合条件的不多，利用正则<code>set\w*\(String \w*\).*\&#123;</code>快速看！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Vulnerability Analysis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 1day </tag>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>NS - MTCTF 2022</title>
       <link href="/2022/09/17/MTCTF%202022/"/>
       <url>/2022/09/17/MTCTF%202022/</url>
