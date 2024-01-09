@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="练习平台Buuctf  金三胖gif帧中间藏了flag，使用puzzle solver解一下即可 你竟然赶我走附件为一个jpg，010editor打开，flag在文件尾 二维码图片藏了个zip，binwalk -e 分离，然后根据提示4number进行爆破，得到密码7639，解压得到flag 大白修复图片宽高，使用puzzle solver修复 N种方法解决下载是个exe，丢DIE里看了下不对，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NS - Buuctf MISC Part">
+<meta property="og:url" content="http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="练习平台Buuctf  金三胖gif帧中间藏了flag，使用puzzle solver解一下即可 你竟然赶我走附件为一个jpg，010editor打开，flag在文件尾 二维码图片藏了个zip，binwalk -e 分离，然后根据提示4number进行爆破，得到密码7639，解压得到flag 大白修复图片宽高，使用puzzle solver修复 N种方法解决下载是个exe，丢DIE里看了下不对，">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-11T02:39:40.000Z">
+<meta property="article:modified_time" content="2023-12-21T02:11:15.629Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="MISC">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>NS - Buuctf MISC Part</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/2024/01/09/Getting%20pwn'd%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2023/10/27/Geek%202023/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&text=NS - Buuctf MISC Part"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&is_video=false&description=NS - Buuctf MISC Part"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - Buuctf MISC Part&body=Check out this article: http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&name=NS - Buuctf MISC Part&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&t=NS - Buuctf MISC Part"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%91%E4%B8%89%E8%83%96"><span class="toc-number">1.</span> <span class="toc-text">金三胖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E7%AB%9F%E7%84%B6%E8%B5%B6%E6%88%91%E8%B5%B0"><span class="toc-number">2.</span> <span class="toc-text">你竟然赶我走</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">二维码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E7%99%BD"><span class="toc-number">4.</span> <span class="toc-text">大白</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#N%E7%A7%8D%E6%96%B9%E6%B3%95%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text">N种方法解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%8C%E9%95%87%E5%B3%B0%E4%BC%9A%E7%A7%8D%E5%9B%BE"><span class="toc-number">6.</span> <span class="toc-text">乌镇峰会种图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wireshark"><span class="toc-number">7.</span> <span class="toc-text">wireshark</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%A0%B4%E8%A7%A3"><span class="toc-number">8.</span> <span class="toc-text">基础破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%A7%98%E5%AF%86"><span class="toc-number">9.</span> <span class="toc-text">文件中的秘密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSB"><span class="toc-number">10.</span> <span class="toc-text">LSB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zip%E4%BC%AA%E5%8A%A0%E5%AF%86"><span class="toc-number">11.</span> <span class="toc-text">zip伪加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="toc-number">12.</span> <span class="toc-text">被嗅探的流量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rar"><span class="toc-number">13.</span> <span class="toc-text">rar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#qr"><span class="toc-number">14.</span> <span class="toc-text">qr</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%AD%90%E9%87%8C%E9%9D%A2%E7%9A%84%E4%B8%96%E7%95%8C"><span class="toc-number">15.</span> <span class="toc-text">镜子里面的世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ningen"><span class="toc-number">16.</span> <span class="toc-text">ningen</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6"><span class="toc-number">17.</span> <span class="toc-text">爱因斯坦</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E6%98%8E%E7%9A%84%E4%BF%9D%E9%99%A9%E7%AE%B1"><span class="toc-number">18.</span> <span class="toc-text">小明的保险箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#easycap"><span class="toc-number">19.</span> <span class="toc-text">easycap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%9A%84%E9%92%A5%E5%8C%99"><span class="toc-number">20.</span> <span class="toc-text">隐藏的钥匙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E4%B8%96%E7%95%8C"><span class="toc-number">21.</span> <span class="toc-text">另外一个世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FLAG"><span class="toc-number">22.</span> <span class="toc-text">FLAG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%A7%98%E9%BE%99%E5%8D%B7%E9%A3%8E"><span class="toc-number">23.</span> <span class="toc-text">神秘龙卷风</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="toc-number">24.</span> <span class="toc-text">数据包中的线索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%87%E5%A6%82%E7%BB%99%E6%88%91%E4%B8%89%E5%A4%A9%E5%85%89%E6%98%8E"><span class="toc-number">25.</span> <span class="toc-text">假如给我三天光明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E6%9F%A5%E6%9D%80"><span class="toc-number">26.</span> <span class="toc-text">后门查杀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webshell%E5%90%8E%E9%97%A8"><span class="toc-number">27.</span> <span class="toc-text">webshell后门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A5%E9%A6%96%E6%AD%8C%E5%90%A7"><span class="toc-number">28.</span> <span class="toc-text">来首歌吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E5%85%B7%E4%B8%8B%E7%9A%84flag"><span class="toc-number">29.</span> <span class="toc-text">面具下的flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8D%B7%E5%85%B0%E5%AE%BD%E5%B8%A6%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="toc-number">30.</span> <span class="toc-text">荷兰宽带数据泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E8%BF%9E%E7%8E%AF"><span class="toc-number">31.</span> <span class="toc-text">九连环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%8A%AB%E6%8C%81%E7%9A%84%E7%A5%9E%E7%A7%98%E7%A4%BC%E7%89%A9"><span class="toc-number">32.</span> <span class="toc-text">被劫持的神秘礼物</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E8%AE%A4%E7%9C%9F%E4%BD%A0%E5%B0%B1%E8%BE%93%E4%BA%86"><span class="toc-number">33.</span> <span class="toc-text">[BJDCTF2020]认真你就输了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E8%97%8F%E8%97%8F%E8%97%8F"><span class="toc-number">34.</span> <span class="toc-text">[BJDCTF2020]藏藏藏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">35.</span> <span class="toc-text">被偷走的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B7%E6%96%B0%E8%BF%87%E7%9A%84%E5%9B%BE%E7%89%87"><span class="toc-number">36.</span> <span class="toc-text">刷新过的图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-%E4%BD%9B%E7%B3%BB%E9%9D%92%E5%B9%B4"><span class="toc-number">37.</span> <span class="toc-text">[GXYCTF2019]佛系青年</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E4%BD%A0%E7%8C%9C%E6%88%91%E6%98%AF%E4%B8%AA%E5%95%A5"><span class="toc-number">38.</span> <span class="toc-text">[BJDCTF2020]你猜我是个啥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#snake"><span class="toc-number">39.</span> <span class="toc-text">snake</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#keli"><span class="toc-number">40.</span> <span class="toc-text">keli</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%B2%E5%8A%AA%E6%AF%94"><span class="toc-number">41.</span> <span class="toc-text">史努比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%98%E5%AF%86%E6%96%87%E4%BB%B6"><span class="toc-number">42.</span> <span class="toc-text">秘密文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E"><span class="toc-number">43.</span> <span class="toc-text">[BJDCTF2020]鸡你太美</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8F%9C%E5%88%80666"><span class="toc-number">44.</span> <span class="toc-text">菜刀666</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E4%B8%80%E5%8F%B6%E9%9A%9C%E7%9B%AE"><span class="toc-number">45.</span> <span class="toc-text">[BJDCTF2020]一叶障目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E7%A5%9E%E5%A5%87%E7%9A%84%E4%BA%8C%E7%BB%B4%E7%A0%81"><span class="toc-number">46.</span> <span class="toc-text">[SWPU2019]神奇的二维码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E7%BA%B3%E5%B0%BC"><span class="toc-number">47.</span> <span class="toc-text">[BJDCTF2020]纳尼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%85%E8%8A%B1%E9%A6%99%E4%B9%8B%E8%8B%A6%E5%AF%92%E6%9D%A5"><span class="toc-number">48.</span> <span class="toc-text">梅花香之苦寒来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-excel%E7%A0%B4%E8%A7%A3"><span class="toc-number">49.</span> <span class="toc-text">[HBNIS2018]excel破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-%E6%9D%A5%E9%A2%98%E4%B8%AD%E7%AD%89%E7%9A%84%E5%90%A7"><span class="toc-number">50.</span> <span class="toc-text">[HBNIS2018]来题中等的吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-outguess"><span class="toc-number">51.</span> <span class="toc-text">[ACTF新生赛2020]outguess</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BF%E8%B6%8A%E6%97%B6%E7%A9%BA%E7%9A%84%E6%80%9D%E5%BF%B5"><span class="toc-number">52.</span> <span class="toc-text">穿越时空的思念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%81%E8%B5%A2%E4%BA%86%E6%AF%94%E8%B5%9B"><span class="toc-number">53.</span> <span class="toc-text">谁赢了比赛</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WUSTCTF2020-find-me"><span class="toc-number">54.</span> <span class="toc-text">[WUSTCTF2020]find_me</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E6%88%91%E6%9C%89%E4%B8%80%E5%8F%AA%E9%A9%AC%E9%87%8C%E5%A5%A5"><span class="toc-number">55.</span> <span class="toc-text">[SWPU2019]我有一只马里奥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GUET-CTF2019-KO"><span class="toc-number">56.</span> <span class="toc-text">[GUET-CTF2019]KO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-gakki"><span class="toc-number">57.</span> <span class="toc-text">[GXYCTF2019]gakki</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-base64%E9%9A%90%E5%86%99"><span class="toc-number">58.</span> <span class="toc-text">[ACTF新生赛2020]base64隐写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRCTF2020-ezmisc"><span class="toc-number">59.</span> <span class="toc-text">[MRCTF2020]ezmisc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-caesar"><span class="toc-number">60.</span> <span class="toc-text">[HBNIS2018]caesar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E4%BC%9F%E5%A4%A7%E7%9A%84%E4%BE%A6%E6%8E%A2"><span class="toc-number">61.</span> <span class="toc-text">[SWPU2019]伟大的侦探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E5%B8%9D%E5%9B%BD"><span class="toc-number">62.</span> <span class="toc-text">黑客帝国</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-%E4%BD%8E%E4%B8%AA%E5%A4%B4"><span class="toc-number">63.</span> <span class="toc-text">[HBNIS2018]低个头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRCTF2020-%E4%BD%A0%E8%83%BD%E7%9C%8B%E6%87%82%E9%9F%B3%E7%AC%A6%E5%90%97"><span class="toc-number">64.</span> <span class="toc-text">[MRCTF2020]你能看懂音符吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUCTF2018-single-dog"><span class="toc-number">65.</span> <span class="toc-text">[SUCTF2018]single dog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E5%90%83%E4%B8%89%E6%98%8E%E6%B2%BB"><span class="toc-number">66.</span> <span class="toc-text">我吃三明治</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E4%BD%A0%E6%9C%89%E6%B2%A1%E6%9C%89%E5%A5%BD%E5%A5%BD%E7%9C%8B%E7%BD%91%E8%AF%BE"><span class="toc-number">67.</span> <span class="toc-text">[SWPU2019]你有没有好好看网课?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">68.</span> <span class="toc-text">[ACTF新生赛2020]NTFS数据流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqltest"><span class="toc-number">69.</span> <span class="toc-text">sqltest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#john-in-the-middle"><span class="toc-number">70.</span> <span class="toc-text">john-in-the-middle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-swp"><span class="toc-number">71.</span> <span class="toc-text">[ACTF新生赛2020]swp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UTCTF2020-docx"><span class="toc-number">72.</span> <span class="toc-text">[UTCTF2020]docx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-SXMgdGhpcyBiYXNlPw"><span class="toc-number">73.</span> <span class="toc-text">[GXYCTF2019]SXMgdGhpcyBiYXNlPw&#x3D;&#x3D;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">74.</span> <span class="toc-text">喵喵喵</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        NS - Buuctf MISC Part
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-11T02:39:40.000Z" itemprop="datePublished">2023-12-11</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Notes/">Notes</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/CTF/" rel="tag">CTF</a>, <a class="tag-link-link" href="/tags/MISC/" rel="tag">MISC</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>练习平台Buuctf</em></p>
+</blockquote>
+<h2 id="金三胖"><a href="#金三胖" class="headerlink" title="金三胖"></a>金三胖</h2><p>gif帧中间藏了flag，使用puzzle solver解一下即可</p>
+<h2 id="你竟然赶我走"><a href="#你竟然赶我走" class="headerlink" title="你竟然赶我走"></a>你竟然赶我走</h2><p>附件为一个jpg，010editor打开，flag在文件尾</p>
+<h2 id="二维码"><a href="#二维码" class="headerlink" title="二维码"></a>二维码</h2><p>图片藏了个zip，binwalk -e 分离，然后根据提示4number进行爆破，得到密码7639，解压得到flag</p>
+<h2 id="大白"><a href="#大白" class="headerlink" title="大白"></a>大白</h2><p>修复图片宽高，使用puzzle solver修复</p>
+<h2 id="N种方法解决"><a href="#N种方法解决" class="headerlink" title="N种方法解决"></a>N种方法解决</h2><p>下载是个exe，丢DIE里看了下不对，strings看了下发现是个base64图片，把base64抠出来丢cyberchef里，解出来是二维码，扫一下就是flag</p>
+<h2 id="乌镇峰会种图"><a href="#乌镇峰会种图" class="headerlink" title="乌镇峰会种图"></a>乌镇峰会种图</h2><p>附件为一个jpg，010editor打开，flag在文件尾</p>
+<h2 id="wireshark"><a href="#wireshark" class="headerlink" title="wireshark"></a>wireshark</h2><p>提示找密码，跟踪tcp流，在第二个stream中找到密码</p>
+<h2 id="基础破解"><a href="#基础破解" class="headerlink" title="基础破解"></a>基础破解</h2><p>爆破密码，提示了4位数，爆破得到2563，解压出来解一下看到Zmxh，base64解压就是flag</p>
+<h2 id="文件中的秘密"><a href="#文件中的秘密" class="headerlink" title="文件中的秘密"></a>文件中的秘密</h2><p>附件为一个jpeg，010editor打开，flag在中间有一段</p>
+<h2 id="LSB"><a href="#LSB" class="headerlink" title="LSB"></a>LSB</h2><p>stegsolve打开，RGB的0打勾，选择ROW LSB RGB，是一张二维码，扫描就是flag</p>
+<h2 id="zip伪加密"><a href="#zip伪加密" class="headerlink" title="zip伪加密"></a>zip伪加密</h2><p>方法1: 手动修改第二个504B段的类似于09 00（奇数表示加密），改为08 00即可，改完mac打不开用windows<br>方法2: 使用ZipCenOp.jar修改</p>
+<h2 id="被嗅探的流量"><a href="#被嗅探的流量" class="headerlink" title="被嗅探的流量"></a>被嗅探的流量</h2><p>wireshark打开搜索flag即可</p>
+<h2 id="rar"><a href="#rar" class="headerlink" title="rar"></a>rar</h2><p>爆破4位数密码，8795，解开就是flag</p>
+<h2 id="qr"><a href="#qr" class="headerlink" title="qr"></a>qr</h2><p>cyberchef扫描二维码即可</p>
+<h2 id="镜子里面的世界"><a href="#镜子里面的世界" class="headerlink" title="镜子里面的世界"></a>镜子里面的世界</h2><p>zsteg中给出了flag（secret）</p>
+<h2 id="ningen"><a href="#ningen" class="headerlink" title="ningen"></a>ningen</h2><p>爆破4位数密码，8368，解开就是flag</p>
+<h2 id="爱因斯坦"><a href="#爱因斯坦" class="headerlink" title="爱因斯坦"></a>爱因斯坦</h2><p>附件为jpg，尾部存在压缩包，密码在中间某段，this_is_not_password（jpg信息段）</p>
+<h2 id="小明的保险箱"><a href="#小明的保险箱" class="headerlink" title="小明的保险箱"></a>小明的保险箱</h2><p>附件为jpg，尾部存在压缩包，提示爆破4位密码</p>
+<h2 id="easycap"><a href="#easycap" class="headerlink" title="easycap"></a>easycap</h2><p>跟踪TCP流即是flag</p>
+<h2 id="隐藏的钥匙"><a href="#隐藏的钥匙" class="headerlink" title="隐藏的钥匙"></a>隐藏的钥匙</h2><p>附件为jpg，尾部存在疑似flag的东西，一串base64解开即可</p>
+<h2 id="另外一个世界"><a href="#另外一个世界" class="headerlink" title="另外一个世界"></a>另外一个世界</h2><p>附件为jpg，尾部存在疑似flag的东西，一串bin解开即可</p>
+<h2 id="FLAG"><a href="#FLAG" class="headerlink" title="FLAG"></a>FLAG</h2><p>zsteg -a看到了个压缩包，提取出来<code>zsteg -E &#39;b1,rgb,lsb,xy&#39; 42011487927629132.png &gt; 1.zip</code><br>然后strings秒了</p>
+<h2 id="神秘龙卷风"><a href="#神秘龙卷风" class="headerlink" title="神秘龙卷风"></a>神秘龙卷风</h2><p>rar爆破密码5463，打开是brainfuck，解一下就是flag</p>
+<h2 id="数据包中的线索"><a href="#数据包中的线索" class="headerlink" title="数据包中的线索"></a>数据包中的线索</h2><p>流量包里有个base64图片，打开就是flag</p>
+<h2 id="假如给我三天光明"><a href="#假如给我三天光明" class="headerlink" title="假如给我三天光明"></a>假如给我三天光明</h2><p>压缩包密码需要找盲文（braille），结果为kmdonowg，解压出一个音频，打开像morse密码，记录下长短<br><code>-.-.  -  ..-.  .--  .--.  .  ..  -----  ---..  --...  ...--  ..---  ..--..  ..---  ...--  -..  --..</code><br>解出来flag为去掉CTF后剩下内容转小写（坑）</p>
+<h2 id="后门查杀"><a href="#后门查杀" class="headerlink" title="后门查杀"></a>后门查杀</h2><p>D盾扫一下，include/include.php为后门，flag为连接密码</p>
+<h2 id="webshell后门"><a href="#webshell后门" class="headerlink" title="webshell后门"></a>webshell后门</h2><p>D盾扫一下，member/zp.php为后门，flag为连接密码</p>
+<h2 id="来首歌吧"><a href="#来首歌吧" class="headerlink" title="来首歌吧"></a>来首歌吧</h2><p>打开有一侧音轨为morse密码<br><code>..... -... -.-. ----. ..--- ..... -.... ....- ----. -.-. -... ----- .---- ---.. ---.. ..-. ..... ..--- . -.... .---- --... -.. --... ----- ----. ..--- ----. .---- ----. .---- -.-.</code></p>
+<h2 id="面具下的flag"><a href="#面具下的flag" class="headerlink" title="面具下的flag"></a>面具下的flag</h2><p>附件为jpg，分离出一个zip（伪加密），解压得到一个vmdk，使用<code>7z x flag.vmdk -o./</code>解压内容，一个brainfuck，一个ook解开即可</p>
+<h2 id="荷兰宽带数据泄露"><a href="#荷兰宽带数据泄露" class="headerlink" title="荷兰宽带数据泄露"></a>荷兰宽带数据泄露</h2><p>考察工具，RouterPassView，打开username为flag，记录下文件头<code>02 F9 5C 97</code></p>
+<h2 id="九连环"><a href="#九连环" class="headerlink" title="九连环"></a>九连环</h2><p>jpg分离得到压缩包（伪加密）和一张jpg，使用010看了下没东西，转为尝试空密码的steghide，得到压缩包密码，解压即可</p>
+<h2 id="被劫持的神秘礼物"><a href="#被劫持的神秘礼物" class="headerlink" title="被劫持的神秘礼物"></a>被劫持的神秘礼物</h2><p>流量包，用户名admina，密码adminb，合并后md5即可</p>
+<h2 id="BJDCTF2020-认真你就输了"><a href="#BJDCTF2020-认真你就输了" class="headerlink" title="[BJDCTF2020]认真你就输了"></a>[BJDCTF2020]认真你就输了</h2><p>解压得到xls，flag在其中（改为压缩包打开查看）</p>
+<h2 id="BJDCTF2020-藏藏藏"><a href="#BJDCTF2020-藏藏藏" class="headerlink" title="[BJDCTF2020]藏藏藏"></a>[BJDCTF2020]藏藏藏</h2><p>jpg分割出一个zip，打开word里有个二维码，扫描得到flag</p>
+<h2 id="被偷走的文件"><a href="#被偷走的文件" class="headerlink" title="被偷走的文件"></a>被偷走的文件</h2><p>流量包中有个rar，拿出来，爆破4位数字密码（脑洞），5790输入即是flag</p>
+<h2 id="刷新过的图片"><a href="#刷新过的图片" class="headerlink" title="刷新过的图片"></a>刷新过的图片</h2><p>考察工具F5-steganography的使用，<code>java -mx40M Extract lopez.jpg -p xxxx</code> ，无密码去掉-p即可，结果在output.txt中，此题为一个压缩包，伪加密解开即可</p>
+<h2 id="GXYCTF2019-佛系青年"><a href="#GXYCTF2019-佛系青年" class="headerlink" title="[GXYCTF2019]佛系青年"></a>[GXYCTF2019]佛系青年</h2><p>伪加密，与佛论禅解开即可</p>
+<h2 id="BJDCTF2020-你猜我是个啥"><a href="#BJDCTF2020-你猜我是个啥" class="headerlink" title="[BJDCTF2020]你猜我是个啥"></a>[BJDCTF2020]你猜我是个啥</h2><p>是个png，但是假的，flag在末尾</p>
+<h2 id="snake"><a href="#snake" class="headerlink" title="snake"></a>snake</h2><p>jpg图片，分离出一个cypher一个key，key需要搜索得到anaconda，cypher（脑洞）是serpent加密，在线网站用<a target="_blank" rel="noopener" href="http://serpent.online-domain-tools.com/%EF%BC%8C%E7%A6%BB%E7%BA%BF%E7%9A%84%E6%9A%82%E6%9C%AA%E8%A7%A3%E5%86%B3">http://serpent.online-domain-tools.com/，离线的暂未解决</a></p>
+<h2 id="keli"><a href="#keli" class="headerlink" title="keli"></a>keli</h2><p>附件为png，zsteg或者aperisolve简单看了下没思路，拿cloacked-pixel解，密码keli，解得一张jpg，jpg尾部有个压缩包，爆破密码000000，得到一个01组成的二维码，使用脚本转换下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from PIL import Image</span><br><span class="line">MAX = 260    #根据01字符串长度开根计算图宽高</span><br><span class="line">pic = Image.new(&quot;RGB&quot;,(MAX, MAX))</span><br><span class="line">#若是(255,255,255)、(0,0,0)需要先转换01 </span><br><span class="line">str = &quot;&quot;</span><br><span class="line"></span><br><span class="line">i=0</span><br><span class="line">for y in range (0,MAX):</span><br><span class="line">    for x in range (0,MAX):</span><br><span class="line">        if(str[i] == &#x27;1&#x27;):</span><br><span class="line">            pic.putpixel([x,y],(0, 0, 0))</span><br><span class="line">        else:</span><br><span class="line">            pic.putpixel([x,y],(255,255,255))</span><br><span class="line">        i = i+1</span><br><span class="line">pic.show()</span><br><span class="line">pic.save(&quot;./flag.png&quot;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="史努比"><a href="#史努比" class="headerlink" title="史努比"></a>史努比</h2><p>附件zip伪加密，一个零宽隐写给了密码snb_123!，然后用cloacked-pixel解出来即可</p>
+<h2 id="秘密文件"><a href="#秘密文件" class="headerlink" title="秘密文件"></a>秘密文件</h2><p>TCP包中有个rar，爆破密码1903，解压就是flag</p>
+<h2 id="BJDCTF2020-鸡你太美"><a href="#BJDCTF2020-鸡你太美" class="headerlink" title="[BJDCTF2020]鸡你太美"></a>[BJDCTF2020]鸡你太美</h2><p>给了两个gif，010打开发现有个缺了头，插入一个GIF头，47 49 46 38</p>
+<h2 id="菜刀666"><a href="#菜刀666" class="headerlink" title="菜刀666"></a>菜刀666</h2><p>流量包里，有个上传图片，拿出来是个密码，后续有流里有个压缩包，直接解压缩就是flag</p>
+<h2 id="BJDCTF2020-一叶障目"><a href="#BJDCTF2020-一叶障目" class="headerlink" title="[BJDCTF2020]一叶障目"></a>[BJDCTF2020]一叶障目</h2><p>修复png高宽，puzzlesolver解决</p>
+<h2 id="SWPU2019-神奇的二维码"><a href="#SWPU2019-神奇的二维码" class="headerlink" title="[SWPU2019]神奇的二维码"></a>[SWPU2019]神奇的二维码</h2><p>二维码扫描没用，binwalk分离，拿到很多东西，在doc中解base64得到密码，解开另一个压缩包得到音频，使用morse2ascii转换得到morse密码，解开就是flag，其他都是虚晃一枪。</p>
+<h2 id="BJDCTF2020-纳尼"><a href="#BJDCTF2020-纳尼" class="headerlink" title="[BJDCTF2020]纳尼"></a>[BJDCTF2020]纳尼</h2><p>给gif加个头GIF89a，打开gif，帧里拼起来就是flag</p>
+<h2 id="梅花香之苦寒来"><a href="#梅花香之苦寒来" class="headerlink" title="梅花香之苦寒来"></a>梅花香之苦寒来</h2><p>附件为jpg，打开后文件尾跟了一堆hex，解开发现是xy坐标，使用随波逐流工具箱生成下图片，是个二维码，扫开就是flag</p>
+<h2 id="HBNIS2018-excel破解"><a href="#HBNIS2018-excel破解" class="headerlink" title="[HBNIS2018]excel破解"></a>[HBNIS2018]excel破解</h2><p>010editor里搜66 6c 61 67秒了</p>
+<h2 id="HBNIS2018-来题中等的吧"><a href="#HBNIS2018-来题中等的吧" class="headerlink" title="[HBNIS2018]来题中等的吧"></a>[HBNIS2018]来题中等的吧</h2><p>解morse，flag就是alphalab，蚌埠住了</p>
+<h2 id="ACTF新生赛2020-outguess"><a href="#ACTF新生赛2020-outguess" class="headerlink" title="[ACTF新生赛2020]outguess"></a>[ACTF新生赛2020]outguess</h2><p>附件jpg的exif信息中有个社会主义核心价值观编码，解开是abc，联想题目outguess，直接解密得到flag</p>
+<h2 id="穿越时空的思念"><a href="#穿越时空的思念" class="headerlink" title="穿越时空的思念"></a>穿越时空的思念</h2><p>提出来是morse，morse2ascii解码得到flag</p>
+<h2 id="谁赢了比赛"><a href="#谁赢了比赛" class="headerlink" title="谁赢了比赛"></a>谁赢了比赛</h2><p>binwalk分解得到rar，爆破密钥为1020，解开得到一个gif，用puzzlesolver拆分，得到一个提示图，然后使用aperisolve看了下，单通道里有二维码，直接扫出来就是flag</p>
+<h2 id="WUSTCTF2020-find-me"><a href="#WUSTCTF2020-find-me" class="headerlink" title="[WUSTCTF2020]find_me"></a>[WUSTCTF2020]find_me</h2><p>exiftool秒了，评论里有一串盲文，用toolsfx解</p>
+<h2 id="SWPU2019-我有一只马里奥"><a href="#SWPU2019-我有一只马里奥" class="headerlink" title="[SWPU2019]我有一只马里奥"></a>[SWPU2019]我有一只马里奥</h2><p>运行得到1.txt（binwalk分离解压好像有点问题），txt提示了ntfs和flag.txt，然后使用<code>notepad .\1.txt:flag.txt</code> 读取ntsf流。</p>
+<blockquote>
+<p>补充制作ntfs流程，<code>echo 123 &gt; 1.txt:flag.txt</code> </p>
+</blockquote>
+<h2 id="GUET-CTF2019-KO"><a href="#GUET-CTF2019-KO" class="headerlink" title="[GUET-CTF2019]KO"></a>[GUET-CTF2019]KO</h2><p>ook解开即可</p>
+<h2 id="GXYCTF2019-gakki"><a href="#GXYCTF2019-gakki" class="headerlink" title="[GXYCTF2019]gakki"></a>[GXYCTF2019]gakki</h2><p>附件为jpg，分离得到压缩包，爆破密码，然后得到一串字符串，杂乱无序一开始以为是base，但不是。最后尝试统计频率发现flag</p>
+<h2 id="ACTF新生赛2020-base64隐写"><a href="#ACTF新生赛2020-base64隐写" class="headerlink" title="[ACTF新生赛2020]base64隐写"></a>[ACTF新生赛2020]base64隐写</h2><p>base64隐写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=UTF-8</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_base64_diff_value</span>(<span class="params">s1, s2</span>):</span></span><br><span class="line">    base64chars = <span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#x27;</span></span><br><span class="line">    res = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(s1)):</span><br><span class="line">        <span class="keyword">if</span> s1[i] != s2[i]:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">abs</span>(base64chars.index(<span class="built_in">chr</span>(s1[i])) - base64chars.index(<span class="built_in">chr</span>(s2[i])))</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solve_stego</span>():</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;./base64_steg.txt&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        file_lines = f.readlines()</span><br><span class="line"> </span><br><span class="line">    bin_str = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> file_lines:</span><br><span class="line">        line = line.strip()</span><br><span class="line">        steg_line = line</span><br><span class="line">        norm_line = base64.b64encode(base64.b64decode(line))</span><br><span class="line">        </span><br><span class="line">        diff = get_base64_diff_value(steg_line, norm_line)</span><br><span class="line"> </span><br><span class="line">        pads_num = steg_line.count(<span class="string">b&#x27;=&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> diff:</span><br><span class="line">            <span class="comment">#print bin(diff)</span></span><br><span class="line">            bin_str += <span class="built_in">bin</span>(diff)[<span class="number">2</span>:].zfill(pads_num * <span class="number">2</span>)</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            bin_str += <span class="string">&#x27;0&#x27;</span> * pads_num * <span class="number">2</span></span><br><span class="line"> </span><br><span class="line">    res_str = <span class="string">&#x27;&#x27;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(bin_str), <span class="number">8</span>):</span><br><span class="line"> </span><br><span class="line">        res_str += <span class="built_in">chr</span>(<span class="built_in">int</span>(bin_str[i:i+<span class="number">8</span>], <span class="number">2</span>))</span><br><span class="line">    <span class="built_in">print</span>(res_str)</span><br><span class="line"> </span><br><span class="line">solve_stego()</span><br></pre></td></tr></table></figure>
+
+<h2 id="MRCTF2020-ezmisc"><a href="#MRCTF2020-ezmisc" class="headerlink" title="[MRCTF2020]ezmisc"></a>[MRCTF2020]ezmisc</h2><p>修复png，puzzlesolver秒了</p>
+<h2 id="HBNIS2018-caesar"><a href="#HBNIS2018-caesar" class="headerlink" title="[HBNIS2018]caesar"></a>[HBNIS2018]caesar</h2><p>凯撒移位，偏移量1，toolsfx秒了</p>
+<h2 id="SWPU2019-伟大的侦探"><a href="#SWPU2019-伟大的侦探" class="headerlink" title="[SWPU2019]伟大的侦探"></a>[SWPU2019]伟大的侦探</h2><p>压缩包有密码，密码本里是乱码，要用EBCDIC编码打开获得密码wllm_is_the_best_team!，然后是跳舞小人，对应解出flag即可。</p>
+<h2 id="黑客帝国"><a href="#黑客帝国" class="headerlink" title="黑客帝国"></a>黑客帝国</h2><p>hex解开得到一个rar，爆破压缩包得到一个图片，修复文件头，把png文件头改成jpg的FF D8 FF E0</p>
+<h2 id="HBNIS2018-低个头"><a href="#HBNIS2018-低个头" class="headerlink" title="[HBNIS2018]低个头"></a>[HBNIS2018]低个头</h2><p>键盘密码，对着敲</p>
+<h2 id="MRCTF2020-你能看懂音符吗"><a href="#MRCTF2020-你能看懂音符吗" class="headerlink" title="[MRCTF2020]你能看懂音符吗"></a>[MRCTF2020]你能看懂音符吗</h2><p>解压得到的文件头有问题，替换一下第一个和第二个字节构成正确的rar头，解出一个word，改后缀找到一串音符。使用在线网站解密<br><a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue">https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=yinyue</a></p>
+<h2 id="SUCTF2018-single-dog"><a href="#SUCTF2018-single-dog" class="headerlink" title="[SUCTF2018]single dog"></a>[SUCTF2018]single dog</h2><p>附件jpg，使用binwalk分离，然后使用toolsfx的aaencode模块解码</p>
+<h2 id="我吃三明治"><a href="#我吃三明治" class="headerlink" title="我吃三明治"></a>我吃三明治</h2><p>jpg和jpg中间有段base，使用basecrack的magic模式解一下</p>
+<h2 id="SWPU2019-你有没有好好看网课"><a href="#SWPU2019-你有没有好好看网课" class="headerlink" title="[SWPU2019]你有没有好好看网课?"></a>[SWPU2019]你有没有好好看网课?</h2><p>两个压缩包，其中一个提示6位数密码，然后分解mp4为图片，找到 <code>..... ../... ./... ./... ../</code> 这是敲击码，需记住，后面还有个base64，解开得到密码wllmup_up_up，解压压缩包得到jpg，flag在文件尾</p>
+<h2 id="ACTF新生赛2020-NTFS数据流"><a href="#ACTF新生赛2020-NTFS数据流" class="headerlink" title="[ACTF新生赛2020]NTFS数据流"></a>[ACTF新生赛2020]NTFS数据流</h2><p>需要注意所有ntfs需要使用winrar进行解压，再使用AlternateStreamView查看ntfs流，最后找到293.txt:flag.txt，使用notepad打开即可</p>
+<h2 id="sqltest"><a href="#sqltest" class="headerlink" title="sqltest"></a>sqltest</h2><p>流量包中是sql盲注，wireshark过滤<code>http contains &quot;tb_flag%20%20limit%200,1))&quot;</code> 然后扣出来解开即可<br><code>102 108 97 103 123 52 55 101 100 98 56 51 48 48 101 100 53 102 57 98 50 56 102 99 53 52 98 48 100 48 57 101 99 100 101 102 55 125</code></p>
+<h2 id="john-in-the-middle"><a href="#john-in-the-middle" class="headerlink" title="john-in-the-middle"></a>john-in-the-middle</h2><p>流量包中提取到一个logo.png，使用steghide找到在切换通道的过程中找到flag</p>
+<h2 id="ACTF新生赛2020-swp"><a href="#ACTF新生赛2020-swp" class="headerlink" title="[ACTF新生赛2020]swp"></a>[ACTF新生赛2020]swp</h2><p>流量包里有个zip，然后hint.html里提示伪加密，拿到flag，strings秒了</p>
+<h2 id="UTCTF2020-docx"><a href="#UTCTF2020-docx" class="headerlink" title="[UTCTF2020]docx"></a>[UTCTF2020]docx</h2><p>docx改zip，图片里有flag</p>
+<h2 id="GXYCTF2019-SXMgdGhpcyBiYXNlPw"><a href="#GXYCTF2019-SXMgdGhpcyBiYXNlPw" class="headerlink" title="[GXYCTF2019]SXMgdGhpcyBiYXNlPw=="></a>[GXYCTF2019]SXMgdGhpcyBiYXNlPw==</h2><p>base64隐写</p>
+<h2 id="喵喵喵"><a href="#喵喵喵" class="headerlink" title="喵喵喵"></a>喵喵喵</h2><p>png使用zsteg提取b1,bgr,lsb,xy中的数据流，是个png，需要修复高宽得到一个二维码，扫码后下载rar，没别的东西猜测NTFS，提取出一个pyc，使用pycdc反编译出源码，编写解密代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decode</span>(<span class="params">ciphertext</span>):</span></span><br><span class="line">	ciphertext = ciphertext[::-<span class="number">1</span>]</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(ciphertext)):</span><br><span class="line">		<span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">			s = <span class="built_in">int</span>(ciphertext[i]) - <span class="number">10</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			s = <span class="built_in">int</span>(ciphertext[i]) + <span class="number">10</span></span><br><span class="line">		s = <span class="built_in">chr</span> (i ^ <span class="built_in">int</span>(s))</span><br><span class="line">		<span class="built_in">print</span>(s, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">ciphertext = [</span><br><span class="line">    <span class="string">&#x27;96&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;65&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;123&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;91&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;22&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;70&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;102&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;94&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;132&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;46&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;64&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;88&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;80&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;82&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;137&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;90&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;109&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;99&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>]</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	decode(ciphertext)</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%91%E4%B8%89%E8%83%96"><span class="toc-number">1.</span> <span class="toc-text">金三胖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E7%AB%9F%E7%84%B6%E8%B5%B6%E6%88%91%E8%B5%B0"><span class="toc-number">2.</span> <span class="toc-text">你竟然赶我走</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%A0%81"><span class="toc-number">3.</span> <span class="toc-text">二维码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E7%99%BD"><span class="toc-number">4.</span> <span class="toc-text">大白</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#N%E7%A7%8D%E6%96%B9%E6%B3%95%E8%A7%A3%E5%86%B3"><span class="toc-number">5.</span> <span class="toc-text">N种方法解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%8C%E9%95%87%E5%B3%B0%E4%BC%9A%E7%A7%8D%E5%9B%BE"><span class="toc-number">6.</span> <span class="toc-text">乌镇峰会种图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wireshark"><span class="toc-number">7.</span> <span class="toc-text">wireshark</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%A0%B4%E8%A7%A3"><span class="toc-number">8.</span> <span class="toc-text">基础破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E7%A7%98%E5%AF%86"><span class="toc-number">9.</span> <span class="toc-text">文件中的秘密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSB"><span class="toc-number">10.</span> <span class="toc-text">LSB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zip%E4%BC%AA%E5%8A%A0%E5%AF%86"><span class="toc-number">11.</span> <span class="toc-text">zip伪加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%97%85%E6%8E%A2%E7%9A%84%E6%B5%81%E9%87%8F"><span class="toc-number">12.</span> <span class="toc-text">被嗅探的流量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rar"><span class="toc-number">13.</span> <span class="toc-text">rar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#qr"><span class="toc-number">14.</span> <span class="toc-text">qr</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%AD%90%E9%87%8C%E9%9D%A2%E7%9A%84%E4%B8%96%E7%95%8C"><span class="toc-number">15.</span> <span class="toc-text">镜子里面的世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ningen"><span class="toc-number">16.</span> <span class="toc-text">ningen</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6"><span class="toc-number">17.</span> <span class="toc-text">爱因斯坦</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E6%98%8E%E7%9A%84%E4%BF%9D%E9%99%A9%E7%AE%B1"><span class="toc-number">18.</span> <span class="toc-text">小明的保险箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#easycap"><span class="toc-number">19.</span> <span class="toc-text">easycap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%9A%84%E9%92%A5%E5%8C%99"><span class="toc-number">20.</span> <span class="toc-text">隐藏的钥匙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E4%B8%96%E7%95%8C"><span class="toc-number">21.</span> <span class="toc-text">另外一个世界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FLAG"><span class="toc-number">22.</span> <span class="toc-text">FLAG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%A7%98%E9%BE%99%E5%8D%B7%E9%A3%8E"><span class="toc-number">23.</span> <span class="toc-text">神秘龙卷风</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%B4%A2"><span class="toc-number">24.</span> <span class="toc-text">数据包中的线索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%87%E5%A6%82%E7%BB%99%E6%88%91%E4%B8%89%E5%A4%A9%E5%85%89%E6%98%8E"><span class="toc-number">25.</span> <span class="toc-text">假如给我三天光明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E6%9F%A5%E6%9D%80"><span class="toc-number">26.</span> <span class="toc-text">后门查杀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#webshell%E5%90%8E%E9%97%A8"><span class="toc-number">27.</span> <span class="toc-text">webshell后门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A5%E9%A6%96%E6%AD%8C%E5%90%A7"><span class="toc-number">28.</span> <span class="toc-text">来首歌吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E5%85%B7%E4%B8%8B%E7%9A%84flag"><span class="toc-number">29.</span> <span class="toc-text">面具下的flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8D%B7%E5%85%B0%E5%AE%BD%E5%B8%A6%E6%95%B0%E6%8D%AE%E6%B3%84%E9%9C%B2"><span class="toc-number">30.</span> <span class="toc-text">荷兰宽带数据泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E8%BF%9E%E7%8E%AF"><span class="toc-number">31.</span> <span class="toc-text">九连环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%8A%AB%E6%8C%81%E7%9A%84%E7%A5%9E%E7%A7%98%E7%A4%BC%E7%89%A9"><span class="toc-number">32.</span> <span class="toc-text">被劫持的神秘礼物</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E8%AE%A4%E7%9C%9F%E4%BD%A0%E5%B0%B1%E8%BE%93%E4%BA%86"><span class="toc-number">33.</span> <span class="toc-text">[BJDCTF2020]认真你就输了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E8%97%8F%E8%97%8F%E8%97%8F"><span class="toc-number">34.</span> <span class="toc-text">[BJDCTF2020]藏藏藏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A2%AB%E5%81%B7%E8%B5%B0%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">35.</span> <span class="toc-text">被偷走的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B7%E6%96%B0%E8%BF%87%E7%9A%84%E5%9B%BE%E7%89%87"><span class="toc-number">36.</span> <span class="toc-text">刷新过的图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-%E4%BD%9B%E7%B3%BB%E9%9D%92%E5%B9%B4"><span class="toc-number">37.</span> <span class="toc-text">[GXYCTF2019]佛系青年</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E4%BD%A0%E7%8C%9C%E6%88%91%E6%98%AF%E4%B8%AA%E5%95%A5"><span class="toc-number">38.</span> <span class="toc-text">[BJDCTF2020]你猜我是个啥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#snake"><span class="toc-number">39.</span> <span class="toc-text">snake</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#keli"><span class="toc-number">40.</span> <span class="toc-text">keli</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%B2%E5%8A%AA%E6%AF%94"><span class="toc-number">41.</span> <span class="toc-text">史努比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%98%E5%AF%86%E6%96%87%E4%BB%B6"><span class="toc-number">42.</span> <span class="toc-text">秘密文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E"><span class="toc-number">43.</span> <span class="toc-text">[BJDCTF2020]鸡你太美</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8F%9C%E5%88%80666"><span class="toc-number">44.</span> <span class="toc-text">菜刀666</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E4%B8%80%E5%8F%B6%E9%9A%9C%E7%9B%AE"><span class="toc-number">45.</span> <span class="toc-text">[BJDCTF2020]一叶障目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E7%A5%9E%E5%A5%87%E7%9A%84%E4%BA%8C%E7%BB%B4%E7%A0%81"><span class="toc-number">46.</span> <span class="toc-text">[SWPU2019]神奇的二维码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF2020-%E7%BA%B3%E5%B0%BC"><span class="toc-number">47.</span> <span class="toc-text">[BJDCTF2020]纳尼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A2%85%E8%8A%B1%E9%A6%99%E4%B9%8B%E8%8B%A6%E5%AF%92%E6%9D%A5"><span class="toc-number">48.</span> <span class="toc-text">梅花香之苦寒来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-excel%E7%A0%B4%E8%A7%A3"><span class="toc-number">49.</span> <span class="toc-text">[HBNIS2018]excel破解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-%E6%9D%A5%E9%A2%98%E4%B8%AD%E7%AD%89%E7%9A%84%E5%90%A7"><span class="toc-number">50.</span> <span class="toc-text">[HBNIS2018]来题中等的吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-outguess"><span class="toc-number">51.</span> <span class="toc-text">[ACTF新生赛2020]outguess</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BF%E8%B6%8A%E6%97%B6%E7%A9%BA%E7%9A%84%E6%80%9D%E5%BF%B5"><span class="toc-number">52.</span> <span class="toc-text">穿越时空的思念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%81%E8%B5%A2%E4%BA%86%E6%AF%94%E8%B5%9B"><span class="toc-number">53.</span> <span class="toc-text">谁赢了比赛</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WUSTCTF2020-find-me"><span class="toc-number">54.</span> <span class="toc-text">[WUSTCTF2020]find_me</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E6%88%91%E6%9C%89%E4%B8%80%E5%8F%AA%E9%A9%AC%E9%87%8C%E5%A5%A5"><span class="toc-number">55.</span> <span class="toc-text">[SWPU2019]我有一只马里奥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GUET-CTF2019-KO"><span class="toc-number">56.</span> <span class="toc-text">[GUET-CTF2019]KO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-gakki"><span class="toc-number">57.</span> <span class="toc-text">[GXYCTF2019]gakki</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-base64%E9%9A%90%E5%86%99"><span class="toc-number">58.</span> <span class="toc-text">[ACTF新生赛2020]base64隐写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRCTF2020-ezmisc"><span class="toc-number">59.</span> <span class="toc-text">[MRCTF2020]ezmisc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-caesar"><span class="toc-number">60.</span> <span class="toc-text">[HBNIS2018]caesar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E4%BC%9F%E5%A4%A7%E7%9A%84%E4%BE%A6%E6%8E%A2"><span class="toc-number">61.</span> <span class="toc-text">[SWPU2019]伟大的侦探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E5%B8%9D%E5%9B%BD"><span class="toc-number">62.</span> <span class="toc-text">黑客帝国</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBNIS2018-%E4%BD%8E%E4%B8%AA%E5%A4%B4"><span class="toc-number">63.</span> <span class="toc-text">[HBNIS2018]低个头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MRCTF2020-%E4%BD%A0%E8%83%BD%E7%9C%8B%E6%87%82%E9%9F%B3%E7%AC%A6%E5%90%97"><span class="toc-number">64.</span> <span class="toc-text">[MRCTF2020]你能看懂音符吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUCTF2018-single-dog"><span class="toc-number">65.</span> <span class="toc-text">[SUCTF2018]single dog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E5%90%83%E4%B8%89%E6%98%8E%E6%B2%BB"><span class="toc-number">66.</span> <span class="toc-text">我吃三明治</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPU2019-%E4%BD%A0%E6%9C%89%E6%B2%A1%E6%9C%89%E5%A5%BD%E5%A5%BD%E7%9C%8B%E7%BD%91%E8%AF%BE"><span class="toc-number">67.</span> <span class="toc-text">[SWPU2019]你有没有好好看网课?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-NTFS%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">68.</span> <span class="toc-text">[ACTF新生赛2020]NTFS数据流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqltest"><span class="toc-number">69.</span> <span class="toc-text">sqltest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#john-in-the-middle"><span class="toc-number">70.</span> <span class="toc-text">john-in-the-middle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACTF%E6%96%B0%E7%94%9F%E8%B5%9B2020-swp"><span class="toc-number">71.</span> <span class="toc-text">[ACTF新生赛2020]swp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UTCTF2020-docx"><span class="toc-number">72.</span> <span class="toc-text">[UTCTF2020]docx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GXYCTF2019-SXMgdGhpcyBiYXNlPw"><span class="toc-number">73.</span> <span class="toc-text">[GXYCTF2019]SXMgdGhpcyBiYXNlPw&#x3D;&#x3D;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%96%B5%E5%96%B5%E5%96%B5"><span class="toc-number">74.</span> <span class="toc-text">喵喵喵</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&text=NS - Buuctf MISC Part"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&is_video=false&description=NS - Buuctf MISC Part"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=NS - Buuctf MISC Part&body=Check out this article: http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&title=NS - Buuctf MISC Part"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&name=NS - Buuctf MISC Part&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2023/12/11/Buuctf%20MISC%20Part/&t=NS - Buuctf MISC Part"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2024
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

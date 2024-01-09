@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原文作者：A Happe, J Cito 原文标题：Getting pwn&#39;d by AI: Penetration Testing with Large Language Models 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;pdf&#x2F;10.1145&#x2F;3611643.3613083 原文来源：ESEC&#x2F;FSE 2023 笔记作者：outx  0x01 Introducti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models">
+<meta property="og:url" content="http://w1mps.github.io/2024/01/09/Getting%20pwn'd%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/index.html">
+<meta property="og:site_name" content="Trashbox 4 outx!">
+<meta property="og:description" content="原文作者：A Happe, J Cito 原文标题：Getting pwn&#39;d by AI: Penetration Testing with Large Language Models 原文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;pdf&#x2F;10.1145&#x2F;3611643.3613083 原文来源：ESEC&#x2F;FSE 2023 笔记作者：outx  0x01 Introducti">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20240109202342390.png">
+<meta property="article:published_time" content="2024-01-09T02:44:40.000Z">
+<meta property="article:modified_time" content="2024-01-09T12:46:38.388Z">
+<meta property="article:author" content="outx">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="ESEC&#x2F;FSE&#39;23">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20240109202342390.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/2023/12/11/Buuctf%20MISC%20Part/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&text=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&is_video=false&description=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models&body=Check out this article: http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&name=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&t=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Introduction"><span class="toc-number">1.</span> <span class="toc-text">0x01 Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">研究问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%9B%B4%E9%99%90%E5%AE%9A"><span class="toc-number">1.2.</span> <span class="toc-text">范围限定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Background"><span class="toc-number">2.</span> <span class="toc-text">0x02 Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Implement"><span class="toc-number">3.</span> <span class="toc-text">0x03 Implement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#High-Level-Task-Planning-Systems"><span class="toc-number">3.1.</span> <span class="toc-text">High-Level: Task-Planning Systems</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Low-Level-Attack-Execution-System"><span class="toc-number">3.2.</span> <span class="toc-text">Low-Level: Attack-Execution System</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">outx</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-01-09T02:44:40.000Z" itemprop="datePublished">2024-01-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Paper-Reading/">Paper Reading</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ESEC-FSE-23/" rel="tag">ESEC/FSE'23</a>, <a class="tag-link-link" href="/tags/LLM/" rel="tag">LLM</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p><em>原文作者：A Happe, J Cito</em></p>
+<p><em>原文标题：Getting pwn&#39;d by AI: Penetration Testing with Large Language Models</em></p>
+<p><em>原文链接：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/pdf/10.1145/3611643.3613083">https://dl.acm.org/doi/pdf/10.1145/3611643.3613083</a></em></p>
+<p><em>原文来源：ESEC/FSE 2023</em></p>
+<p><em>笔记作者：outx</em></p>
+</blockquote>
+<h2 id="0x01-Introduction"><a href="#0x01-Introduction" class="headerlink" title="0x01 Introduction"></a>0x01 Introduction</h2><p>渗透测试人员需求与实际年增量不符的现实情况，催生了LLM辅佐式渗透，即AI增强渗透测试能力，使得新手渗透测试人员也能够发起更高层次的攻击，而非仅脚本小子。</p>
+<h3 id="研究问题"><a href="#研究问题" class="headerlink" title="研究问题"></a>研究问题</h3><p>本文提出了一个RQ：<strong>如何合理地使用LLM进行自动化的渗透测试？</strong></p>
+<p>为了回答这一问题，作者使用ATT&amp;CK矩阵作为安全领域威胁行为（渗透测试）人员的知识策划数据库，以此提供相应指导。并根据指导的层级不同分为高维度指导和低维度指导：在高维度指导中，通过人工“询问”的方式，解决通用场景和具体目标组织的渗透测试设计问题；在低维度指导中，作者集成了GPT3.5和脆弱的虚拟机（存在一定量的漏洞），然后允许GPT接入分析主机存在风险，提出攻击面并实施。</p>
+<h3 id="范围限定"><a href="#范围限定" class="headerlink" title="范围限定"></a>范围限定</h3><p>除了上述场景，作者还给出了两个场景：</p>
+<ol>
+<li>利用LLM生成网络钓鱼或网络钓鱼信息（存在伦理性争议）</li>
+<li>自动化生成渗透测试报告</li>
+</ol>
+<h2 id="0x02-Background"><a href="#0x02-Background" class="headerlink" title="0x02 Background"></a>0x02 Background</h2><blockquote>
+<p> ATT&amp;CK、LLM、GPT3.5这类基本概念此处不再赘述</p>
+</blockquote>
+<h2 id="0x03-Implement"><a href="#0x03-Implement" class="headerlink" title="0x03 Implement"></a>0x03 Implement</h2><p>首先，再来区分本文的两大用例：</p>
+<ul>
+<li>高维度指导：渗透测试人员以“询问”的方式请求LLM，这类问题应当产生策略以及实施策略的潜在技术，如”如何攻击Active Diretory？“</li>
+<li>低维度指导：渗透人员试图获取针对特定目标的具体技术手段，如”我想实施权限提升，针对Ubuntu16.04有什么合适的方法？“</li>
+</ul>
+<h3 id="High-Level-Task-Planning-Systems"><a href="#High-Level-Task-Planning-Systems" class="headerlink" title="High-Level: Task-Planning Systems"></a>High-Level: Task-Planning Systems</h3><p>在这一用例中，作者要求GPT生成“如何成为Active Directory中的域管理员？”。在GPT的回答中，生成的文档包含非常真实的攻击面，如password spraying, Kerberoasting, AS-REP roasting等。这些攻击都是真实、可行的，也确实在真实场景下的渗透测试中非常常用。</p>
+<p>同时，作者在获取到目标公司的批准后，让GPT为该公司设计了一个外部渗透测试计划，该计划包括了网络漏洞扫描、爆破弱口令等操作，所有这些操作也迎合实际外部渗透测试期间渗透测试人员的惯用手段。在进一步利用的场景中，涉及伦理性争议的场景，作者并没有继续深究，但读者认为的确是可行的。</p>
+<h3 id="Low-Level-Attack-Execution-System"><a href="#Low-Level-Attack-Execution-System" class="headerlink" title="Low-Level: Attack-Execution System"></a>Low-Level: Attack-Execution System</h3><p>在这一用例中，作者编写了一个Python脚本，使用SSH链接到一个脆弱的Linux虚拟机中，该脚本由一个循环组成，在该循环中，持续告诉GPT想象自己是一个想要成为root用户的低权限用户，然后告知其可以声明一个linux shell命令并执行，随后该脚本会在虚拟机中执行命令，并将结果返回给GPT，过程如下图</p>
+<p><img src="https://blog-1253481369.cos.ap-chengdu.myqcloud.com/img/image-20240109202342390.png" alt="image-20240109202342390"></p>
+<h2 id="0x04-Conclusion"><a href="#0x04-Conclusion" class="headerlink" title="0x04 Conclusion"></a>0x04 Conclusion</h2><p>作者预研了LLM与渗透测试相结合的可能性，并分别从高维度指导和低维度指导两种场景提出了相应的可行性研究思路（受制于伦理性争议，部分场景没有深入）。读者在阅读这篇文章后认为有几点是可以发散的：</p>
+<ol>
+<li>提示词工程的精进，对于LLM来说，结果反馈的准确性和模型输出的标准化是实现自动化的充要条件，如何通过提示词提高模型输出准确率是实现自动化渗透测试绕不开的一大问题；</li>
+<li>LLM的幻觉问题也是一大需要解决的问题，在作者提出的低维度指导用例中，一旦模型产生幻觉（生成现实中没有的命令），并因此执行了导致系统错误的一些命令后，如何还原？</li>
+<li>伦理性争议也是在利用LLM解决安全问题过程中需要注意的一个问题，尤其是企业在接入LLM后，如何保障数据隐私、数据安全，还需进一步限制。</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Introduction"><span class="toc-number">1.</span> <span class="toc-text">0x01 Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">研究问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%9B%B4%E9%99%90%E5%AE%9A"><span class="toc-number">1.2.</span> <span class="toc-text">范围限定</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Background"><span class="toc-number">2.</span> <span class="toc-text">0x02 Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Implement"><span class="toc-number">3.</span> <span class="toc-text">0x03 Implement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#High-Level-Task-Planning-Systems"><span class="toc-number">3.1.</span> <span class="toc-text">High-Level: Task-Planning Systems</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Low-Level-Attack-Execution-System"><span class="toc-number">3.2.</span> <span class="toc-text">Low-Level: Attack-Execution System</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Conclusion"><span class="toc-number">4.</span> <span class="toc-text">0x04 Conclusion</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&text=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&is_video=false&description=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models&body=Check out this article: http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&title=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&name=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://w1mps.github.io/2024/01/09/Getting%20pwn&#39;d%20by%20AI%20-%20Penetration%20Testing%20with%20Large%20Language%20Models/&t=PR - Getting pwn&#39;d by AI: Penetration Testing with Large Language Models"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+    <div class="footer-center">
+      Copyright &copy;
+      
+      
+      2021-2024
+      Powered by
+      outx
+      <!-- (<span id="busuanzi_value_site_pv"></span>) -->
+    </div>
+  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/paper/">Paper</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <br>
+
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
